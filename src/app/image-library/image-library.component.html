@@ -15,8 +15,8 @@
         <ion-img [src]="file.data"></ion-img>
       </ion-thumbnail>
       <ion-label class="ion-text-wrap"> {{ file.name }} </ion-label>
-      <ion-button slot="end" fill="clear" (click)="startUpload(file)">
-        <ion-icon slot="icon-only" name="cloud-upload"></ion-icon>
+      <ion-button slot="end" fill="clear" (click)="editImage(file)">
+        <ion-icon slot="icon-only" name="create"></ion-icon>
       </ion-button>
       <ion-button slot="end" fill="clear" (click)="deleteImage(file)">
         <ion-icon slot="icon-only" name="trash"></ion-icon>

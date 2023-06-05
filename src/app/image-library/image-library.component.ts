@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   Camera,
   CameraResultType,
@@ -9,28 +10,25 @@ import {
 import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { LoadingController, Platform, ToastController } from '@ionic/angular';
+import { LocalFile } from '../dtos/local-file';
 
 const IMAGE_DIR = 'stored-images';
 
-interface LocalFile {
-  name: string;
-  path: string;
-  data: string;
-}
 @Component({
-  selector: 'app-explore-container',
-  templateUrl: './explore-container.component.html',
-  styleUrls: ['./explore-container.component.scss'],
+  selector: 'cmp-image-library',
+  templateUrl: './image-library.component.html',
+  styleUrls: ['./image-library.component.scss'],
   providers: [],
 })
-export class ExploreContainerComponent {
+export class ImageLibraryComponent {
   images: LocalFile[] = [];
 
   constructor(
     private plt: Platform,
     private http: HttpClient,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -94,8 +92,12 @@ export class ExploreContainerComponent {
     toast.present();
   }
 
-  async startUpload(file: LocalFile) {
+  async editImage(file: LocalFile) {
     // TODO
+    //bavigate to editor
+    console.log('navigate');
+
+    this.router.navigate(['edit']);
   }
 
   async deleteImage(file: LocalFile) {

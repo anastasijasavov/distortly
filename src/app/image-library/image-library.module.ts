@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ExploreContainerComponent } from './explore-container.component';
+import { ImageLibraryComponent } from './image-library.component';
 
 @NgModule({
-  imports: [ CommonModule, FormsModule, IonicModule],
-  declarations: [ExploreContainerComponent],
-  exports: [ExploreContainerComponent]
+  imports: [CommonModule, FormsModule, IonicModule],
+  declarations: [ImageLibraryComponent],
+  exports: [ImageLibraryComponent],
 })
 export class ExploreContainerComponentModule {}

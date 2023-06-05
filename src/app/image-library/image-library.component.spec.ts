@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ExploreContainerComponent } from './explore-container.component';
+import { ImageLibraryComponent } from './image-library.component';
 
 describe('ExploreContainerComponent', () => {
-  let component: ExploreContainerComponent;
-  let fixture: ComponentFixture<ExploreContainerComponent>;
+  let component: ImageLibraryComponent;
+  let fixture: ComponentFixture<ImageLibraryComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ExploreContainerComponent],
-      imports: [IonicModule.forRoot()]
+      declarations: [ImageLibraryComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ExploreContainerComponent);
+    fixture = TestBed.createComponent(ImageLibraryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
