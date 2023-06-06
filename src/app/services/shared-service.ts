@@ -1,8 +1,6 @@
+import { LocalFile } from '../dtos/local-file';
 export class SharedService {
-  /**
-   *
-   */
-  constructor() {
-    image: LocalFile;
-  }
+  image?: LocalFile;
+  isEditMode = false;
+  constructor() {}
 }

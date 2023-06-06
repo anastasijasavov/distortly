@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   Camera,
@@ -7,10 +7,10 @@ import {
   CameraSource,
   Photo,
 } from '@capacitor/camera';
-import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { LoadingController, Platform, ToastController } from '@ionic/angular';
 import { LocalFile } from '../dtos/local-file';
+import { SharedService } from '../services/shared-service';
 
 const IMAGE_DIR = 'stored-images';
 
@@ -28,7 +28,8 @@ export class ImageLibraryComponent {
     private http: HttpClient,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
-    private router: Router
+    private router: Router,
+    private sharedService: SharedService
   ) {}
 
   async ngOnInit() {
@@ -96,8 +97,9 @@ export class ImageLibraryComponent {
     // TODO
     //bavigate to editor
     console.log('navigate');
-
-    this.router.navigate(['edit']);
+    this.sharedService.image = file;
+    this.sharedService.isEditMode = true;
+    this.router.navigate(['tabs/tab2']);
   }
 
   async deleteImage(file: LocalFile) {

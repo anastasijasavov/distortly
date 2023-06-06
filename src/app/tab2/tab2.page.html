@@ -10,4 +10,8 @@
       <ion-title size="large">Edit image</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-img [src]="image!.data" class="imgClass"></ion-img>
+
+  <cmp-edit-bar class="edit-bar" (onMicStart)="startMic($event)"></cmp-edit-bar>
 </ion-content>

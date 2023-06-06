@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Tab2Page } from './tab2.page';
 import { ExploreContainerComponentModule } from '../image-library/image-library.module';
 
+import { EditBarModule } from '../edit-bar/edit-bar.component.module';
 import { Tab2PageRoutingModule } from './tab2-routing.module';
 
 @NgModule({
@@ -14,6 +15,7 @@ import { Tab2PageRoutingModule } from './tab2-routing.module';
     FormsModule,
     ExploreContainerComponentModule,
     Tab2PageRoutingModule,
+    EditBarModule,
   ],
   declarations: [Tab2Page],
 })
