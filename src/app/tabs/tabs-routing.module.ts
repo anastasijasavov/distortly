@@ -26,7 +26,7 @@ const routes: Routes = [
       {
         path: 'collections',
         loadChildren: () =>
-          import('../edit-page/edit-page.module').then((m) => m.EditPageModule),
+          import('../collections-page/collections-page.module').then((m) => m.CollectionsPageModule),
       },
       {
         
