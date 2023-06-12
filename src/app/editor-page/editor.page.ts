@@ -1,25 +1,23 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { LocalFile } from '../dtos/local-file';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import Recorder from 'recorder-js';
+import { BaseImports } from '../services/base-imports';
 
 @Component({
   selector: 'editor',
   templateUrl: 'editor.page.html',
   styleUrls: ['editor.page.scss'],
 })
-export class EditorPage {
+export class EditorPage extends BaseImports {
   // private audioContext: AudioContext;
   private recorder: any;
   private isRecording: boolean = false;
   private audioSrc: SafeUrl | undefined;
   image?: LocalFile;
 
-  constructor(private sanitizer: DomSanitizer) {
+  constructor(private sanitizer: DomSanitizer, private injector: Injector) {
+    super(injector);
     // this.audioContext = new AudioContext();
     // this.recorder = new Recorder(this.audioContext);
     // navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {

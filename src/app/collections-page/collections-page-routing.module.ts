@@ -4,7 +4,7 @@ import { CollectionsPage } from './collections.page';
 
 const routes: Routes = [
   {
-    path: 'edit',
+    path: '',
     component: CollectionsPage,
   }
 ];

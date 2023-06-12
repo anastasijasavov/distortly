@@ -4,7 +4,7 @@ import { EditorPage } from './editor.page';
 
 const routes: Routes = [
   {
-    path: 'editor',
+    path: '',
     component: EditorPage,
   },
 ];

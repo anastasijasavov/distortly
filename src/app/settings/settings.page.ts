@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'settings',
   templateUrl: 'settings.page.html',
   styleUrls: ['settings.page.scss'],
 })
-export class SettingsPage {
+export class SettingsPage implements OnInit {
   constructor() {}
+
+  ngOnInit(): void {
+    console.log("uslo u settings")
+  }
 }

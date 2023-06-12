@@ -98,7 +98,6 @@ export class ImageLibraryComponent {
   async editImage(file: LocalFile) {
     // TODO
     //bavigate to editor
-    console.log('navigate');
     this.sharedService.image = file;
     this.sharedService.isEditMode = true;
     this.router.navigate(['tabs/editor']);

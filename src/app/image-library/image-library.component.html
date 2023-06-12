@@ -1,35 +1,29 @@
-
 <ion-content>
 
   <ion-img src="assets/folder-is-empty.webp" *ngIf="images.length === 0"></ion-img>
-  <h6 class="ion-text-center" *ngIf="images.length === 0"> Your library is empty. Upload some photos and start playing around! </h6>
+  <h6 class="ion-text-center" *ngIf="images.length === 0"> Your library is empty. Upload some photos and start playing
+    around! </h6>
   <ion-list *ngIf="images.length > 0">
     <ion-item *ngFor="let file of images; let i = index">
       <ion-thumbnail slot="start">
         <ion-img [src]="file.data"></ion-img>
       </ion-thumbnail>
       <ion-button class="icon" slot="end" fill="clear" (click)="addToCollection(file)">
-        <img src="/assets/icons8-plus-50.png"/>
+        <img src="/assets/icons8-plus-50.png" />
       </ion-button>
       <ion-button class="icon" slot="end" fill="clear" (click)="editImage(file)">
-        <img src="/assets/icons8-edit-50.png"/>
+        <img src="/assets/icons8-edit-50.png" />
       </ion-button>
       <ion-button slot="end" fill="clear" (click)="deleteImage(file)">
-        <img src="/assets/icons8-x-30.png"/>
-       
+        <img src="/assets/icons8-x-30.png" />
+
       </ion-button>
     </ion-item>
   </ion-list>
   <ion-toolbar color="primary">
-    <ion-button
-      fill="clear"
-      expand="full"
-      color="dark"
-      (click)="selectImage()"
-    >
+    <ion-button fill="clear" expand="full" color="dark" (click)="selectImage()">
       <ion-icon slot="start" name="camera"></ion-icon>
       Select Image
     </ion-button>
   </ion-toolbar>
 </ion-content>
-
