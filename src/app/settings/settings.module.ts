@@ -12,7 +12,6 @@ import { SettingsPageRoutingModule } from './settings-routing.module';
     IonicModule,
     CommonModule,
     FormsModule,
-    ExploreContainerComponentModule,
     SettingsPageRoutingModule,
   ],
   declarations: [SettingsPage],

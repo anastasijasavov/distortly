@@ -8,9 +8,9 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'home',
         loadChildren: () =>
-          import('../tab1/tab1.module').then((m) => m.Tab1PageModule),
+          import('../home/home.module').then((m) => m.HomePageModule),
       },
      
       {
@@ -24,15 +24,21 @@ const routes: Routes = [
           import('../edit-page/edit-page.module').then((m) => m.EditPageModule),
       },
       {
+        path: 'collections',
+        loadChildren: () =>
+          import('../edit-page/edit-page.module').then((m) => m.EditPageModule),
+      },
+      {
+        
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/tabs/home',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/home',
     pathMatch: 'full',
   },
 ];
