@@ -18,6 +18,7 @@ export class EditorPage extends BaseImports {
 
   constructor(private sanitizer: DomSanitizer, private injector: Injector) {
     super(injector);
+    this.image = this.sharedService.image;
     // this.audioContext = new AudioContext();
     // this.recorder = new Recorder(this.audioContext);
     // navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
