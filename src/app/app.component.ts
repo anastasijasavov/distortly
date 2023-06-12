@@ -7,9 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   constructor() {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-    this.toggleDarkTheme(prefersDark.matches);
-    prefersDark.addEventListener('change', (mediaQuery) => this.toggleDarkTheme(mediaQuery.matches));
+   this.toggleDarkTheme(true);
+    // const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    // this.toggleDarkTheme(prefersDark.matches);
+    // prefersDark.addEventListener('change', (mediaQuery) => this.toggleDarkTheme(mediaQuery.matches));
   }
 
 

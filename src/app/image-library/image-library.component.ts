@@ -101,7 +101,7 @@ export class ImageLibraryComponent {
     console.log('navigate');
     this.sharedService.image = file;
     this.sharedService.isEditMode = true;
-    this.router.navigate(['tabs/edit']);
+    this.router.navigate(['tabs/editor']);
   }
 
   async deleteImage(file: LocalFile) {

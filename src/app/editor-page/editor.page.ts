@@ -8,24 +8,24 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import Recorder from 'recorder-js';
 
 @Component({
-  selector: 'edit',
-  templateUrl: 'edit.page.html',
-  styleUrls: ['edit.page.scss'],
+  selector: 'editor',
+  templateUrl: 'editor.page.html',
+  styleUrls: ['editor.page.scss'],
 })
-export class EditorPage implements OnInit, OnDestroy {
-  private audioContext: AudioContext;
+export class EditorPage {
+  // private audioContext: AudioContext;
   private recorder: any;
   private isRecording: boolean = false;
   private audioSrc: SafeUrl | undefined;
   image?: LocalFile;
 
   constructor(private sanitizer: DomSanitizer) {
-    this.audioContext = new AudioContext();
-    this.recorder = new Recorder(this.audioContext);
-    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-      this.recorder = new Recorder(this.audioContext);
-      this.recorder.init(stream);
-    });
+    // this.audioContext = new AudioContext();
+    // this.recorder = new Recorder(this.audioContext);
+    // navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+    //   this.recorder = new Recorder(this.audioContext);
+    //   this.recorder.init(stream);
+    // });
   }
 
   startMic(event: any) {
@@ -33,7 +33,7 @@ export class EditorPage implements OnInit, OnDestroy {
   }
   ngOnInit(): void {}
   ngOnDestroy() {
-    this.audioContext.close();
+    // this.audioContext.close();
   }
 
   startListening() {

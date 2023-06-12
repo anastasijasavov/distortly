@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EditorPage } from './edit.page';
+import { EditorPage } from './editor.page';
 
 const routes: Routes = [
   {
-    path: 'edit',
+    path: 'editor',
     component: EditorPage,
-  }
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class EditPageRoutingModule {}
+export class EditorPageRoutingModule {}

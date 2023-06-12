@@ -19,9 +19,9 @@ const routes: Routes = [
           import('../settings/settings.module').then((m) => m.SettingsPageModule),
       },
       {
-        path: 'edit',
+        path: 'editor',
         loadChildren: () =>
-          import('../edit-page/edit-page.module').then((m) => m.EditPageModule),
+          import('../editor-page/editor.module').then((m) => m.EditorPageModule),
       },
       {
         path: 'collections',

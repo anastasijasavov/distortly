@@ -2,9 +2,9 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { EditorPage } from './edit.page';
+import { EditorPage } from './editor.page';
 
-import { EditPageRoutingModule } from './edit-page-routing.module';
+import { EditorPageRoutingModule } from './editor-routing.module';
 import { EditBarComponent } from '../edit-bar/edit-bar.component';
 
 @NgModule({
@@ -12,8 +12,8 @@ import { EditBarComponent } from '../edit-bar/edit-bar.component';
     IonicModule,
     CommonModule,
     FormsModule,
-    EditPageRoutingModule,
+    EditorPageRoutingModule,
   ],
   declarations: [EditorPage, EditBarComponent],
 })
-export class EditPageModule {}
+export class EditorPageModule {}
