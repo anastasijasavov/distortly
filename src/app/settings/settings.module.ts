@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { SettingsPage } from './settings.page';
 import { ExploreContainerComponentModule } from '../image-library/image-library.module';
 
-import { Tab3PageRoutingModule } from './settings-routing.module';
+import { SettingsPageRoutingModule } from './settings-routing.module';
 
 @NgModule({
   imports: [
@@ -13,8 +13,8 @@ import { Tab3PageRoutingModule } from './settings-routing.module';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    Tab3PageRoutingModule,
+    SettingsPageRoutingModule,
   ],
   declarations: [SettingsPage],
 })
-export class Tab3PageModule {}
+export class SettingsPageModule {}

@@ -4,7 +4,7 @@ import { SettingsPage } from './settings.page';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'settings',
     component: SettingsPage,
   },
 ];
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class Tab3PageRoutingModule {}
+export class SettingsPageRoutingModule {}

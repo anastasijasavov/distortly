@@ -64,7 +64,9 @@ export class ImageLibraryComponent {
         loading.dismiss();
       });
   }
+  addToCollection(img: LocalFile){
 
+  }
   // Get the actual base64 data of an image
   // base on the name of the file
   async loadFileData(fileNames: string[]) {
@@ -99,7 +101,7 @@ export class ImageLibraryComponent {
     console.log('navigate');
     this.sharedService.image = file;
     this.sharedService.isEditMode = true;
-    this.router.navigate(['tabs/tab2']);
+    this.router.navigate(['tabs/edit']);
   }
 
   async deleteImage(file: LocalFile) {

@@ -24,3 +24,39 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+:root {
+    --background-color:#1A1625;
+    --primary-color: #2F2B3A;
+    --secondary-color: #46424F;
+    --ion-font-family: 'Fira Code', monospace
+}
+
+:host {
+    background: var(--background-color) !important;
+}
+body {
+    
+    --ion-item-background: var(--background-color);
+    --ion-background-color: var(--background-color);
+}
+.ion-card {
+    background-color: var(--primary-color);
+}
+ 
+.list-md {
+    background: var(--background-color); 
+}
+
+.ion-page{
+    background: var(--background-color) !important;
+}
+
+
+// ion-item {
+//     width: 80%;
+//     min-width: 40px;
+//     margin: auto;
+//     --border-radius: 14px;
+// }

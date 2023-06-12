@@ -1,22 +1,18 @@
 import {
   Component,
-  ElementRef,
-  Inject,
-  Injector,
   OnDestroy,
   OnInit,
 } from '@angular/core';
 import { LocalFile } from '../dtos/local-file';
-import * as p5 from 'p5';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import Recorder from 'recorder-js';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss'],
+  selector: 'edit',
+  templateUrl: 'edit.page.html',
+  styleUrls: ['edit.page.scss'],
 })
-export class Tab2Page implements OnInit, OnDestroy {
+export class EditorPage implements OnInit, OnDestroy {
   private audioContext: AudioContext;
   private recorder: any;
   private isRecording: boolean = false;

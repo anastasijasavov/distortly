@@ -25,3 +25,23 @@
 #container a {
   text-decoration: none;
 }
+
+ion-thumbnail {
+  --size: 150px;
+  --border-radius: 14px;
+}
+
+ion-toolbar {
+  position:fixed;
+  bottom: 0.3em;
+}
+
+.button-small { 
+  height: 40px;
+  width: 100%;
+  img {
+    height: 40px;
+    width: 100%;
+  }
+}
+

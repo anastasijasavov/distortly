@@ -12,15 +12,16 @@ const routes: Routes = [
         loadChildren: () =>
           import('../tab1/tab1.module').then((m) => m.Tab1PageModule),
       },
+     
       {
-        path: 'tab2',
+        path: 'settings',
         loadChildren: () =>
-          import('../tab2/tab2.module').then((m) => m.Tab2PageModule),
+          import('../settings/settings.module').then((m) => m.SettingsPageModule),
       },
       {
-        path: 'tab3',
+        path: 'edit',
         loadChildren: () =>
-          import('../settings/tab3.module').then((m) => m.Tab3PageModule),
+          import('../edit-page/edit-page.module').then((m) => m.EditPageModule),
       },
       {
         path: '',
