@@ -7,7 +7,16 @@
 <ion-card *ngFor="let collection of collections">
     <ion-card-header>
         <ion-card-title>{{collection.name}}</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-      </ion-card-content>
+    </ion-card-header>
+    <ion-card-content>
+        <ion-thumbnail slot="start">
+            <ion-img [src]="collection.images[0].data"></ion-img>
+        </ion-thumbnail>
+    </ion-card-content>
 </ion-card>
+
+<ion-fab>
+    <ion-fab-button>
+        <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+</ion-fab>

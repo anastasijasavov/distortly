@@ -29,6 +29,11 @@ const routes: Routes = [
           import('../collections-page/collections-page.module').then((m) => m.CollectionsPageModule),
       },
       {
+        path: 'collections/:id',
+        loadChildren: () =>
+          import('../collections-page/collections-page.module').then((m) => m.CollectionsPageModule),
+      },
+      {
         
         path: '',
         redirectTo: '/tabs/home',

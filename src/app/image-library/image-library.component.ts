@@ -32,8 +32,9 @@ export class ImageLibraryComponent extends BaseImports {
   }
 
   async ngOnInit() {
-    await this.sharedService.loadFiles();
-    this.images = this.sharedService.images;
+    this.sharedService.images$.subscribe(images => {
+      this.images = images;
+    });
 
     this.toastService.presentToast("test")
 

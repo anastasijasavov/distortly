@@ -1,12 +1,4 @@
-import {
-  Component,
-  Injector,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import { LocalFile } from '../dtos/local-file';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import Recorder from 'recorder-js';
+import { Component, Injector, OnInit } from '@angular/core';
 import { Collection } from '../dtos/collection.dto';
 import { BaseImports } from '../services/base-imports';
 
@@ -15,17 +7,15 @@ import { BaseImports } from '../services/base-imports';
   templateUrl: 'collections.page.html',
   styleUrls: ['collections.page.scss'],
 })
-export class CollectionsPage extends BaseImports implements OnInit{
- 
-  collections:Collection[] = [];
-  constructor(private sanitizer: DomSanitizer, private injector: Injector) {
+export class CollectionsPage extends BaseImports implements OnInit {
+  collections: Collection[] = [];
+  constructor(private injector: Injector) {
     super(injector);
-   this.collections.push({name: "stuff", images: this.sharedService.images})
+
+    this.sharedService.images$.subscribe(images => {
+      this.collections = [{ name: 'stuff', images: images }];
+    })
   }
 
   ngOnInit(): void {}
- 
-
- 
-
 }

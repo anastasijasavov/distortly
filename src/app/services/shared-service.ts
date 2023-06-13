@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { LocalFile } from '../dtos/local-file';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { LoadingController } from '@ionic/angular';
@@ -7,26 +7,22 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class SharedService {
-  private image?: BehaviorSubject<LocalFile | undefined>;
-  public data$ = this.image?.asObservable();
-  public images: LocalFile[] = [];
+  emptyFile: LocalFile = {name: "", data:"", path: ""};
+  isEmptyFile = true;
+  private image: BehaviorSubject<LocalFile> = new BehaviorSubject(this.emptyFile);
+  public data$: Observable<LocalFile> = this.image.asObservable();
+  public images: BehaviorSubject<LocalFile[]> = new BehaviorSubject<LocalFile[]>([]);
+  public images$: Observable<LocalFile[]> = this.images.asObservable();
   isEditMode = false;
   constructor( private loadingCtrl: LoadingController) {
   }
 
-  setImage(image?:LocalFile) {
-    console.log(image, this.image == undefined, this.image == null)
-    if(this.image == undefined){
-      this.image = new BehaviorSubject(image);
-      this.image.next(image);
-    }
-    else this.image.next(image);
-    console.log(this.image);
-    
+  setImage(image:LocalFile) {
+    this.image.next(image);
+    this.isEmptyFile = false;
   }
 
   async loadFiles() {
-    this.images = [];
 
     const loading = await this.loadingCtrl.create({
       message: 'Loading data...',
@@ -55,8 +51,7 @@ export class SharedService {
   }
 
   async loadFileData(fileNames: string[]) {
-    console.log(fileNames);
-    
+    const images: LocalFile[] = []
     for (let f of fileNames) {
       const filePath = `${Constants.IMAGE_DIR}/${f}`;
 
@@ -65,11 +60,12 @@ export class SharedService {
         directory: Directory.Data,
       });
 
-      this.images.push({
+      images.push({
         name: f,
         path: filePath,
         data: `data:image/jpeg;base64,${readFile.data}`,
       });
     }
+    this.images.next(images);
   }
 }

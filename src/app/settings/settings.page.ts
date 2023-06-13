@@ -9,6 +9,5 @@ export class SettingsPage implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log("uslo u settings")
   }
 }

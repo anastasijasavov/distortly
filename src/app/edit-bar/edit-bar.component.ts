@@ -16,7 +16,6 @@ export class EditBarComponent implements OnInit {
 
   constructor() {}
   ngOnInit(): void {
-    console.log('init');
   }
 
   startMic() {
