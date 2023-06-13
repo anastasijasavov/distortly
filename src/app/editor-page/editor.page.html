@@ -11,8 +11,8 @@
     </ion-toolbar>
   </ion-header>
 
-  <h6 *ngIf="!image">Select image from upload and click on edit to edit it!</h6>
-  <ion-img *ngIf="!!image" [src]="image!.data" class="imgClass"></ion-img>
+  <h6 *ngIf="(sharedService.data$ | async) === null "> Select image from upload and click on edit to edit it!</h6>
+  <ion-img *ngIf="(sharedService.data$ | async)" [src]="(sharedService.data$ | async)?.data" class="imgClass"></ion-img>
 
   <cmp-edit-bar class="edit-bar"></cmp-edit-bar>
 </ion-content>  

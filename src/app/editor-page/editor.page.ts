@@ -18,7 +18,12 @@ export class EditorPage extends BaseImports {
 
   constructor(private sanitizer: DomSanitizer, private injector: Injector) {
     super(injector);
-    this.image = this.sharedService.image;
+    this.sharedService.data$?.subscribe(image => {
+      this.image = image;
+      console.log("uslo u promene slike");
+      
+    });
+        
     // this.audioContext = new AudioContext();
     // this.recorder = new Recorder(this.audioContext);
     // navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {

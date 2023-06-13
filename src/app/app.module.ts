@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedService } from './services/shared-service';
+import { ToastService } from './services/toast-service';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -19,6 +20,7 @@ import { SharedService } from './services/shared-service';
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     SharedService,
+    ToastService
   ],
   bootstrap: [AppComponent],
 })

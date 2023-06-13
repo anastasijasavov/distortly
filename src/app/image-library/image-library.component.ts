@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   Camera,
@@ -11,8 +11,9 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { LoadingController, Platform, ToastController } from '@ionic/angular';
 import { LocalFile } from '../dtos/local-file';
 import { SharedService } from '../services/shared-service';
+import { BaseImports } from '../services/base-imports';
+import { Constants } from '../app.constants';
 
-const IMAGE_DIR = 'stored-images';
 
 @Component({
   selector: 'cmp-image-library',
@@ -20,85 +21,39 @@ const IMAGE_DIR = 'stored-images';
   styleUrls: ['./image-library.component.scss'],
   providers: [],
 })
-export class ImageLibraryComponent {
+export class ImageLibraryComponent extends BaseImports {
   images: LocalFile[] = [];
 
   constructor(
     private plt: Platform,
-    private http: HttpClient,
-    private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
-    private router: Router,
-    private sharedService: SharedService
-  ) {}
+    private injector: Injector,
+  ) {
+    super(injector);
+  }
 
   async ngOnInit() {
-    this.loadFiles();
+    await this.sharedService.loadFiles();
+    this.images = this.sharedService.images;
+
+    this.toastService.presentToast("test")
+
   }
 
-  async loadFiles() {
-    this.images = [];
 
-    const loading = await this.loadingCtrl.create({
-      message: 'Loading data...',
-    });
-    await loading.present();
-
-    Filesystem.readdir({
-      path: IMAGE_DIR,
-      directory: Directory.Data,
-    })
-      .then(
-        (result) => {
-          this.loadFileData(result.files.map((x) => x.name));
-        },
-        async (err) => {
-          // Folder does not yet exists!
-          await Filesystem.mkdir({
-            path: IMAGE_DIR,
-            directory: Directory.Data,
-          });
-        }
-      )
-      .then((_) => {
-        loading.dismiss();
-      });
-  }
   addToCollection(img: LocalFile){
 
   }
   // Get the actual base64 data of an image
   // base on the name of the file
-  async loadFileData(fileNames: string[]) {
-    for (let f of fileNames) {
-      const filePath = `${IMAGE_DIR}/${f}`;
 
-      const readFile = await Filesystem.readFile({
-        path: filePath,
-        directory: Directory.Data,
-      });
-
-      this.images.push({
-        name: f,
-        path: filePath,
-        data: `data:image/jpeg;base64,${readFile.data}`,
-      });
-    }
-  }
 
   // Little helper
-  async presentToast(text: string) {
-    const toast = await this.toastCtrl.create({
-      message: text,
-      duration: 3000,
-    });
-    toast.present();
-  }
+
 
   async editImage(file: LocalFile) {
     // TODO
     //bavigate to editor
-    this.sharedService.image = file;
+    this.sharedService.setImage(file);
     this.sharedService.isEditMode = true;
     this.router.navigate(['tabs/editor']);
   }
@@ -116,7 +71,7 @@ export class ImageLibraryComponent {
     });
 
     if (image) {
-      this.saveImage(image);
+      await this.saveImage(image);
     }
   }
 
@@ -126,14 +81,14 @@ export class ImageLibraryComponent {
 
     const fileName = new Date().getTime() + '.jpeg';
     const savedFile = await Filesystem.writeFile({
-      path: `${IMAGE_DIR}/${fileName}`,
+      path: `${Constants.IMAGE_DIR}/${fileName}`,
       data: base64Data,
       directory: Directory.Data,
     });
 
     // Reload the file list
     // Improve by only loading for the new image and unshifting array!
-    this.loadFiles();
+    await this.sharedService.loadFiles();
   }
 
   // https://ionicframework.com/docs/angular/your-first-app/3-saving-photos

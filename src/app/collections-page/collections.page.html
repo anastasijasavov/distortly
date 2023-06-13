@@ -1,1 +1,13 @@
-<h3>hewo</h3> 
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title> Collections </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-card *ngFor="let collection of collections">
+    <ion-card-header>
+        <ion-card-title>{{collection.name}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+      </ion-card-content>
+</ion-card>
