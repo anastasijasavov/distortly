@@ -14,7 +14,6 @@ import { SharedService } from '../services/shared-service';
 import { BaseImports } from '../services/base-imports';
 import { Constants } from '../app.constants';
 
-
 @Component({
   selector: 'cmp-image-library',
   templateUrl: './image-library.component.html',
@@ -24,32 +23,21 @@ import { Constants } from '../app.constants';
 export class ImageLibraryComponent extends BaseImports {
   images: LocalFile[] = [];
 
-  constructor(
-    private plt: Platform,
-    private injector: Injector,
-  ) {
+  constructor(private plt: Platform, private injector: Injector) {
     super(injector);
   }
 
   async ngOnInit() {
-    this.sharedService.images$.subscribe(images => {
+    this.sharedService.images$.subscribe((images) => {
       this.images = images;
     });
-
-    this.toastService.presentToast("test")
-
   }
 
-
-  addToCollection(img: LocalFile){
-
-  }
+  addToCollection(img: LocalFile) {}
   // Get the actual base64 data of an image
   // base on the name of the file
 
-
   // Little helper
-
 
   async editImage(file: LocalFile) {
     // TODO
@@ -60,7 +48,11 @@ export class ImageLibraryComponent extends BaseImports {
   }
 
   async deleteImage(file: LocalFile) {
-    // TODO
+    await Filesystem.deleteFile({
+      path: file.path,
+      directory: Directory.Data,
+    });
+    await this.sharedService.loadFiles();
   }
 
   async selectImage() {
