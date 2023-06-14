@@ -11,4 +11,4 @@ import { ImageLibraryComponent } from './image-library.component';
   declarations: [ImageLibraryComponent],
   exports: [ImageLibraryComponent],
 })
-export class ExploreContainerComponentModule {}
+export class ImageLibraryModule {}
