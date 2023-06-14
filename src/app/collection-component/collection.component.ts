@@ -12,4 +12,16 @@ export class CollectionComponent extends BaseImports implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  async deleteCollection() {
+    //TODO:
+    //delete from storage
+    //redirect to collections page
+  }
+
+  async renameCollection() {
+    //TODO:
+    //rename
+    //update storage
+  }
 }

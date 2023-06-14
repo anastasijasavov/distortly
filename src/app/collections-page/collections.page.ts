@@ -12,10 +12,12 @@ export class CollectionsPage extends BaseImports implements OnInit {
   constructor(private injector: Injector) {
     super(injector);
 
-    this.sharedService.images$.subscribe(images => {
+    this.sharedService.images$.subscribe((images) => {
       this.collections = [{ name: 'stuff', images: images }];
-    })
+    });
   }
 
   ngOnInit(): void {}
+
+  async createCollection() {}
 }

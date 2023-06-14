@@ -45,7 +45,7 @@ export class CollectionsService {
         directory: Directory.Data,
       });
 
-      res.push(readFile.data);
+      // res.push(readFile.data);
     }
   }
 }

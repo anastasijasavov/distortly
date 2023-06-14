@@ -3,6 +3,7 @@ import { LocalFile } from '../dtos/local-file';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import Recorder from 'recorder-js';
 import { BaseImports } from '../services/base-imports';
+import p5 from 'p5';
 
 @Component({
   selector: 'editor',
@@ -18,10 +19,29 @@ export class EditorPage extends BaseImports {
 
   constructor(private sanitizer: DomSanitizer, private injector: Injector) {
     super(injector);
-
+    let pic: any;
     this.sharedService.data$?.subscribe((image) => {
       this.image = image;
     });
+
+    const sketch = (s: any) => {
+      s.preload = () => {
+        // preload code
+      };
+
+      s.setup = () => {
+        //uzmi width i height od slike i napravi canvas koji je te velicine
+        s.createCanvas(400, 400);
+        p5.loadImage(this.image!.data);
+      };
+
+      s.draw = () => {
+        s.background(255);
+        s.rect(100, 100, 100, 100);
+      };
+    };
+
+    let canvas = new p5(sketch);
 
     // this.audioContext = new AudioContext();
     // this.recorder = new Recorder(this.audioContext);
@@ -44,6 +64,10 @@ export class EditorPage extends BaseImports {
       this.recorder.start();
       this.isRecording = true;
     }
+  }
+
+  async exportImage() {
+    //TODO
   }
 
   stopListening() {
