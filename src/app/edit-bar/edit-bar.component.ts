@@ -12,13 +12,16 @@ import {
   styleUrls: ['edit-bar.component.scss'],
 })
 export class EditBarComponent implements OnInit {
-  @Output() onMicStart = new EventEmitter();
+  @Output() onStartMap = new EventEmitter();
 
   constructor() {}
   ngOnInit(): void {
   }
 
   startMic() {
-    this.onMicStart.emit('start');
+  }
+
+  startMapping(){
+    this.onStartMap.emit(true);
   }
 }

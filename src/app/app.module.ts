@@ -7,9 +7,10 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { SharedService } from './services/shared-service';
-import { ToastService } from './services/toast-service';
+import { SharedService } from './services/shared.service';
+import { ToastService } from './services/toast.service';
 import { CollectionsService } from './services/collections.service';
+import { EditorService } from './services/editor.service';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -23,6 +24,7 @@ import { CollectionsService } from './services/collections.service';
     SharedService,
     ToastService,
     CollectionsService,
+    EditorService
   ],
   bootstrap: [AppComponent],
 })

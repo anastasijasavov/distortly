@@ -19,7 +19,6 @@ export class SharedService {
 
   setImage(image:LocalFile) {
     this.image.next(image);
-    console.log("Setovana slika");
     
     this.isEmptyFile = false;
   }

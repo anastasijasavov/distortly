@@ -22,5 +22,6 @@
   <cmp-edit-bar
     class="edit-bar"
     *ngIf="!sharedService.isEmptyFile"
+    (onStartMap)="onStartMap()"
   ></cmp-edit-bar>
 </ion-content>

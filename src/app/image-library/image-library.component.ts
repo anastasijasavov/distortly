@@ -10,7 +10,7 @@ import {
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { LoadingController, Platform, ToastController } from '@ionic/angular';
 import { LocalFile } from '../dtos/local-file';
-import { SharedService } from '../services/shared-service';
+import { SharedService } from '../services/shared.service';
 import { BaseImports } from '../services/base-imports';
 import { Constants } from '../app.constants';
 
