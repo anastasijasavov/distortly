@@ -14,11 +14,10 @@
   <h6 *ngIf="sharedService.isEmptyFile">
     Select image from upload and click on edit to edit it!
   </h6>
-  <ion-img
+  <div #sketch
     *ngIf="!sharedService.isEmptyFile"
-    [src]="image!.data"
     class="imgClass"
-  ></ion-img>
+  ></div>
 
   <cmp-edit-bar
     class="edit-bar"

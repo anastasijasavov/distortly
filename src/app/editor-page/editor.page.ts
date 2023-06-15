@@ -1,93 +1,41 @@
-import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Injector,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { LocalFile } from '../dtos/local-file';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import Recorder from 'recorder-js';
 import { BaseImports } from '../services/base-imports';
-// import p5 from 'p5';
+import p5, { Color } from 'p5';
+import { Observable, filter } from 'rxjs';
 
 @Component({
   selector: 'editor',
   templateUrl: 'editor.page.html',
   styleUrls: ['editor.page.scss'],
 })
-export class EditorPage extends BaseImports {
+export class EditorPage extends BaseImports implements AfterViewInit {
+  @ViewChild('sketch') sketch!: ElementRef;
+
   // private audioContext: AudioContext;
   private recorder: any;
   private isRecording: boolean = false;
   private audioSrc: SafeUrl | undefined;
   image?: LocalFile;
+  image$: Observable<LocalFile> = new Observable();
+  p5: p5;
 
   constructor(private sanitizer: DomSanitizer, private injector: Injector) {
     super(injector);
-    let pic: any;
-    let pixsize = 1;
-    let xoffset = 0;
-    let yoffset = 0;
+
+    this.image$ = this.sharedService.data$;
     this.sharedService.data$?.subscribe((image) => {
       this.image = image;
     });
-
-    // const sketch = (s: any) => {
-    //   s.preload = () => {
-    //     // preload code
-    //   };
-
-    //   s.setup = () => {
-    //     //uzmi width i height od slike i napravi canvas koji je te velicine
-    //     s.createCanvas(400, 400);
-    //     pic = p5.loadImage(this.image!.data);
-    //   };
-
-    //   s.draw = () => {
-    //     for (let x = 0; x < 400; x += pixsize) {
-    //       for (let y = 0; y < 400; y += pixsize) {
-    //         let loc = x + y * 400;
-
-    //         let r = p5.red(pic.pixels[loc]);
-    //         let g = p5.green(pic.pixels[loc]);
-    //         let b = p5.blue(pic.pixels[loc]);
-    //         let grayscale = (r + g + b) / 3;
-    //         let c = p5.color(p5.int(grayscale));
-
-    //         if (xoffset % 2 == 0 && yoffset % 2 == 0) {
-    //           if (c > 64) {
-    //             c = p5.color(255);
-    //           } else {
-    //             c = p5.color(0);
-    //           }
-    //         }
-    //         if (xoffset % 2 == 1 && yoffset % 2 == 0) {
-    //           if (c > 128) {
-    //             c = p5.color(255);
-    //           } else {
-    //             c = p5.color(0);
-    //           }
-    //         }
-    //         if (xoffset % 2 == 0 && yoffset % 2 == 1) {
-    //           if (c > 192) {
-    //             c = p5.color(255);
-    //           } else {
-    //             c = p5.color(0);
-    //           }
-    //         }
-    //         if (xoffset % 2 == 1 && yoffset % 2 == 1) {
-    //           if (c > 10) {
-    //             c = p5.color(255);
-    //           } else {
-    //             c = p5.color(0);
-    //           }
-    //         }
-
-    //         p5.fill(c);
-    //         p5.rect(x, y, pixsize, pixsize);
-    //         yoffset++;
-    //       }
-    //       xoffset++;
-    //     }
-    //     pic.updatePixels();
-    //     p5.snapshot();
-    //   };
-    // };
 
     // let canvas = new p5(sketch);
 
@@ -98,7 +46,90 @@ export class EditorPage extends BaseImports {
     //   this.recorder.init(stream);
     // });
   }
+  ngAfterViewInit(): void {
+    let pic: p5.Image;
+    let pixsize = 2;
+    let xoffset = 0;
+    let yoffset = 0;
+    const sketch = (s: p5) => {
+      s.preload = () => {
+        this.sharedService.data$.subscribe(img => pic = s.loadImage(img.data))
+      };
 
+      s.setup = () => {
+        //uzmi width i height od slike i napravi canvas koji je te velicine
+        s.createCanvas(pic.width, pic.height);
+        s.noLoop();
+        s.noStroke();
+        // s.colorMode('rgb', 255);
+      };
+      
+      s.draw = () => {
+     
+        const maxWidth = Math.min(500, pic.width);
+        pic.resize(maxWidth, 0);
+        this.renderImage(s, pic, pixsize, xoffset, yoffset);
+      };
+    };
+
+    this.p5 = new p5(sketch, this.sketch.nativeElement);
+  }
+
+  renderImage(
+    s: p5,
+    pic: p5.Image,
+    pixsize: number,
+    xoffset: number,
+    yoffset: number
+  ) {
+    pic.loadPixels();
+
+    for (let x = 0; x < pic.width; x += pixsize) {
+      for (let y = 0; y < pic.height; y += pixsize) {
+        let loc = (x + y * pic.width) * 4;
+
+        let r = pic.pixels[loc];
+        let g = pic.pixels[loc + 1];
+        let b = pic.pixels[loc + 2];
+        let grayscale = (r + g + b) / 3;
+        let c = s.color(s.int(grayscale));
+
+        if (xoffset % 2 == 0 && yoffset % 2 == 0) {
+          if (s.brightness(c) > 64) {
+            c = s.color(255);
+          } else {
+            c = s.color(0);
+          }
+        }
+        if (xoffset % 2 == 1 && yoffset % 2 == 0) {
+          if (s.brightness(c) > 128) {
+            c = s.color(255);
+          } else {
+            c = s.color(0);
+          }
+        }
+        if (xoffset % 2 == 0 && yoffset % 2 == 1) {
+          if (s.brightness(c) > 192) {
+            c = s.color(255);
+          } else {
+            c = s.color(0);
+          }
+        }
+        if (xoffset % 2 == 1 && yoffset % 2 == 1) {
+          if (s.brightness(c) > 10) {
+            c = s.color(255);
+          } else {
+            c = s.color(0);
+          }
+        }
+        s.fill(c);
+        s.rect(x, y, pixsize, pixsize);
+        yoffset++;
+      }
+      xoffset++;
+    }
+    s.updatePixels();
+  }
   startMic(event: any) {
     this.startListening();
   }

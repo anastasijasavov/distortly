@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Constants } from '../app.constants';
 import { ToastService } from './toast-service';
 import { CollectionsService } from './collections.service';
-
 export class BaseImports {
   sharedService: SharedService;
   router: Router;
