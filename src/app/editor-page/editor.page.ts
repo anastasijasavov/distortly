@@ -3,6 +3,7 @@ import { LocalFile } from '../dtos/local-file';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import Recorder from 'recorder-js';
 import { BaseImports } from '../services/base-imports';
+// import p5 from 'p5';
 
 @Component({
   selector: 'editor',
@@ -18,10 +19,77 @@ export class EditorPage extends BaseImports {
 
   constructor(private sanitizer: DomSanitizer, private injector: Injector) {
     super(injector);
-
+    let pic: any;
+    let pixsize = 1;
+    let xoffset = 0;
+    let yoffset = 0;
     this.sharedService.data$?.subscribe((image) => {
       this.image = image;
     });
+
+    // const sketch = (s: any) => {
+    //   s.preload = () => {
+    //     // preload code
+    //   };
+
+    //   s.setup = () => {
+    //     //uzmi width i height od slike i napravi canvas koji je te velicine
+    //     s.createCanvas(400, 400);
+    //     pic = p5.loadImage(this.image!.data);
+    //   };
+
+    //   s.draw = () => {
+    //     for (let x = 0; x < 400; x += pixsize) {
+    //       for (let y = 0; y < 400; y += pixsize) {
+    //         let loc = x + y * 400;
+
+    //         let r = p5.red(pic.pixels[loc]);
+    //         let g = p5.green(pic.pixels[loc]);
+    //         let b = p5.blue(pic.pixels[loc]);
+    //         let grayscale = (r + g + b) / 3;
+    //         let c = p5.color(p5.int(grayscale));
+
+    //         if (xoffset % 2 == 0 && yoffset % 2 == 0) {
+    //           if (c > 64) {
+    //             c = p5.color(255);
+    //           } else {
+    //             c = p5.color(0);
+    //           }
+    //         }
+    //         if (xoffset % 2 == 1 && yoffset % 2 == 0) {
+    //           if (c > 128) {
+    //             c = p5.color(255);
+    //           } else {
+    //             c = p5.color(0);
+    //           }
+    //         }
+    //         if (xoffset % 2 == 0 && yoffset % 2 == 1) {
+    //           if (c > 192) {
+    //             c = p5.color(255);
+    //           } else {
+    //             c = p5.color(0);
+    //           }
+    //         }
+    //         if (xoffset % 2 == 1 && yoffset % 2 == 1) {
+    //           if (c > 10) {
+    //             c = p5.color(255);
+    //           } else {
+    //             c = p5.color(0);
+    //           }
+    //         }
+
+    //         p5.fill(c);
+    //         p5.rect(x, y, pixsize, pixsize);
+    //         yoffset++;
+    //       }
+    //       xoffset++;
+    //     }
+    //     pic.updatePixels();
+    //     p5.snapshot();
+    //   };
+    // };
+
+    // let canvas = new p5(sketch);
 
     // this.audioContext = new AudioContext();
     // this.recorder = new Recorder(this.audioContext);
@@ -44,6 +112,10 @@ export class EditorPage extends BaseImports {
       this.recorder.start();
       this.isRecording = true;
     }
+  }
+
+  async exportImage() {
+    //TODO
   }
 
   stopListening() {

@@ -22,4 +22,6 @@ export class CollectionsPage extends BaseImports implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  async createCollection() {}
 }

@@ -1,11 +1,36 @@
-<ion-tabs>
+<ion-tabs class="edit-bar">
   <ion-tab-bar slot="bottom">
-    <!-- <ion-tab-button (click)="startMic()" tab="tab1">
-      <ion-icon name="mic"></ion-icon>
-    </ion-tab-button> -->
-
-    <ion-tab-button>
-      <ion-icon src="../../assets/icons8-pixel-heart-50.png"></ion-icon>
-    </ion-tab-button>
+    <button id="pixel-btn" (click)="startMic()">
+      <a href="/assets/icons8-pixel-heart-50.png"></a>
+    </button>
+    <ion-popover trigger="pixel-btn" triggerAction="hover">
+      <ng-template>
+        <ion-content class="ion-padding">Dither</ion-content>
+      </ng-template>
+    </ion-popover>
+    <button id="pixel-sort" (click)="startMic()">
+      <img src="/assets/icons8-sort-32.png" />
+    </button>
+    <ion-popover trigger="pixel-sort" triggerAction="hover">
+      <ng-template>
+        <ion-content class="ion-padding">Pixel sort</ion-content>
+      </ng-template>
+    </ion-popover>
+    <button id="sound-glitch" (click)="startMic()">
+      <img src="/assets/icons8-sound-50.png" />
+    </button>
+    <ion-popover trigger="sound-glitch" triggerAction="hover">
+      <ng-template>
+        <ion-content class="ion-padding">Glitch</ion-content>
+      </ng-template>
+    </ion-popover>
+    <button id="inpaint" (click)="startMic()">
+      <img src="/assets/icons8-merge-64.png" />
+    </button>
+    <ion-popover trigger="inpaint" triggerAction="hover">
+      <ng-template>
+        <ion-content class="ion-padding">Inpainting</ion-content>
+      </ng-template>
+    </ion-popover>
   </ion-tab-bar>
 </ion-tabs>

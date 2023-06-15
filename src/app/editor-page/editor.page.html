@@ -11,8 +11,17 @@
     </ion-toolbar>
   </ion-header>
 
-  <h6 *ngIf="sharedService.isEmptyFile"> Select image from upload and click on edit to edit it!</h6>
-  <ion-img *ngIf="!sharedService.isEmptyFile" [src]="image!.data" class="imgClass"></ion-img>
+  <h6 *ngIf="sharedService.isEmptyFile">
+    Select image from upload and click on edit to edit it!
+  </h6>
+  <ion-img
+    *ngIf="!sharedService.isEmptyFile"
+    [src]="image!.data"
+    class="imgClass"
+  ></ion-img>
 
-  <cmp-edit-bar class="edit-bar"></cmp-edit-bar>
-</ion-content>  
+  <cmp-edit-bar
+    class="edit-bar"
+    *ngIf="!sharedService.isEmptyFile"
+  ></cmp-edit-bar>
+</ion-content>

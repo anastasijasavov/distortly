@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedService } from './services/shared-service';
 import { ToastService } from './services/toast-service';
+import { CollectionsService } from './services/collections.service';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -20,8 +21,9 @@ import { ToastService } from './services/toast-service';
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     SharedService,
-    ToastService
+    ToastService,
+    CollectionsService,
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule  {}
+export class AppModule {}
