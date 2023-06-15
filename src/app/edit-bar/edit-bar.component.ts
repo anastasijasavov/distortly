@@ -13,6 +13,7 @@ import {
 })
 export class EditBarComponent implements OnInit {
   @Output() onStartMap = new EventEmitter();
+  @Output() onTriangulate = new EventEmitter();
 
   constructor() {}
   ngOnInit(): void {
@@ -23,5 +24,9 @@ export class EditBarComponent implements OnInit {
 
   startMapping(){
     this.onStartMap.emit(true);
+  }
+
+  triangulate() {
+    this.onTriangulate.emit(true);
   }
 }

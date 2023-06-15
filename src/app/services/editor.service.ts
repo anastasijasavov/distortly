@@ -55,7 +55,22 @@ export class EditorService {
     s.updatePixels();
   }
 
-  triangulate(p5: p5, pic: p5.Image) {}
+  triangulate(s: p5, pic: p5.Image) {
+    let x = s.mouseX;
+    let y = s.mouseY;
+    let c = pic.get(s.int(x), s.int(y));
+
+    s.fill(c);
+    s.noStroke();
+    s.triangle(
+      x,
+      y,
+      s.int(x + s.random(50)),
+      s.int(y + s.random(70)),
+      s.int(x - s.random(100)),
+      s.int(y + s.random(60))
+    );
+  }
 
   get3dMap(s: p5, pic: p5.Image) {
     s.background(241);
@@ -92,5 +107,67 @@ export class EditorService {
       }
     }
     s.pop();
+  }
+
+
+  pixelSort(s: p5, img: p5.Image){
+    s.image(img, 0, 0);
+  
+    // Load the pixel data from the canvas
+    s.loadPixels();
+    
+    console.log('Sorting the image...');
+    const pixels = s.pixels;
+    // Loop through each row and sort the pixels in that row
+    for (let y = 0; y < s.height; y++) {
+      // Get a row
+      let row = [];
+      for (let x = 0; x < s.width; x++) {
+        let index = (x + y * s.width) * 4;
+        row.push([
+          pixels[index],      // Red
+          pixels[index + 1],  // Green
+          pixels[index + 2],  // Blue
+          pixels[index + 3]   // Alpha
+        ]);
+      }
+      
+      // Sort the row
+      row = this.sortRow(row);
+      
+      // Record the sorted data
+      for (let x = 0; x < s.width; x++) {
+        let index = (x + y * s.width) * 4;
+        pixels[index] = row[x][0];     // Red
+        pixels[index + 1] = row[x][1]; // Green
+        pixels[index + 2] = row[x][2]; // Blue
+        pixels[index + 3] = row[x][3]; // Alpha
+      }
+    }
+    
+    // Update the canvas with sorted pixels
+    s.updatePixels();
+    
+    console.log('Image preview...');
+  }
+
+  sortRow(row: any[]) {
+    let min = 255 * 3;
+    let minIndex = 0;
+    
+    // Find the darkest pixel in the row
+    for (let i = 0; i < row.length; i++) {
+      // Each pixel has an RGB value, for instance, [255, 255, 255]
+      let temp = row[i][0] + row[i][1] + row[i][2];
+      if (temp < min) {
+        min = temp;
+        minIndex = i;
+      }
+    }
+    
+    // Sort the row up to the brightest pixel
+    let sortedRow = row.slice(0, minIndex);
+    sortedRow.sort();
+    return sortedRow.concat(row.slice(minIndex));
   }
 }

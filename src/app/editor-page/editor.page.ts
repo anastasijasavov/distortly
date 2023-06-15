@@ -101,8 +101,68 @@ export class EditorPage extends BaseImports implements AfterViewInit {
         img.resize(maxWidth, 0);
         this.editorService.get3dMap(s, img);
       };
+    };
 
-     
+    this.p5 = new p5(sketch, this.sketch.nativeElement);
+  }
+
+  onTriangulate() {
+    let img: p5.Image;
+    const sketch = (s: p5) => {
+      s.preload = () => {
+        this.sharedService.data$.subscribe(
+          (image) => (img = s.loadImage(image.data))
+        );
+      };
+
+      s.setup = () => {
+        const canvas = s.createCanvas(img.width, img.height);
+        s.noStroke();
+
+        canvas.mouseClicked(() => {
+          if (s.mouseIsPressed) {
+            s.saveCanvas('triangulation', 'jpg');
+          }
+        });
+      };
+
+      s.draw = () => {
+        const maxWidth = Math.min(500, img.width);
+        img.resize(maxWidth, 0);
+        this.editorService.triangulate(s, img);
+      };
+    };
+
+    this.p5 = new p5(sketch, this.sketch.nativeElement);
+  }
+
+  onPixelSort() {
+
+    let img: p5.Image;
+    const sketch = (s: p5) => {
+      s.preload = () => {
+        this.sharedService.data$.subscribe(
+          (image) => (img = s.loadImage(image.data))
+        );
+        s.noLoop();
+      };
+
+      s.setup = () => {
+        const canvas = s.createCanvas(img.width, img.height);
+        s.noStroke();
+
+        canvas.mouseClicked(() => {
+          if (s.mouseIsPressed) {
+            s.saveCanvas('pixel-sort', 'jpg');
+          }
+        });
+      };
+
+      s.draw = () => {
+        const maxWidth = Math.min(500, img.width);
+        img.resize(maxWidth, 0);
+        this.editorService.pixelSort(s, img);
+      };
     };
 
     this.p5 = new p5(sketch, this.sketch.nativeElement);
