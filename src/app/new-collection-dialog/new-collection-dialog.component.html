@@ -1,0 +1,18 @@
+<ion-modal #modal trigger="open-custom-dialog">
+    <ng-template>
+      <div class="confirm-modal">
+        <h1>Name your collection</h1>
+        <ion-input
+        type="text"
+        fill="solid"
+        label="Name"
+        labelPlacement="floating"
+        helperText=".."
+        [(ngModel)]="name"
+      ></ion-input>
+      <ion-tab-button>
+        <img src="/assets/icons8-confirm-30.png"/>
+      </ion-tab-button>
+      </div>
+    </ng-template>
+  </ion-modal>

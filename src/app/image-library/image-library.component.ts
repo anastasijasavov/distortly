@@ -36,8 +36,6 @@ export class ImageLibraryComponent extends BaseImports {
       this.images = images;
     });
 
-    this.toastService.presentToast("test")
-
   }
 
 
