@@ -1,6 +1,7 @@
 <ion-header [translucent]="true" *ngIf="sharedService.isEditMode">
   <ion-toolbar>
     <ion-title> Edit </ion-title>
+    <button>Save <a href="/assets/icons8-save-50.png" ></a></button>
   </ion-toolbar>
 </ion-header>
 
@@ -22,6 +23,7 @@
   <cmp-edit-bar
     class="edit-bar"
     *ngIf="!sharedService.isEmptyFile"
+    (onDither)="onDither()"
     (onStartMap)="onStartMap()"
     (onTriangulate)="onTriangulate()"
   ></cmp-edit-bar>

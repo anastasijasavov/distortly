@@ -3,15 +3,13 @@ import {
   Component,
   ElementRef,
   Injector,
-  OnDestroy,
-  OnInit,
   ViewChild,
 } from '@angular/core';
 import { LocalFile } from '../dtos/local-file';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { BaseImports } from '../services/base-imports';
-import p5, { Color } from 'p5';
-import { Observable, filter } from 'rxjs';
+import p5 from 'p5';
+import { Observable } from 'rxjs';
 import { DitherParams } from '../dtos/dither.dto';
 
 @Component({
@@ -22,13 +20,13 @@ import { DitherParams } from '../dtos/dither.dto';
 export class EditorPage extends BaseImports implements AfterViewInit {
   @ViewChild('sketch') sketch!: ElementRef;
 
-  // private audioContext: AudioContext;
-  private recorder: any;
-  private isRecording: boolean = false;
-  private audioSrc: SafeUrl | undefined;
+  isFirstFilter = true;
+  imageStack: p5.Image[] = [];
   image?: LocalFile;
   image$: Observable<LocalFile> = new Observable();
   p5: p5;
+  pic: p5.Image;
+
 
   constructor(private sanitizer: DomSanitizer, private injector: Injector) {
     super(injector);
@@ -39,7 +37,23 @@ export class EditorPage extends BaseImports implements AfterViewInit {
     });
   }
   ngAfterViewInit(): void {
-    let pic: p5.Image;
+  }
+
+  ngOnInit(): void {}
+
+  preloadImage(s: p5, img?: p5.Image){
+    if(!img){
+      this.sharedService.data$.subscribe(
+        (image) => {
+          this.pic = s.loadImage(image.data);
+          this.imageStack.push(this.pic);
+        }
+      );
+    }else {
+      this.imageStack.push(img);
+    }
+  }
+  onDither(){
     const ditherParams: DitherParams = {
       pixsize: 2,
       yoffset: 0,
@@ -47,35 +61,33 @@ export class EditorPage extends BaseImports implements AfterViewInit {
     };
     const sketch = (s: p5) => {
       s.preload = () => {
-        this.sharedService.data$.subscribe(
-          (img) => (pic = s.loadImage(img.data))
-        );
+        this.preloadImage(s);
       };
-
+      
       s.setup = () => {
-        s.createCanvas(pic.width, pic.height);
+
+        const maxWidth = Math.min(window.innerWidth, this.pic.width);
+        this.pic.resize(maxWidth, 0);
+        var canvas = s.createCanvas(this.pic.width, this.pic.height);
+
+        canvas.mouseClicked(() => {
+          if (s.mouseIsPressed) {
+            s.saveCanvas('dithered', 'jpg');
+          }
+        });
         s.noLoop();
         s.noStroke();
+        
       };
 
       s.draw = () => {
-        const maxWidth = Math.min(500, pic.width);
-        pic.resize(maxWidth, 0);
-        this.editorService.dither(s, pic, ditherParams);
+        this.editorService.dither(s, this.pic, ditherParams);
       };
 
-      s.mousePressed = (e: any) => {
-        if (s.mouseIsPressed) {
-          s.saveCanvas('dithered', 'jpg');
-        }
-      };
     };
-
     this.p5 = new p5(sketch, this.sketch.nativeElement);
+
   }
-
-  ngOnInit(): void {}
-
   onStartMap() {
     let img: p5.Image;
     const sketch = (s: p5) => {
@@ -167,4 +179,11 @@ export class EditorPage extends BaseImports implements AfterViewInit {
 
     this.p5 = new p5(sketch, this.sketch.nativeElement);
   }
+
+
+  // @HostListener('window:resize', ['$event'])
+  // onResize(event:any) {
+  //   const maxWidth = Math.min(this.pic.width, event.target.width);
+  //   this.pic.resize(maxWidth, 0);
+  // }
 }
