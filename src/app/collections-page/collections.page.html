@@ -4,15 +4,16 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <div class="collection-card-container">
+    <div class="collection-card-container" *ngIf="collections.length > 0">
+        <h4>testic</h4>
         <ion-card *ngFor="let collection of collections" class="collection-card">
             <ion-card-header>
-                <ion-card-title class="card-title">{{collection.name}}</ion-card-title>
+                <ion-card-title class="card-title">{{collection?.name}}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-                <ion-thumbnail slot="start" class="collecitons-thumbnail">
-                    <ion-img [src]="collection.images[0].data" class="image1"></ion-img>
-                    <ion-img [src]="collection.images[1].data" class="image2"></ion-img>
+                <ion-thumbnail slot="start" class="collecitons-thumbnail" *ngIf="collection?.images && collection?.images!.length  > 1">
+                    <ion-img [src]="collection!.images[0].data" class="image1"></ion-img>
+                    <ion-img [src]="collection!.images[1].data" class="image2"></ion-img>
                 </ion-thumbnail>
             </ion-card-content>
         </ion-card>
@@ -25,4 +26,4 @@
 
 </ion-content>
 
-<new-col-dialog-cmp></new-col-dialog-cmp>
+<new-col-dialog-cmp (onCreateCollection)="refreshCollection()"></new-col-dialog-cmp>

@@ -2,7 +2,12 @@ import { createSelector } from '@ngrx/store';
 import { collectionAdapter, CollectionState } from './collections.reducers';
 import { AppState } from '../reducers';
 
-export const selectCollectionState = (state: AppState) => state.collections;
+export const selectCollectionState = (state: CollectionState) => state;
+
+export const selectCollections = createSelector(
+    selectCollectionState, 
+    (state: CollectionState) => state.entities ? Object.values(state.entities) : []
+)
 
 export const { selectAll: selectAllCollections } =
   collectionAdapter.getSelectors(selectCollectionState);

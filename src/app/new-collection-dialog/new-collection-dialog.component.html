@@ -12,7 +12,7 @@
           [(ngModel)]="name">
         </ion-input>
       <div class="button-container">
-        <ion-tab-button>
+        <ion-tab-button (click)="cancel()">
           <img src="/assets/icons8-x-30.png" />
         </ion-tab-button>
         <ion-tab-button (click)="createCollection()">

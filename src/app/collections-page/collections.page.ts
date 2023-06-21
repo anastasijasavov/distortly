@@ -1,9 +1,11 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { Collection } from '../dtos/collection.dto';
 import { BaseImports } from '../services/base-imports';
-import { AppState } from '../store/reducers';
-import { Store } from '@ngrx/store';
-import * as fromActions from "../store/collections/collections.actions";
+import * as fromActions from '../store/collections/collections.actions';
+import { selectCollectionState, selectCollections } from '../store/collections/collections.selectors';
+import { Store, select } from '@ngrx/store';
+import { CollectionDo } from '../dtos/collection.do';
+import { Observable } from 'rxjs';
+import { CollectionState } from '../store/collections/collections.reducers';
 
 @Component({
   selector: 'collections',
@@ -11,22 +13,24 @@ import * as fromActions from "../store/collections/collections.actions";
   styleUrls: ['collections.page.scss'],
 })
 export class CollectionsPage extends BaseImports implements OnInit {
-  collections: Collection[] = [];
-  constructor(private injector: Injector) {
+  collections: (CollectionDo | undefined)[] = [];
+  constructor(private injector: Injector, private store2: Store<CollectionState>) {
     super(injector);
 
-    this.sharedService.images$.subscribe((images) => {
-      this.collections = [
-        { name: 'stuff', images: images },
-        { name: 'stuff 2', images: images },
-        { name: 'stuff 3', images: images },
-      ];
+    this.sharedService.images$.subscribe((images) => {});
+    this.store2.select(selectCollections).subscribe((col) => {
+      this.collections = col;
     });
-    this.store.dispatch(fromActions.addCollection({collection: this.collections[0]}));
-
   }
 
   ngOnInit(): void {}
 
   async createCollection() {}
+
+  refreshCollection(){
+    this.store2.dispatch(fromActions.loadCollections());
+    this.store2.select(selectCollections).subscribe((col) => {
+      this.collections = col;
+    });
+  }
 }

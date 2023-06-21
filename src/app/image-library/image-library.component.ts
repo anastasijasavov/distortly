@@ -13,6 +13,9 @@ import { Constants } from '../app.constants';
 import { AppState } from '../store/reducers';
 import { Store } from '@ngrx/store';
 import * as fromActions from '../store/collections/collections.actions';
+import { CollectionDo } from '../dtos/collection.do';
+import { CollectionState } from '../store/collections/collections.reducers';
+import { selectCollections } from '../store/collections/collections.selectors';
 @Component({
   selector: 'cmp-image-library',
   templateUrl: './image-library.component.html',
@@ -22,13 +25,14 @@ import * as fromActions from '../store/collections/collections.actions';
 export class ImageLibraryComponent extends BaseImports {
   images: LocalFile[] = [];
   customPopoverOptions = {
-    header: 'Collections',
-    subHeader: 'Select collections',
+    header: 'Select Collections',
   };
 
+  collections: (CollectionDo | undefined)[] = [];
   constructor(
     private plt: Platform,
     private injector: Injector,
+    private store2: Store<CollectionState>
   ) {
     super(injector);
   }
@@ -37,6 +41,10 @@ export class ImageLibraryComponent extends BaseImports {
     this.sharedService.images$.subscribe((images) => {
       this.images = images;
     });
+
+    this.store2.select(selectCollections).subscribe(col => {
+      this.collections = col;
+    })
   }
 
   addToCollection(id: number, image: LocalFile) {

@@ -13,7 +13,7 @@
       </ion-button>
       <ion-item>
         <ion-select label="Add to.." [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="">
-          <ion-select-option value="brown">Brown</ion-select-option>
+          <ion-select-option *ngFor="let item of collections">{{item?.name}}</ion-select-option>
         </ion-select>
       </ion-item>
       <ion-button class="icon" slot="end" fill="clear" (click)="editImage(file)">
