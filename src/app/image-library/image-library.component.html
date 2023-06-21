@@ -18,8 +18,10 @@
       </ion-item>
       <ion-button class="icon" slot="end" fill="clear" (click)="editImage(file)">
         <img src="/assets/icons8-edit-50.png" />
+        <confirm-dialog (onDelete)="deleteImage(imageToDelete)"></confirm-dialog>
+
       </ion-button>
-      <ion-button class="icon" slot="end" fill="clear" (click)="deleteImage(file)">
+      <ion-button class="icon" slot="end" id="open-confirm-dialog" fill="clear" (click)="setImageToDelete(file)">
         <img src="/assets/icons8-x-30.png" />
       </ion-button>
     </ion-item>

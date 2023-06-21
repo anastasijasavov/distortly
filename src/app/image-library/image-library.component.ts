@@ -28,6 +28,8 @@ export class ImageLibraryComponent extends BaseImports {
     header: 'Select Collections',
   };
 
+  imageToDelete:LocalFile;
+
   collections: (CollectionDo | undefined)[] = [];
   constructor(
     private plt: Platform,
@@ -65,6 +67,9 @@ export class ImageLibraryComponent extends BaseImports {
     this.router.navigate(['tabs/editor']);
   }
 
+  setImageToDelete(image:LocalFile){
+    this.imageToDelete = image;
+  }
   async deleteImage(file: LocalFile) {
     await Filesystem.deleteFile({
       path: file.path,
