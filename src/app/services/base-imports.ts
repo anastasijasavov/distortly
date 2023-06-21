@@ -5,6 +5,8 @@ import { Constants } from '../app.constants';
 import { ToastService } from './toast.service';
 import { CollectionsService } from './collections.service';
 import { EditorService } from './editor.service';
+import { AppState } from '@capacitor/app';
+import { Store } from '@ngrx/store';
 export class BaseImports {
   sharedService: SharedService;
   router: Router;
@@ -12,6 +14,7 @@ export class BaseImports {
   toastService: ToastService;
   collectionService: CollectionsService;
   editorService: EditorService;
+  store: Store<AppState>;
   constructor(injector: Injector) {
     this.sharedService = injector.get(SharedService);
     this.router = injector.get(Router);
@@ -19,5 +22,6 @@ export class BaseImports {
     this.toastService = injector.get(ToastService);
     this.collectionService = injector.get(CollectionsService);
     this.editorService = injector.get(EditorService);
+    this.store = injector.get(Store<AppState>);
   }
 }

@@ -1,14 +1,15 @@
 import { createReducer, on } from '@ngrx/store';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Collection } from 'src/app/dtos/collection.dto';
 import * as CollectionActions from './collections.actions';
 
-export interface CollectionState extends EntityState<Collection> {
+import { CollectionDo } from 'src/app/dtos/collection.do';
+
+export interface CollectionState extends EntityState<CollectionDo> {
   // additional state properties can be defined here
 }
 
-export const collectionAdapter: EntityAdapter<Collection> =
-  createEntityAdapter<Collection>();
+export const collectionAdapter: EntityAdapter<CollectionDo> =
+  createEntityAdapter<CollectionDo>();
 
 export const initialCollectionState: CollectionState =
   collectionAdapter.getInitialState({
@@ -18,13 +19,16 @@ export const initialCollectionState: CollectionState =
 export const collectionReducer = createReducer(
   initialCollectionState,
   on(CollectionActions.loadCollections, (state) => state),
-  on(CollectionActions.addCollection, (state, { collection }) =>
-  {
-    console.log("EVO USLO");
-    
-     return collectionAdapter.addOne(collection, state)
-  }
-  ),
+  on(CollectionActions.addCollection, (state, { collection }) => {
+    const col: CollectionDo = {
+      ...collection,
+      id:
+        state.ids.length > 0 ? <number>state.ids[state.ids.length - 1] + 1 : 0,
+    };
+    console.log(state, col);
+
+    return collectionAdapter.addOne(col, state);
+  }),
   on(CollectionActions.updateCollection, (state, { id, changes }) =>
     collectionAdapter.updateOne({ id, changes }, state)
   ),

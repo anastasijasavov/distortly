@@ -29,7 +29,6 @@ export class ImageLibraryComponent extends BaseImports {
   constructor(
     private plt: Platform,
     private injector: Injector,
-    private store: Store<AppState>
   ) {
     super(injector);
   }

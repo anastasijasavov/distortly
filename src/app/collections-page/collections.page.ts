@@ -12,17 +12,17 @@ import * as fromActions from "../store/collections/collections.actions";
 })
 export class CollectionsPage extends BaseImports implements OnInit {
   collections: Collection[] = [];
-  constructor(private injector: Injector, private store:Store<AppState>) {
+  constructor(private injector: Injector) {
     super(injector);
 
     this.sharedService.images$.subscribe((images) => {
       this.collections = [
-        {id: 0, name: 'stuff', images: images },
-        { id: 1, name: 'stuff 2', images: images },
-        { id: 2, name: 'stuff 3', images: images },
+        { name: 'stuff', images: images },
+        { name: 'stuff 2', images: images },
+        { name: 'stuff 3', images: images },
       ];
     });
-    store.dispatch(fromActions.addCollection({collection: this.collections[0]}));
+    this.store.dispatch(fromActions.addCollection({collection: this.collections[0]}));
 
   }
 

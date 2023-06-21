@@ -78,6 +78,10 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  /*custom*/
+
+  --custom-color-input: #605D68;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -235,6 +239,6 @@
 
     --ion-tab-bar-background: #2F2B3A;
 
-    --ion-card-background: #1e1e1e;
+    --ion-card-background: #2F2B3A;
   }
 }
