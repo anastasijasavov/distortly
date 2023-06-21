@@ -8,11 +8,11 @@
       <ion-thumbnail slot="start">
         <ion-img [src]="file.data"></ion-img>
       </ion-thumbnail>
-      <ion-button class="icon" slot="end" fill="clear" (click)="addToCollection(file)">
+      <ion-button class="icon" slot="end" fill="clear">
         <img src="/assets/icons8-plus-50.png" />
       </ion-button>
       <ion-item>
-        <ion-select label="Add to.." [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="Select One">
+        <ion-select label="Add to.." [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="">
           <ion-select-option value="brown">Brown</ion-select-option>
         </ion-select>
       </ion-item>

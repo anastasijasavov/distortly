@@ -10,7 +10,9 @@ import { Platform } from '@ionic/angular';
 import { LocalFile } from '../dtos/local-file';
 import { BaseImports } from '../services/base-imports';
 import { Constants } from '../app.constants';
-
+import { AppState } from '../store/reducers';
+import { Store } from '@ngrx/store';
+import * as fromActions from '../store/collections/collections.actions';
 @Component({
   selector: 'cmp-image-library',
   templateUrl: './image-library.component.html',
@@ -24,7 +26,11 @@ export class ImageLibraryComponent extends BaseImports {
     subHeader: 'Select collections',
   };
 
-  constructor(private plt: Platform, private injector: Injector) {
+  constructor(
+    private plt: Platform,
+    private injector: Injector,
+    private store: Store<AppState>
+  ) {
     super(injector);
   }
 
@@ -34,7 +40,11 @@ export class ImageLibraryComponent extends BaseImports {
     });
   }
 
-  addToCollection(img: LocalFile) {}
+  addToCollection(id: number, image: LocalFile) {
+    this.store.dispatch(
+      fromActions.updateCollection({ id: id.toString(), changes: image })
+    );
+  }
   // Get the actual base64 data of an image
   // base on the name of the file
 

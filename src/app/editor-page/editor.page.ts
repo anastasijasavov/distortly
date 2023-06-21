@@ -14,7 +14,7 @@ import { BaseImports } from '../services/base-imports';
 import p5 from 'p5';
 import { Observable } from 'rxjs';
 import { DitherParams } from '../dtos/dither.dto';
-import { CanDeactivate, NavigationStart, Router } from '@angular/router';
+import { ActivationStart, CanDeactivate, NavigationStart, Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'editor',
@@ -23,7 +23,7 @@ import { CanDeactivate, NavigationStart, Router } from '@angular/router';
 })
 export class EditorPage extends BaseImports implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sketch') sketch!: ElementRef;
-
+  @ViewChild(RouterOutlet) outlet: RouterOutlet;
   isFirstFilter = true;
   imageStack: p5.Image[] = [];
   image?: LocalFile;
@@ -41,6 +41,10 @@ export class EditorPage extends BaseImports implements OnInit, AfterViewInit, On
     });
   }
   ngAfterViewInit(): void {
+    this.router.events.subscribe(e => {
+      if (e instanceof ActivationStart && e.snapshot.outlet === "edit")
+        this.outlet.deactivate();
+    });
   }
 
   ngOnInit(): void {
