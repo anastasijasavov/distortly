@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
   Injector,
   OnDestroy,
   OnInit,
@@ -13,6 +14,7 @@ import { BaseImports } from '../services/base-imports';
 import p5 from 'p5';
 import { Observable } from 'rxjs';
 import { DitherParams } from '../dtos/dither.dto';
+import { CanDeactivate, NavigationStart, Router } from '@angular/router';
 
 @Component({
   selector: 'editor',
@@ -30,7 +32,7 @@ export class EditorPage extends BaseImports implements OnInit, AfterViewInit, On
   pic: p5.Image;
 
 
-  constructor(private sanitizer: DomSanitizer, private injector: Injector) {
+  constructor(private sanitizer: DomSanitizer, private injector: Injector, router:Router) {
     super(injector);
 
     this.image$ = this.sharedService.data$;
@@ -42,11 +44,15 @@ export class EditorPage extends BaseImports implements OnInit, AfterViewInit, On
   }
 
   ngOnInit(): void {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart && this.p5) {
+        this.p5.remove();
+      }
+    });
   }
 
+
   preloadImage(s: p5 , filename: string, img?: p5.Image){
-    console.log("preload", img);
-    
     if(!img){
       this.sharedService.data$.subscribe(
         (image) => {
@@ -217,4 +223,11 @@ export class EditorPage extends BaseImports implements OnInit, AfterViewInit, On
   //   const maxWidth = Math.min(this.pic.width, event.target.width);
   //   this.pic.resize(maxWidth, 0);
   // }
+
+  
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    this.p5.remove();
+    return true;
+  }
 }

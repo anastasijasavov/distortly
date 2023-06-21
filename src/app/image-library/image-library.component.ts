@@ -1,6 +1,4 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, Injector } from '@angular/core';
-import { Router } from '@angular/router';
 import {
   Camera,
   CameraResultType,
@@ -8,9 +6,8 @@ import {
   Photo,
 } from '@capacitor/camera';
 import { Directory, Filesystem } from '@capacitor/filesystem';
-import { LoadingController, Platform, ToastController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { LocalFile } from '../dtos/local-file';
-import { SharedService } from '../services/shared.service';
 import { BaseImports } from '../services/base-imports';
 import { Constants } from '../app.constants';
 
@@ -22,6 +19,10 @@ import { Constants } from '../app.constants';
 })
 export class ImageLibraryComponent extends BaseImports {
   images: LocalFile[] = [];
+  customPopoverOptions = {
+    header: 'Collections',
+    subHeader: 'Select collections',
+  };
 
   constructor(private plt: Platform, private injector: Injector) {
     super(injector);
