@@ -15,6 +15,8 @@ export class EditBarComponent implements OnInit {
   @Output() onStartMap = new EventEmitter();
   @Output() onTriangulate = new EventEmitter();
   @Output() onDither = new EventEmitter();
+  @Output() onPixelSort = new EventEmitter();
+  @Output() onGlitch = new EventEmitter();
 
   constructor() {}
   ngOnInit(): void {
@@ -34,4 +36,14 @@ export class EditBarComponent implements OnInit {
   triangulate() {
     this.onTriangulate.emit(true);
   }
+
+  pixelSort() {
+    this.onPixelSort.emit(true);
+  }
+
+  glitch() {
+    this.onGlitch.emit(true);
+  }
+
+
 }

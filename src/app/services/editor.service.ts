@@ -4,6 +4,7 @@ import { DitherParams } from '../dtos/dither.dto';
 
 @Injectable()
 export class EditorService {
+
   dither(s: p5, pic: p5.Image, ditherParams: DitherParams) {
     pic.loadPixels();
 
@@ -109,13 +110,12 @@ export class EditorService {
     s.pop();
   }
 
-
-  pixelSort(s: p5, img: p5.Image){
+  pixelSort(s: p5, img: p5.Image) {
     s.image(img, 0, 0);
-  
+
     // Load the pixel data from the canvas
     s.loadPixels();
-    
+
     console.log('Sorting the image...');
     const pixels = s.pixels;
     // Loop through each row and sort the pixels in that row
@@ -125,36 +125,36 @@ export class EditorService {
       for (let x = 0; x < s.width; x++) {
         let index = (x + y * s.width) * 4;
         row.push([
-          pixels[index],      // Red
-          pixels[index + 1],  // Green
-          pixels[index + 2],  // Blue
-          pixels[index + 3]   // Alpha
+          pixels[index], // Red
+          pixels[index + 1], // Green
+          pixels[index + 2], // Blue
+          pixels[index + 3], // Alpha
         ]);
       }
-      
+
       // Sort the row
       row = this.sortRow(row);
-      
+
       // Record the sorted data
       for (let x = 0; x < s.width; x++) {
         let index = (x + y * s.width) * 4;
-        pixels[index] = row[x][0];     // Red
+        pixels[index] = row[x][0]; // Red
         pixels[index + 1] = row[x][1]; // Green
         pixels[index + 2] = row[x][2]; // Blue
         pixels[index + 3] = row[x][3]; // Alpha
       }
     }
-    
+
     // Update the canvas with sorted pixels
     s.updatePixels();
-    
+
     console.log('Image preview...');
   }
 
   sortRow(row: any[]) {
     let min = 255 * 3;
     let minIndex = 0;
-    
+
     // Find the darkest pixel in the row
     for (let i = 0; i < row.length; i++) {
       // Each pixel has an RGB value, for instance, [255, 255, 255]
@@ -164,10 +164,49 @@ export class EditorService {
         minIndex = i;
       }
     }
-    
+
     // Sort the row up to the brightest pixel
     let sortedRow = row.slice(0, minIndex);
     sortedRow.sort();
     return sortedRow.concat(row.slice(minIndex));
+  }
+
+  glitch(s: p5, img: p5.Image) {
+    let threshold = 80; // Threshold for edge detection
+    let glitchColor = [255, 0, 0]; // Color of the shifted edges
+
+    // Set the number of glitches and their intensity
+    // Load pixels of the image
+    img.loadPixels();
+
+    // Iterate over each pixel to detect edges
+    for (let x = 1; x < img.width - 1; x++) {
+      for (let y = 1; y < img.height - 1; y++) {
+        // Get pixel indices
+        const i = (x + y * img.width) * 4;
+
+        // Apply edge detection algorithm
+        const diff =
+          s.abs(
+            s.brightness([img.pixels[i - 4]]) -
+              s.brightness([img.pixels[i + 4]])
+          ) +
+          s.abs(
+            s.brightness([img.pixels[i - img.width * 4]]) -
+              s.brightness([img.pixels[i + img.width * 4]])
+          );
+
+        // If the difference is above the threshold, shift the pixel color
+        if (diff > threshold) {
+          // Shift the pixel color to the right
+          img.pixels[i + 4] = glitchColor[0];
+          img.pixels[i + 5] = glitchColor[1];
+          img.pixels[i + 6] = glitchColor[2];
+        }
+      }
+    }
+
+    // Update the modified pixels on the canvas
+    img.updatePixels();
   }
 }

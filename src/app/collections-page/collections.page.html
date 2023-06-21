@@ -4,19 +4,21 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <ion-card *ngFor="let collection of collections">
-        <ion-card-header>
-            <ion-card-title>{{collection.name}}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-            <ion-thumbnail slot="start">
-                <ion-img [src]="collection.images[0].data"></ion-img>
-            </ion-thumbnail>
-        </ion-card-content>
-    </ion-card>
-
+    <div class="collection-card-container">
+        <ion-card *ngFor="let collection of collections" class="collection-card">
+            <ion-card-header>
+                <ion-card-title class="card-title">{{collection.name}}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-thumbnail slot="start" class="collecitons-thumbnail">
+                    <ion-img [src]="collection.images[0].data" class="image1"></ion-img>
+                    <ion-img [src]="collection.images[1].data" class="image2"></ion-img>
+                </ion-thumbnail>
+            </ion-card-content>
+        </ion-card>
+    </div>
     <ion-fab>
-        <ion-fab-button id="open-custom-dialog" expand="block">
+        <ion-fab-button id="open-custom-dialog" expand="block" class="add-collection-button">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>

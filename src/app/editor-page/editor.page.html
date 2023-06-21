@@ -1,7 +1,9 @@
 <ion-header [translucent]="true" *ngIf="sharedService.isEditMode">
   <ion-toolbar>
     <ion-title> Edit </ion-title>
-    <button>Save <a href="/assets/icons8-save-50.png" ></a></button>
+    <button>
+      <img src="/assets/icons8-save-50.png" />
+    </button>
   </ion-toolbar>
 </ion-header>
 
@@ -15,16 +17,11 @@
   <h6 *ngIf="sharedService.isEmptyFile">
     Select image from upload and click on edit to edit it!
   </h6>
-  <div #sketch
-    *ngIf="!sharedService.isEmptyFile"
-    class="imgClass"
-  ></div>
+  <div #sketch *ngIf="!sharedService.isEmptyFile" class="imgClass"></div>
 
-  <cmp-edit-bar
-    class="edit-bar"
-    *ngIf="!sharedService.isEmptyFile"
-    (onDither)="onDither()"
-    (onStartMap)="onStartMap()"
-    (onTriangulate)="onTriangulate()"
-  ></cmp-edit-bar>
+  <cmp-edit-bar class="edit-bar" *ngIf="!sharedService.isEmptyFile" 
+   (onDither)="onDither()"
+   (onStartMap)="onStartMap()"
+   (onPixelSort)="onPixelSort()" 
+   (onTriangulate)="onTriangulate()" (onGlitch)="onGlitch()"></cmp-edit-bar>
 </ion-content>

@@ -3,6 +3,8 @@ import {
   Component,
   ElementRef,
   Injector,
+  OnDestroy,
+  OnInit,
   ViewChild,
 } from '@angular/core';
 import { LocalFile } from '../dtos/local-file';
@@ -17,7 +19,7 @@ import { DitherParams } from '../dtos/dither.dto';
   templateUrl: 'editor.page.html',
   styleUrls: ['editor.page.scss'],
 })
-export class EditorPage extends BaseImports implements AfterViewInit {
+export class EditorPage extends BaseImports implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sketch') sketch!: ElementRef;
 
   isFirstFilter = true;
@@ -39,9 +41,12 @@ export class EditorPage extends BaseImports implements AfterViewInit {
   ngAfterViewInit(): void {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
-  preloadImage(s: p5, img?: p5.Image){
+  preloadImage(s: p5 , filename: string, img?: p5.Image){
+    console.log("preload", img);
+    
     if(!img){
       this.sharedService.data$.subscribe(
         (image) => {
@@ -49,9 +54,28 @@ export class EditorPage extends BaseImports implements AfterViewInit {
           this.imageStack.push(this.pic);
         }
       );
-    }else {
+    }
+    else {
       this.imageStack.push(img);
     }
+
+    const maxWidth = Math.min(window.innerWidth, this.pic.width);
+    this.pic.resize(maxWidth, 0);
+    var canvas = s.createCanvas(this.pic.width, this.pic.height);
+
+    canvas.mousePressed(() => {
+      console.log("pressed");
+      
+      if (s.mouseIsPressed) {
+        s.saveCanvas(filename, 'jpg');
+      }
+    });
+    s.noLoop();
+    s.noStroke();
+  }
+
+  ngOnDestroy(): void {
+    this.p5.remove();
   }
   onDither(){
     const ditherParams: DitherParams = {
@@ -61,7 +85,7 @@ export class EditorPage extends BaseImports implements AfterViewInit {
     };
     const sketch = (s: p5) => {
       s.preload = () => {
-        this.preloadImage(s);
+        this.preloadImage(s, "dither");
       };
       
       s.setup = () => {
@@ -92,22 +116,17 @@ export class EditorPage extends BaseImports implements AfterViewInit {
     let img: p5.Image;
     const sketch = (s: p5) => {
       s.preload = () => {
-        this.sharedService.data$.subscribe(
-          (image) => (img = s.loadImage(image.data))
-        );
+        this.preloadImage(s, "topography");
       };
 
       s.setup = () => {
-        const canvas = s.createCanvas(img.width, img.height, s.WEBGL);
-        s.noStroke();
-
-        canvas.mouseClicked(() => {
-          if (s.mouseIsPressed) {
-            s.saveCanvas('topography', 'jpg');
-          }
-        });
+       
       };
-
+      s.mousePressed = (e: any) => {
+        if (s.mouseIsPressed) {
+          s.saveCanvas('topography', 'jpg');
+        }
+      };
       s.draw = () => {
         const maxWidth = Math.min(500, img.width);
         img.resize(maxWidth, 0);
@@ -122,25 +141,17 @@ export class EditorPage extends BaseImports implements AfterViewInit {
     let img: p5.Image;
     const sketch = (s: p5) => {
       s.preload = () => {
-        this.sharedService.data$.subscribe(
-          (image) => (img = s.loadImage(image.data))
-        );
+        this.preloadImage(s, "triangulate");
+
       };
 
       s.setup = () => {
-        const canvas = s.createCanvas(img.width, img.height);
-        s.noStroke();
-
-        canvas.mouseClicked(() => {
-          if (s.mouseIsPressed) {
-            s.saveCanvas('triangulation', 'jpg');
-          }
-        });
+      
       };
 
+      
       s.draw = () => {
-        const maxWidth = Math.min(500, img.width);
-        img.resize(maxWidth, 0);
+      
         this.editorService.triangulate(s, img);
       };
     };
@@ -153,6 +164,26 @@ export class EditorPage extends BaseImports implements AfterViewInit {
     let img: p5.Image;
     const sketch = (s: p5) => {
       s.preload = () => {
+        this.preloadImage(s, "pixel-sort");
+
+      };
+
+      s.setup = () => {
+      };
+
+      
+      s.draw = () => {
+        this.editorService.pixelSort(s, img);
+      };
+    };
+
+    this.p5 = new p5(sketch, this.sketch.nativeElement);
+  }
+
+  onGlitch(){
+    let img: p5.Image;
+    const sketch = (s: p5) => {
+      s.preload = () => {
         this.sharedService.data$.subscribe(
           (image) => (img = s.loadImage(image.data))
         );
@@ -161,25 +192,25 @@ export class EditorPage extends BaseImports implements AfterViewInit {
 
       s.setup = () => {
         const canvas = s.createCanvas(img.width, img.height);
-        s.noStroke();
+        s.image(img, 0, 0, img.width, img.height);
 
-        canvas.mouseClicked(() => {
-          if (s.mouseIsPressed) {
-            s.saveCanvas('pixel-sort', 'jpg');
-          }
-        });
+        s.noStroke();
       };
 
+      s.mousePressed = (e: any) => {
+        if (s.mouseIsPressed) {
+          s.saveCanvas('glitch', 'jpg');
+        }
+      };
       s.draw = () => {
         const maxWidth = Math.min(500, img.width);
         img.resize(maxWidth, 0);
-        this.editorService.pixelSort(s, img);
+        this.editorService.glitch(s, img);
       };
     };
 
     this.p5 = new p5(sketch, this.sketch.nativeElement);
   }
-
 
   // @HostListener('window:resize', ['$event'])
   // onResize(event:any) {

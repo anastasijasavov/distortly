@@ -16,7 +16,7 @@
         <ion-content class="ion-padding">Pixel sort</ion-content>
       </ng-template>
     </ion-popover> -->
-    <button id="sound-glitch" (click)="startMic()">
+    <button id="sound-glitch" (click)="pixelSort()">
       <img src="/assets/icons8-sound-50.png" />
     </button>
     <!-- <ion-popover trigger="sound-glitch" triggerAction="hover">
@@ -24,7 +24,7 @@
         <ion-content class="ion-padding">Glitch</ion-content>
       </ng-template>
     </ion-popover> -->
-    <button id="inpaint" (click)="startMic()">
+    <button id="inpaint" (click)="glitch()">
       <img src="/assets/icons8-merge-64.png" />
     </button>
     <!-- <ion-popover trigger="inpaint" triggerAction="hover">
@@ -32,5 +32,8 @@
         <ion-content class="ion-padding">Inpainting</ion-content>
       </ng-template>
     </ion-popover> -->
+    <button id="3dmap" (click)="startMapping()">
+      <img src="/assets/icons8-merge-64.png" />
+    </button>
   </ion-tab-bar>
 </ion-tabs>
