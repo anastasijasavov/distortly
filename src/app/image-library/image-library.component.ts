@@ -53,7 +53,7 @@ export class ImageLibraryComponent extends BaseImports {
     console.log(e.detail.value);
     console.log(e.detail.value[0])
     this.store.dispatch(
-      fromActions.updateCollection({ id: e.detail.value[0], changes: file})
+      fromActions.updateCollection({ id: e.detail.value[0], changes: file.name})
     );
   }
 

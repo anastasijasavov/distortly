@@ -1,6 +1,6 @@
 import { LocalFile } from "./local-file";
 
-export interface Collection {
+export interface CollectionDto {
     name: string;
     images: LocalFile[];
 }

@@ -1,5 +1,5 @@
-import { Collection } from './collection.dto';
-
-export interface CollectionDo extends Collection {
+export interface CollectionDo {
+  name: string;
+  images: string[];
   id: number;
 }

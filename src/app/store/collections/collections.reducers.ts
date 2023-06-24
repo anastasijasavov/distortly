@@ -31,10 +31,9 @@ export const collectionReducer = createReducer(
     return collectionAdapter.addOne(col, state);
   }),
   on(CollectionActions.updateCollection, (state, { id, changes }) => {
-    debugger;
     const returnState = { ...state.entities };
     const col = <CollectionDo>{ ...returnState[id] };
-    const image = <LocalFile>changes;
+    const image = <string>changes;
     var images = [];
 
     //deep copy images
@@ -43,12 +42,8 @@ export const collectionReducer = createReducer(
     });
     images?.push(image);
     col.images = images;
-    returnState[id] = col;
 
-    return {
-      ...state,
-      entities: { ...returnState },
-    };
+    return collectionAdapter.updateOne({id, changes: col}, state);
   }),
   on(CollectionActions.deleteCollection, (state, { id }) =>
     collectionAdapter.removeOne(id, state)

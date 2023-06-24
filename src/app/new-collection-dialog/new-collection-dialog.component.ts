@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Injector, Output, ViewChild } from "@angular/core";
+import { Component, Injector, ViewChild } from "@angular/core";
 import { BaseImports } from "../services/base-imports";
 import * as fromActions from "../store/collections/collections.actions";
-import { Collection } from "../dtos/collection.dto";
 import { IonModal } from "@ionic/angular";
+import { CollectionDo } from "../dtos/collection.do";
 @Component({
     selector: 'new-col-dialog-cmp',
     templateUrl: 'new-collection-dialog.component.html',
@@ -16,9 +16,10 @@ export class NewCollectionDialogComponent extends BaseImports{
         
     }
     createCollection(){
-        const collection: Collection = {
+        const collection: CollectionDo = {
             name: this.name,
             images:[],
+            id: 0
         }
         this.store.dispatch(fromActions.addCollection({collection: collection }));
         this.name = "";

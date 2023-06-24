@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { LoadingController } from '@ionic/angular';
 import { Constants } from '../app.constants';
-import { Collection } from '../dtos/collection.dto';
+import { CollectionDto } from '../dtos/collection.dto';
 
 @Injectable()
 export class CollectionsService {
@@ -36,7 +36,7 @@ export class CollectionsService {
   };
 
   async loadCollections(collections: string[]) {
-    var res: Collection[] = [];
+    var res: CollectionDto[] = [];
     for (let c of collections) {
       const filePath = `${Constants.IMAGE_DIR}/${c}`;
 

@@ -4,8 +4,8 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <div class="collection-card-container" *ngIf="(collections$ | async) | keyvalue">
-        <ion-card *ngFor="let collection of (collections$ | async ) | keyvalue" class="collection-card">
+    <div class="collection-card-container" *ngIf="collectionsDto | keyvalue" >
+        <ion-card *ngFor="let collection of collectionsDto | keyvalue" (click)="openCollection(collection.key)" class="collection-card">
             <ion-card-header>
                 <ion-card-title class="card-title">{{collection?.value?.name}}</ion-card-title>
             </ion-card-header>
