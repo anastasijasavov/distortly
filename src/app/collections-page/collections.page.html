@@ -5,15 +5,14 @@
 </ion-header>
 <ion-content>
     <div class="collection-card-container" *ngIf="collections | keyvalue">
-        <h4>testic</h4>
-        <ion-card *ngFor="let collection in (collections | keyvalue)" class="collection-card">
+        <ion-card *ngFor="let collection of collections | keyvalue" class="collection-card">
             <ion-card-header>
-                <ion-card-title class="card-title">{{collection?.name}}</ion-card-title>
+                <ion-card-title class="card-title">{{collection?.value?.name}}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-                <ion-thumbnail slot="start" class="collecitons-thumbnail" *ngIf="collection?.images && collection?.images!.length  > 1">
-                    <ion-img *ngIf="collection.images.length > 0" [src]="collection!.images[0].data" class="image1"></ion-img>
-                    <ion-img *ngIf="collection.images.length > 1" [src]="collection!.images[1].data" class="image2"></ion-img>
+                <ion-thumbnail slot="start" class="collecitons-thumbnail" *ngIf="collection?.value!.images && collection?.value?.images!.length > 0">
+                    <ion-img [src]="collection.value!.images[0].data" class="image1"></ion-img>
+                    <ion-img *ngIf="collection.value?.images!.length > 1" [src]="collection.value!.images[1].data" class="image2"></ion-img>
                 </ion-thumbnail>
             </ion-card-content>
         </ion-card>
