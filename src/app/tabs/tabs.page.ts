@@ -20,5 +20,8 @@ export class TabsPage implements OnInit {
         this.outlet.deactivate();
     });
   }
-
+  setImage(){
+    console.log("set image");
+    
+  }
 }

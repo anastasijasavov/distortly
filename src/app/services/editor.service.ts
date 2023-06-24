@@ -111,8 +111,9 @@ export class EditorService {
   }
 
   pixelSort(s: p5, img: p5.Image) {
+    console.log(img);
     s.image(img, 0, 0);
-
+    
     // Load the pixel data from the canvas
     s.loadPixels();
 

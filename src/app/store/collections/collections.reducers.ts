@@ -36,3 +36,24 @@ export const collectionReducer = createReducer(
     collectionAdapter.removeOne(id, state)
   )
 );
+
+
+const {
+  selectIds,
+  selectAll,
+  selectEntities,
+  selectTotal
+} = collectionAdapter.getSelectors();
+
+
+// select the array of user ids
+export const selectCollectionIds = selectIds;
+ 
+// select the dictionary of user entities
+export const selectCollectionEntities = selectEntities;
+ 
+// select the array of users
+export const selectAllCollections = selectAll;
+ 
+// select the total user count
+export const selectCollectionCount = selectTotal;

@@ -1,25 +1,27 @@
-import { createSelector } from '@ngrx/store';
-import { collectionAdapter, CollectionState } from './collections.reducers';
-import { AppState } from '../reducers';
+import {
+  ActionReducerMap,
+  createFeatureSelector,
+  createSelector,
+} from '@ngrx/store';
+import * as fromCol from './collections.reducers';
 
-export const selectCollectionState = (state: CollectionState) => state;
+export interface State {
+  collections: fromCol.CollectionState;
+}
 
-export const selectCollections = createSelector(
-    selectCollectionState, 
-    (state: CollectionState) => state.entities ? Object.values(state.entities) : []
-)
+export const reducers: ActionReducerMap<State> = {
+  collections: fromCol.collectionReducer,
+};
 
-export const { selectAll: selectAllCollections } =
-  collectionAdapter.getSelectors(selectCollectionState);
+export const selectCollectionState =
+  createFeatureSelector<fromCol.CollectionState>('collections');
 
-export const selectCollectionCount = createSelector(
+export const selectColIds = createSelector(
   selectCollectionState,
-  (state: CollectionState) => state.ids.length
+  fromCol.selectCollectionIds
 );
 
-export const selectLastId = createSelector(
+export const selectCollections = createSelector(
   selectCollectionState,
-  (state: CollectionState) => {
-    return state.ids.length > 0 ? <number>state.ids.pop()! + 1 : 0;
-  }
+  fromCol.selectCollectionEntities
 );
