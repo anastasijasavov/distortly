@@ -11,7 +11,6 @@ import { IonModal } from "@ionic/angular";
 export class NewCollectionDialogComponent extends BaseImports{
     name = "";
     @ViewChild(IonModal) modal: IonModal;
-    @Output() onCreateCollection = new EventEmitter();
     constructor(private injector:Injector) {
         super(injector);
         
@@ -24,7 +23,6 @@ export class NewCollectionDialogComponent extends BaseImports{
         this.store.dispatch(fromActions.addCollection({collection: collection }));
         this.name = "";
         this.modal.dismiss();
-        this.onCreateCollection.emit(true);
     }
 
     cancel(){
