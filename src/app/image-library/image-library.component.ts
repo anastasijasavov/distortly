@@ -46,8 +46,6 @@ export class ImageLibraryComponent extends BaseImports {
 
     this.store2.select(selectCollections).subscribe(col => {
       this.collections = col;
-      console.log(col);
-      
     })
   }
 
@@ -56,10 +54,6 @@ export class ImageLibraryComponent extends BaseImports {
       fromActions.updateCollection({ id: id.toString(), changes: image })
     );
   }
-  // Get the actual base64 data of an image
-  // base on the name of the file
-
-  // Little helper
 
   async editImage(file: LocalFile) {
     // TODO
