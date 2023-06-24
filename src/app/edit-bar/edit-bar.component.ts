@@ -1,7 +1,6 @@
 import {
   Component,
   EventEmitter,
-  Injector,
   OnInit,
   Output,
 } from '@angular/core';
@@ -18,6 +17,7 @@ export class EditBarComponent implements OnInit {
   @Output() onPixelSort = new EventEmitter();
   @Output() onGlitch = new EventEmitter();
 
+  showSlider = false;
   constructor() {}
   ngOnInit(): void {
   }
@@ -30,6 +30,7 @@ export class EditBarComponent implements OnInit {
   }
 
   dither(){
+    this.showSlider = true;
     this.onDither.emit(true);
   }
 

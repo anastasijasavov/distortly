@@ -45,6 +45,17 @@ export class EditorPage extends BaseImports implements OnInit, AfterViewInit, On
       if (e instanceof ActivationStart && e.snapshot.outlet === "edit")
         this.outlet.deactivate();
     });
+
+    if(this.sharedService.isEditMode){
+      this.p5 = new p5(() => {
+
+        this.p5.setup = () => {
+          const pic = this.p5.loadImage(this.image!.data);
+          this.p5.image(pic, 0, 0);
+          
+        }
+      }, this.sketch.nativeElement)
+    }
   }
 
   ngOnInit(): void {
@@ -53,6 +64,8 @@ export class EditorPage extends BaseImports implements OnInit, AfterViewInit, On
         this.p5.remove();
       }
     });
+   
+   
   }
 
 

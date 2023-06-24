@@ -1,9 +1,19 @@
 <ion-header [translucent]="true" *ngIf="sharedService.isEditMode">
   <ion-toolbar>
-    <ion-title> Edit </ion-title>
-    <button>
-      <img src="/assets/icons8-save-50.png" />
-    </button>
+    <div class="toolbar">
+      <ion-title> Edit </ion-title>
+      <div class="toolbar-buttons">
+        <button>
+          <img src="/assets/icons8-save-50.png" />
+        </button>
+        <button>
+          <img src="/assets/icons8-undo-64.png" />
+        </button>
+        <button>
+          <img src="/assets/icons8-undo-64.png" class="redo-img" />
+        </button>
+      </div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -14,10 +24,11 @@
     </ion-toolbar>
   </ion-header>
 
-  <h6 *ngIf="sharedService.isEmptyFile">
+  <h6 *ngIf="sharedService.isEmptyFile" class="no-pic-selected-text">
     Select image from upload and click on edit to edit it!
   </h6>
-  <div #sketch *ngIf="!sharedService.isEmptyFile" class="imgClass"></div>
+  <!-- Remove the imgClass if its not need-->
+  <div #sketch *ngIf="!sharedService.isEmptyFile" class="imgClass canvas-container"></div>
 
   <cmp-edit-bar class="edit-bar" *ngIf="!sharedService.isEmptyFile" 
    (onDither)="onDither()"

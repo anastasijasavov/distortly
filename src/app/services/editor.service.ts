@@ -209,4 +209,48 @@ export class EditorService {
     // Update the modified pixels on the canvas
     img.updatePixels();
   }
+
+  inpaint(s: p5, img: p5.Image, mask: p5.Image){
+      img.loadPixels();
+      // Convert the mask image to a binary image with black and white pixels
+      mask.loadPixels();
+      for (let i = 0; i < mask.pixels.length; i += 4) {
+        const r = mask.pixels[i];
+        const g = mask.pixels[i + 1];
+        const b = mask.pixels[i + 2];
+        const a = mask.pixels[i + 3];
+        // Set the pixel to white if it's not black
+        if (r !== 0 || g !== 0 || b !== 0) {
+          mask.pixels[i] = 255;
+          mask.pixels[i + 1] = 255;
+          mask.pixels[i + 2] = 255;
+          mask.pixels[i + 3] = 255;
+        }
+      }
+      mask.updatePixels();
+    
+      // Inpaint the image using the mask
+      s.loadPixels();
+      for (let i = 0; i < s.pixels.length; i += 4) {
+        const r = mask.pixels[i];
+        const g = mask.pixels[i + 1];
+        const b = mask.pixels[i + 2];
+        const a = mask.pixels[i + 3];
+        // Set the pixel color to black if it's part of the mask
+        if (r === 0 && g === 0 && b === 0 && a === 255) {
+          s.pixels[i] = 0;
+          s.pixels[i + 1] = 0;
+          s.pixels[i + 2] = 0;
+        }
+      }
+      s.updatePixels();
+  }
+
+  offsetImg(s: p5, img: p5.Image){
+    img.loadPixels();
+    s.image(img, 0, 0);
+    s.tint(120, 50);
+    s.image(img, 50, 50);
+    s.updatePixels();
+  }
 }
