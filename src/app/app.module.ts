@@ -12,9 +12,19 @@ import { ToastService } from './services/toast.service';
 import { CollectionsService } from './services/collections.service';
 import { EditorService } from './services/editor.service';
 import { reducers } from './store/reducers';
-import { StoreModule } from '@ngrx/store';
+import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import { environment } from 'src/environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { localStorageSync } from 'ngrx-store-localstorage';
+
+const localStorageSyncReducer = (reducer: ActionReducer<any>) => {
+  return localStorageSync({
+    keys: ['collections'],
+    restoreDates: true,
+    rehydrate: true,
+  })(reducer);
+};
+const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,7 +33,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
@@ -34,7 +44,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     SharedService,
     ToastService,
     CollectionsService,
-    EditorService
+    EditorService,
   ],
   bootstrap: [AppComponent],
 })

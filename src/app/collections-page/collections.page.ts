@@ -17,27 +17,20 @@ export class CollectionsPage extends BaseImports implements OnInit {
   collections: Dictionary<CollectionDo>;
   constructor(private injector: Injector, private store2: Store<CollectionState>) {
     super(injector);
-
-    this.sharedService.images$.subscribe((images) => {});
-    this.store2.select(fromCol.selectCollectionIds).subscribe((col) => {
-      // this.collections = col;
-      console.log(col);
-      
-    });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.store2.select(selectCollections).subscribe((col) => {
+      this.collections = col;
+    });
+  }
 
   async createCollection() {}
 
   refreshCollection(){
-    console.log("refresh ocl");
-    
-    // this.store2.dispatch(fromActions.loadCollections());
-    // this.store.select(selectCollectionState)
+   
     this.store2.select(selectCollections).subscribe((col) => {
       console.log(col);
-      // this.collections = col;
       this.collections = col;
     });
   }

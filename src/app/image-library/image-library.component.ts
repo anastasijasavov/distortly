@@ -10,12 +10,12 @@ import { Platform } from '@ionic/angular';
 import { LocalFile } from '../dtos/local-file';
 import { BaseImports } from '../services/base-imports';
 import { Constants } from '../app.constants';
-import { AppState } from '../store/reducers';
 import { Store } from '@ngrx/store';
-import * as fromCol from "../store/collections/collections.reducers";
 import * as fromActions from '../store/collections/collections.actions';
 import { CollectionDo } from '../dtos/collection.do';
 import { CollectionState } from '../store/collections/collections.reducers';
+import { Dictionary } from '@ngrx/entity';
+import { selectCollections } from '../store/collections/collections.selectors';
 @Component({
   selector: 'cmp-image-library',
   templateUrl: './image-library.component.html',
@@ -24,13 +24,13 @@ import { CollectionState } from '../store/collections/collections.reducers';
 })
 export class ImageLibraryComponent extends BaseImports {
   images: LocalFile[] = [];
+  collections: Dictionary<CollectionDo>;
   customPopoverOptions = {
     header: 'Select Collections',
   };
 
   imageToDelete:LocalFile;
 
-  collections: (CollectionDo | undefined)[] = [];
   constructor(
     private plt: Platform,
     private injector: Injector,
@@ -44,8 +44,8 @@ export class ImageLibraryComponent extends BaseImports {
       this.images = images;
     });
 
-    this.store2.select(fromCol.selectAllCollections).subscribe(col => {
-      // this.collections = col;
+    this.store2.select(selectCollections).subscribe(col => {
+      this.collections = col;
       console.log(col);
       
     })
