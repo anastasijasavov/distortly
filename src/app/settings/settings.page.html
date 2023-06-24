@@ -8,8 +8,8 @@
 <ion-toggle [checked]="autoSave" [(ngModel)]="autoSave" (ionChange)="toggleAutoSave()">Auto save</ion-toggle><br /><br />
 
 <h5>Default export name</h5>
-<ion-input fill="outline" class="name-input" type="text" fill="solid" labelPlacement="floating"
-    [value]="userSettings.filename">
+<ion-input fill="outline" class="name-input" (ionChange)="changeFileName()" type="text" fill="solid" labelPlacement="floating"
+    [(ngModel)]="fileName">
 </ion-input>
 
 

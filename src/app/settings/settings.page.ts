@@ -13,15 +13,17 @@ export class SettingsPage extends BaseImports implements OnInit {
   userSettings: UserSettings;
   fileType: FileType = 'JPG';
   autoSave = true;
+  fileName: string = "pic";
   constructor(private injector: Injector) {
     super(injector);
   }
 
   ngOnInit(): void {
     this.userStore.select(selectUserState).subscribe((user) => {
-      console.log(user);
       this.userSettings = user;
       this.autoSave = user.autoSave;
+      this.fileName = user.filename;
+      this.fileType = user.fileType;
     });
   }
 
@@ -39,6 +41,14 @@ export class SettingsPage extends BaseImports implements OnInit {
     this.collectionStore.dispatch(
       fromActions.updateUser({
         props: { ...this.userSettings, fileType: this.fileType },
+      })
+    );
+  }
+
+  changeFileName(){
+    this.collectionStore.dispatch(
+      fromActions.updateUser({
+        props: { ...this.userSettings, filename: this.fileName},
       })
     );
   }
