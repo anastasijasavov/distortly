@@ -6,6 +6,8 @@ import { CollectionsPage } from './collections.page';
 
 import { CollectionsPageRoutingModule } from './collections-page-routing.module';
 import { NewCollectionComponentModule } from '../new-collection-dialog/new-collection-dialog.component.module';
+import { CollectionComponentModule } from '../collection-component/collection-component.module';
+import { CollectionComponent } from '../collection-component/collection.component';
 
 @NgModule({
   imports: [
@@ -13,7 +15,8 @@ import { NewCollectionComponentModule } from '../new-collection-dialog/new-colle
     CommonModule,
     FormsModule,
     CollectionsPageRoutingModule,
-    NewCollectionComponentModule
+    NewCollectionComponentModule,
+    CollectionComponentModule
   ],
   declarations: [CollectionsPage],
 })

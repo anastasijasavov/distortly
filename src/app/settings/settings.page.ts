@@ -28,7 +28,6 @@ export class SettingsPage extends BaseImports implements OnInit {
   }
 
   toggleAutoSave() {
-    console.log(this.userSettings, this.autoSave);
 
     this.collectionStore.dispatch(
       fromActions.updateUser({

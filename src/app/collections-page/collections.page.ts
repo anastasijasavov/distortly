@@ -40,6 +40,6 @@ export class CollectionsPage extends BaseImports implements OnInit {
 
 
   openCollection(id: string){
-    this.router.navigate([`collections/${id}`]);
+    this.router.navigate([`tabs/collections/${id}`]);
   }
 }

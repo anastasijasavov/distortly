@@ -8,7 +8,7 @@ import { CollectionComponent } from './collection.component';
   imports: [
     IonicModule,
     CommonModule,
-    FormsModule
+    FormsModule,
   ],
   declarations: [CollectionComponent],
 })

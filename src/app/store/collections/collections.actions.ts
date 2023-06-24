@@ -17,3 +17,9 @@ export const deleteCollection = createAction(
   '[Collection] Delete Collection',
   props<{ id: string }>()
 );
+
+
+export const removeFromCollection = createAction(
+  '[Collection] Delete Collection',
+  props<{id:string, name: string }>()
+);

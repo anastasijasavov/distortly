@@ -1,0 +1,22 @@
+<ion-content>
+
+   
+     <ion-list *ngIf="images.length > 0">
+      <ion-item class="card" *ngFor="let file of images; let i = index">
+        <ion-thumbnail slot="start">
+          <ion-img [src]="file.data"></ion-img>
+        </ion-thumbnail>
+      
+       
+        <ion-button class="icon" slot="end" fill="clear" (click)="editImage(file)">
+          <img src="/assets/icons8-edit-50.png" />
+          
+        </ion-button>
+        <!-- <confirm-dialog (onDelete)="deleteImage(imageToDelete)"></confirm-dialog>  -->
+        <ion-button class="icon" slot="end" id="open-confirm-dialog" fill="clear" (click)="removeFromCollection(file)">
+          <img src="/assets/icons8-x-30.png" />
+        </ion-button>
+      </ion-item>
+    </ion-list>
+
+  </ion-content>

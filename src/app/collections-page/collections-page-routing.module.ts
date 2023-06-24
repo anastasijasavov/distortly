@@ -7,11 +7,13 @@ const routes: Routes = [
   {
     path: '',
     component: CollectionsPage,
+   
   },
   {
     path:':id',
     component: CollectionComponent
   }
+ 
 ];
 
 @NgModule({

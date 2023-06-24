@@ -45,7 +45,24 @@ export const collectionReducer = createReducer(
   }),
   on(CollectionActions.deleteCollection, (state, { id }) =>
     collectionAdapter.removeOne(id, state)
-  )
+  ),
+  on(CollectionActions.removeFromCollection, (state, {id, name}) => {
+    const returnState = { ...state.entities };
+    const col = <CollectionDo>{ ...returnState[id] };
+    var images : string[] = [];
+    console.log(col, id, name);
+    
+
+    //deep copy images
+    col.images!.forEach((element) => {
+      if(element !== name){
+        images.push(element);
+      }
+    });
+    col.images = images;
+
+    return collectionAdapter.updateOne({id, changes: col}, state); 
+  })
 );
 
 const { selectIds, selectAll, selectEntities, selectTotal } =
