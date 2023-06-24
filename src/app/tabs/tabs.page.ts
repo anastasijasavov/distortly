@@ -21,7 +21,6 @@ export class TabsPage implements OnInit {
     });
   }
   setImage(){
-    console.log("set image");
     
   }
 }

@@ -19,7 +19,7 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 
 const localStorageSyncReducer = (reducer: ActionReducer<any>) => {
   return localStorageSync({
-    keys: ['collections'],
+    keys: ['collections', 'user'],
     restoreDates: true,
     rehydrate: true,
   })(reducer);

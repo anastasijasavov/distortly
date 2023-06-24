@@ -1,1 +1,23 @@
-<h3>testic</h3>
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title> Settings </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-toggle [checked]="autoSave" [(ngModel)]="autoSave" (ionChange)="toggleAutoSave()">Auto save</ion-toggle><br /><br />
+
+<h5>Default export name</h5>
+<ion-input fill="outline" class="name-input" type="text" fill="solid" labelPlacement="floating"
+    [value]="userSettings.filename">
+</ion-input>
+
+
+<h5>Default file type</h5>
+
+<ion-item>
+    <ion-select [label]="fileType" interface="popover" placeholder="" (ionChange)="setImageType()" [ngModel]="fileType">
+        <ion-select-option value="JPEG">JPG</ion-select-option>
+        <ion-select-option value="PNG">PNG</ion-select-option>
+    </ion-select>
+</ion-item>

@@ -26,8 +26,6 @@ export const collectionReducer = createReducer(
       id:
         state.ids.length > 0 ? <number>state.ids[state.ids.length - 1] + 1 : 0,
     };
-    console.log(state, col);
-
     return collectionAdapter.addOne(col, state);
   }),
   on(CollectionActions.updateCollection, (state, { id, changes }) => {

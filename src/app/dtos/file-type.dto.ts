@@ -1,0 +1,1 @@
+export type FileType = 'JPG' | 'PNG';

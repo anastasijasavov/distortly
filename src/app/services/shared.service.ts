@@ -56,8 +56,6 @@ export class SharedService {
     })
       .then(
         (result) => {
-          console.log(result.files.map(x => x.name));
-          
           this.loadFileData(result.files.map((x) => x.name));
         },
         async (err) => {

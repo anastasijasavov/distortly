@@ -5,9 +5,10 @@ import { Constants } from '../app.constants';
 import { ToastService } from './toast.service';
 import { CollectionsService } from './collections.service';
 import { EditorService } from './editor.service';
-import { AppState } from '@capacitor/app';
 import { Store } from '@ngrx/store';
 import { CollectionState } from '../store/collections/collections.reducers';
+import { UserState } from '../store/user-settings/user-settings.reducers';
+import { AppState } from '../store/reducers';
 export class BaseImports {
   sharedService: SharedService;
   router: Router;
@@ -15,6 +16,7 @@ export class BaseImports {
   toastService: ToastService;
   collectionService: CollectionsService;
   editorService: EditorService;
+  userStore: Store<UserState>;
   store: Store<AppState>;
   collectionStore: Store<CollectionState>;
   constructor(injector: Injector) {
@@ -24,7 +26,8 @@ export class BaseImports {
     this.toastService = injector.get(ToastService);
     this.collectionService = injector.get(CollectionsService);
     this.editorService = injector.get(EditorService);
+    this.collectionStore = injector.get(Store<CollectionState>);
+    this.userStore = injector.get(Store<UserState>);
     this.store = injector.get(Store<AppState>);
-    this.collectionStore= injector.get(Store<CollectionState>);
   }
 }
