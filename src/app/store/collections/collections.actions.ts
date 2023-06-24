@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Collection } from 'src/app/dtos/collection.dto';
+import { LocalFile } from 'src/app/dtos/local-file';
 
 export const loadCollections = createAction('[Collection] Load Collections');
 
@@ -10,7 +11,7 @@ export const addCollection = createAction(
 
 export const updateCollection = createAction(
   '[Collection] Update Collection',
-  props<{ id: string, changes: Partial<Collection> }>()
+  props<{ id: string, changes: Partial<LocalFile> }>()
 );
 
 export const deleteCollection = createAction(

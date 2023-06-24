@@ -49,9 +49,11 @@ export class ImageLibraryComponent extends BaseImports {
     })
   }
 
-  addToCollection(id: number, image: LocalFile) {
+  addToCollection(e: any, file: LocalFile) {
+    console.log(e.detail.value);
+    console.log(e.detail.value[0])
     this.store.dispatch(
-      fromActions.updateCollection({ id: id.toString(), changes: image })
+      fromActions.updateCollection({ id: e.detail.value[0], changes: file})
     );
   }
 

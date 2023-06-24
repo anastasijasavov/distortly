@@ -12,8 +12,8 @@
         <img src="/assets/icons8-plus-50.png" />
       </ion-button>
       <ion-item>
-        <ion-select label="Add to.." [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="">
-          <ion-select-option *ngFor="let item of collections | keyvalue">{{item?.value?.name}}</ion-select-option>
+        <ion-select label="Add to.." [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="" (ionChange)="addToCollection($event, file)" [multiple]="true">
+          <ion-select-option [value]="item.key" *ngFor="let item of collections | keyvalue">{{item?.value?.name}}</ion-select-option>
         </ion-select>
       </ion-item>
       <ion-button class="icon" slot="end" fill="clear" (click)="editImage(file)">

@@ -18,5 +18,8 @@ export class CollectionsPage extends BaseImports implements OnInit {
 
   ngOnInit(): void {
     this.collections$ = this.collectionStore.select(selectCollections);
+    this.collections$.subscribe(col => {
+      console.log(col)
+    })
   }
 }
