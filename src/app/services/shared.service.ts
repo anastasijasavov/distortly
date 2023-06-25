@@ -4,16 +4,25 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { LoadingController } from '@ionic/angular';
 import { Constants } from '../app.constants';
 import { Injectable } from '@angular/core';
-import { deleteCollection } from '../store/collections/collections.actions';
+import { DitherParams } from '../dtos/dither.dto';
 
 @Injectable()
 export class SharedService {
   emptyFile: LocalFile = { name: '', data: '', path: '' };
   isEmptyFile = true;
+  
+  ditherParams: DitherParams = {
+    contrast: 1,
+    pixsize: 1,
+    xoffset: 0,
+    yoffset: 0,
+  }
+  private param: BehaviorSubject<DitherParams> = new BehaviorSubject(this.ditherParams);
+  public param$: Observable<DitherParams> = this.param.asObservable();
   private image: BehaviorSubject<LocalFile> = new BehaviorSubject(
     this.emptyFile
   );
-  public data$: Observable<LocalFile> = this.image.asObservable();
+  public image$: Observable<LocalFile> = this.image.asObservable();
   public images: BehaviorSubject<LocalFile[]> = new BehaviorSubject<
     LocalFile[]
   >([]);
@@ -85,7 +94,17 @@ export class SharedService {
     this.images.next(images);
   }
 
-  emitDeleteCollection(id: string){
+  emitDeleteCollection(id: string) {
     this.deleteCollection.next(id);
+  }
+
+  setPixSize(intensity: number) {
+    this.ditherParams.pixsize = intensity;
+    this.param.next(this.ditherParams);
+  }
+
+  setContrast(contrast: number){
+   this.ditherParams.contrast = contrast;
+   this.param.next(this.ditherParams);
   }
 }

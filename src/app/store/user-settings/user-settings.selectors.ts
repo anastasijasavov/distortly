@@ -15,5 +15,10 @@ import {
   
   export const selectUserState =
     createFeatureSelector<fromUser.UserState>('user');
+
+    export const selectUser = createSelector(
+        selectUserState,
+        (state) => state
+    )
   
   

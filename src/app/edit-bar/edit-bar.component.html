@@ -40,4 +40,5 @@
   </ion-tab-bar>
 </ion-tabs>
 
-<ion-range *ngIf="showSlider" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="0" [max]="10"></ion-range>
+<ion-range *ngIf="showSlider" (ionChange)="setPixSize($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
+<ion-range *ngIf="showSlider" (ionChange)="setContrast($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>

@@ -43,7 +43,6 @@ export class CollectionComponent extends BaseImports implements OnInit {
     this.setIsOpen(false);
     this.sharedService.emitDeleteCollection(this.collectionId);
     this.router.navigate(['tabs/collections']);
-    this.collectionStore.dispatch(fromActions.loadCollections());
   }
 
   renameCollection(e: any) {
