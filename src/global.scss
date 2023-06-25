@@ -62,3 +62,65 @@ ion-modal {
 //     margin: auto;
 //     --border-radius: 14px;
 // }
+
+ion-input.generic-input{
+    --border-radius: 8px;
+    --color: white;
+    --border-color: white !important;
+    --highlight-color-focused: white !important;
+    --highlight-color-valid: white !important;
+    --highlight-color-invalid: white !important;
+}
+
+ion-input.generic-input-light{
+    --background: var(--custom-color-input) !important;
+}
+
+ion-input.generic-input-dark{
+    --background: var(--custom-color-input-secondary) !important;
+}
+
+.confirm-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--secondary-color);
+}
+
+.confirm-modal h1 {
+    text-align: center;
+    font-size: 20px;
+    color: white;
+}
+
+ion-modal.confirm-modal-wrapper::part(content), .confirm-modal{
+    width: 300px;
+    height: 180px;
+}
+
+.button-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: end;
+    gap: 0px;
+    margin-top: 8px;
+}
+  
+.button-container ion-tab-button{
+height: 54px;
+}
+
+.yes-no-modal h1{
+    font-size: 16px;
+    line-height: 22px;
+    width: 94%;
+    margin: 30px auto auto auto;
+}

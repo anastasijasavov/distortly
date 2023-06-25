@@ -21,7 +21,6 @@ export const userReducer = createReducer(
   on(UserActions.loadUser, (state) => state),
 
   on(UserActions.updateUser, (state, {props}) => {
-    debugger
     return {
       ...state, ...props
     };

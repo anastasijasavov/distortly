@@ -31,7 +31,6 @@ export class CollectionsPage extends BaseImports implements OnInit {
     this.collections$
       .subscribe(async (col) => {
         for (const item of Object.values(col)) {
-          debugger
           const tempPics = await this.sharedService.getImagesByNames(
             item?.images!
           );
