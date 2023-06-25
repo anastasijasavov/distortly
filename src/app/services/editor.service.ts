@@ -117,6 +117,7 @@ export class EditorService {
         let z = s.map(b, 0, 1, -tiles, tiles);
         s.push();
         s.translate(x * tileSize - s.width / 2, y * tileSize - s.height / 2, z);
+        s.fill(c);
         s.sphere(tileSize * b * 1.5);
         s.pop();
       }
