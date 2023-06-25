@@ -10,6 +10,15 @@
       [snaps]="true" [min]="1" [max]="10"></ion-range>
     <ion-range *ngIf="showTriangleSlider" (ionChange)="setDetailLevel($event)" aria-label="Range with ticks"
       [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
+
+    <ion-range *ngIf="showPixelSlider" (ionChange)="setPixelMin($event)" aria-label="Range with ticks" [ticks]="true"
+      [snaps]="true" [min]="1" [max]="10"></ion-range>
+
+    <ion-range *ngIf="showMapSlider" (ionChange)="setMapRotation($event)" aria-label="Range with ticks" [ticks]="true"
+      [snaps]="true" [min]="1" [max]="10"></ion-range>
+
+    <ion-range *ngIf="showGlitchSlider" (ionChange)="setGlitchParams($event)" aria-label="Range with ticks"
+      [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
   </div>
   <ion-tab-bar slot="bottom">
     <div class="button-container">
@@ -54,18 +63,3 @@
     </div>
   </ion-tab-bar>
 </ion-tabs>
-
-<ion-range *ngIf="showSlider" (ionChange)="setPixSize($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-<ion-range *ngIf="showSlider" (ionChange)="setContrast($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-
-
-<ion-range *ngIf="showTriangleSlider" (ionChange)="setAbstractionLevel($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-<ion-range *ngIf="showTriangleSlider" (ionChange)="setHue($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-<ion-range *ngIf="showTriangleSlider" (ionChange)="setDetailLevel($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-
-
-<ion-range *ngIf="showPixelSlider" (ionChange)="setPixelMin($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-
-<ion-range *ngIf="showMapSlider" (ionChange)="setMapRotation($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-
-<ion-range *ngIf="showGlitchSlider" (ionChange)="setGlitchParams($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
