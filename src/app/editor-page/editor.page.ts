@@ -73,7 +73,7 @@ export class EditorPage
 
   ngOnInit(): void {}
 
-  preloadImage(s: p5, filename: string, img?: p5.Image) {
+  preloadImage(s: p5, filename: string, img?: p5.Image, isWebGL = false) {
     if (!img) {
       this.sharedService.image$.subscribe((image) => {
         this.pic = s.loadImage(image.data);
@@ -86,14 +86,13 @@ export class EditorPage
 
     const maxWidth = Math.min(window.innerWidth, this.pic.width);
     this.pic.resize(maxWidth, 0);
-    var canvas = s.createCanvas(this.pic.width, this.pic.height);
+    if (isWebGL) {
+      s.createCanvas(this.pic.width, this.pic.height, s.WEBGL);
+    } else {
+      s.createCanvas(this.pic.width, this.pic.height);
+    }
 
-    canvas.mousePressed(() => {
-      if (s.mouseIsPressed) {
-        s.saveCanvas(filename, 'jpg');
-      }
-    });
-    s.noLoop();
+    // s.noLoop();
     s.noStroke();
   }
 
@@ -105,9 +104,9 @@ export class EditorPage
       pixsize: 2,
       yoffset: 0,
       xoffset: 0,
-      contrast: 1
+      contrast: 1,
     };
-    
+
     const sketch = (s: p5) => {
       s.preload = () => {
         this.preloadImage(s, 'dither');
@@ -117,17 +116,16 @@ export class EditorPage
         const maxWidth = Math.min(window.innerWidth, this.pic.width);
         this.pic.resize(maxWidth, 0);
         s.createCanvas(this.pic.width, this.pic.height);
-      
+
         s.noLoop();
         s.noStroke();
       };
 
       s.draw = () => {
-        this.sharedService.param$.subscribe(params => {
+        this.sharedService.param$.subscribe((params) => {
           ditherParams.pixsize = params.pixsize;
           ditherParams.contrast = params.contrast;
           this.editorService.dither(s, this.pic, ditherParams);
-          
         });
       };
     };
@@ -137,19 +135,20 @@ export class EditorPage
     let img: p5.Image;
     const sketch = (s: p5) => {
       s.preload = () => {
-        this.preloadImage(s, 'topography');
+        this.preloadImage(s, 'topography', undefined, true);
       };
 
-      s.setup = () => {};
-      s.mousePressed = (e: any) => {
-        if (s.mouseIsPressed) {
-          s.saveCanvas('topography', 'jpg');
-        }
+      s.setup = () => {
+        const maxWidth = Math.min(window.innerWidth, this.pic.width);
+        this.pic.resize(maxWidth, 0);
+        s.noLoop();
+        s.noStroke();
       };
+
       s.draw = () => {
-        const maxWidth = Math.min(500, img.width);
-        img.resize(maxWidth, 0);
-        this.editorService.get3dMap(s, img);
+        this.sharedService.mapRotation$.subscribe(rotateY => {
+          this.editorService.get3dMap(s, this.pic, rotateY);
+        })
       };
     };
 
@@ -157,11 +156,10 @@ export class EditorPage
   }
 
   onTriangulate() {
-
     const triangulateParams: TriangulateParams = {
       abstractionLevel: 1,
       hue: 5,
-      detailLevel: 1
+      detailLevel: 1,
     };
     const sketch = (s: p5) => {
       s.preload = () => {
@@ -178,10 +176,9 @@ export class EditorPage
       };
 
       s.draw = () => {
-      
-        this.sharedService.triangulateParams$.subscribe(params => {
+        this.sharedService.triangulateParams$.subscribe((params) => {
           this.editorService.triangulate(s, this.pic, params);
-        })
+        });
       };
     };
 
@@ -195,7 +192,7 @@ export class EditorPage
       };
 
       s.setup = () => {
-        const maxWidth = Math.min(window.innerWidth, this.pic.width); 
+        const maxWidth = Math.min(window.innerWidth, this.pic.width);
         this.pic.resize(maxWidth, 0);
         s.createCanvas(this.pic.width, this.pic.height);
 
@@ -204,9 +201,9 @@ export class EditorPage
       };
 
       s.draw = () => {
-        this.sharedService.pixelParams$.subscribe(params => {
+        this.sharedService.pixelParams$.subscribe((params) => {
           this.editorService.pixelSort(s, this.pic, params);
-        })
+        });
       };
     };
 

@@ -22,23 +22,27 @@ export class EditBarComponent extends BaseImports implements OnInit {
   showSlider = false;
   showTriangleSlider = false;
   showPixelSlider = false;
+  showMapSlider = false;
   constructor(private injector: Injector) {
     super(injector);
   }
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  startMic() {
-  }
+  startMic() {}
 
-  startMapping(){
+  startMapping() {
+    this.showTriangleSlider = false;
+    this.showPixelSlider = false;
+    this.showMapSlider = true;
+    this.showSlider = false;
     this.onStartMap.emit(true);
   }
 
-  dither(){
+  dither() {
     this.showSlider = true;
     this.showTriangleSlider = false;
     this.showPixelSlider = false;
+    this.showMapSlider = false;
 
     this.onDither.emit(true);
   }
@@ -46,6 +50,7 @@ export class EditBarComponent extends BaseImports implements OnInit {
   triangulate() {
     this.showTriangleSlider = true;
     this.showPixelSlider = false;
+    this.showMapSlider = false;
     this.showSlider = false;
     this.onTriangulate.emit(true);
   }
@@ -53,6 +58,7 @@ export class EditBarComponent extends BaseImports implements OnInit {
   pixelSort() {
     this.showTriangleSlider = false;
     this.showPixelSlider = true;
+    this.showMapSlider = false;
     this.showSlider = false;
     this.onPixelSort.emit(true);
   }
@@ -61,31 +67,32 @@ export class EditBarComponent extends BaseImports implements OnInit {
     this.onGlitch.emit(true);
   }
 
-  setPixSize(e: any){
+  setPixSize(e: any) {
     this.sharedService.setPixSize(e.detail.value);
   }
 
-  setContrast(e: any){
+  setContrast(e: any) {
     console.log(e.detail.value);
-    
+
     this.sharedService.setContrast(e.detail.value);
   }
 
-  setAbstractionLevel(e: any){
+  setAbstractionLevel(e: any) {
     this.sharedService.setAbstractionLevel(e.detail.value);
   }
 
-  setHue(e: any){
+  setHue(e: any) {
     this.sharedService.setHue(e.detail.value);
   }
 
-  setDetailLevel(e: any){
+  setDetailLevel(e: any) {
     this.sharedService.setDetailLevel(e.detail.value);
   }
 
-  setPixelMin(e: any){
+  setPixelMin(e: any) {
     this.sharedService.setPixelParam(e.detail.value);
   }
-
-
+  setMapRotation(e: any) {
+    this.sharedService.setMapRotation(e.detail.value);
+  }
 }

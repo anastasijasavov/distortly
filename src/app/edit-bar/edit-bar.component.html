@@ -21,7 +21,7 @@
       </ng-template>
     </ion-popover> -->
       <button id="sound-glitch" (click)="pixelSort()">
-        <img src="/assets/icons8-sound-50.png" />
+        <img src="/assets/icons8-sort-32.png"/>
       </button>
       <!-- <ion-popover trigger="sound-glitch" triggerAction="hover">
       <ng-template>
@@ -29,7 +29,7 @@
       </ng-template>
     </ion-popover> -->
       <button id="inpaint" (click)="glitch()">
-        <img src="/assets/icons8-merge-64.png" />
+        <img src="/assets/icons8-sound-50.png" />
       </button>
       <!-- <ion-popover trigger="inpaint" triggerAction="hover">
       <ng-template>
@@ -53,3 +53,5 @@
 
 
 <ion-range *ngIf="showPixelSlider" (ionChange)="setPixelMin($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
+
+<ion-range *ngIf="showMapSlider" (ionChange)="setMapRotation($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>

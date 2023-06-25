@@ -36,6 +36,12 @@ export class SharedService {
   public triangulateParams$: Observable<TriangulateParams> =
     this.triangParam.asObservable();
 
+  mapRotationY = 1;
+  private mapRotation: BehaviorSubject<number> = new BehaviorSubject(
+    this.mapRotationY
+  );
+  public mapRotation$: Observable<number> = this.mapRotation.asObservable();
+
   pixelParams: PixelSort = {
     min: 255 * 3,
   };
@@ -152,5 +158,10 @@ export class SharedService {
   setPixelParam(min: number) {
     this.pixelParams.min = min;
     this.pixelParam.next(this.pixelParams);
+  }
+
+  setMapRotation(rotateY: number){
+    this.mapRotationY = rotateY;
+    this.mapRotation.next(rotateY);
   }
 }

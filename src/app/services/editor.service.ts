@@ -83,17 +83,19 @@ export class EditorService {
     }
   }
 
-  get3dMap(s: p5, pic: p5.Image) {
+  get3dMap(s: p5, pic: p5.Image, rotateY: number) {
+    // debugger;
+    s.createCanvas(pic.width, pic.height, s.WEBGL);
     s.background(241);
     s.fill(0);
     s.noStroke();
     //   s.sphereDetail(3);
-    let tiles = 300;
+    let tiles = 500;
     let tileSize = s.width / tiles;
     s.camera(
-      s.width / 2.0,
-      s.height / 2.0,
-      s.height / 2.0 / s.tan((s.PI * 30.0) / 180.0),
+      s.width / 4.0,
+      s.height / 4.0,
+      s.height / 2.0 / s.tan((s.PI * 30.0) / (270.0)),
       s.width / 2.0,
       s.height / 2.0,
       0,
@@ -104,13 +106,15 @@ export class EditorService {
 
     s.push();
     s.translate(s.width / 2, s.height / 2);
-    s.rotateY(s.radians(10));
+    s.rotateY(s.radians(360 / rotateY));
 
+    console.log(tiles);
+    
     for (let x = 0; x < tiles; x++) {
       for (let y = 0; y < tiles; y++) {
         let c = pic.get(s.int(x * tileSize), s.int(y * tileSize));
         let b = s.map(s.brightness(c), 255, 0, 0, 1);
-        let z = s.map(b, 0, 1, -300, 300);
+        let z = s.map(b, 0, 1, -tiles, tiles);
         s.push();
         s.translate(x * tileSize - s.width / 2, y * tileSize - s.height / 2, z);
         s.sphere(tileSize * b * 1.5);
@@ -129,8 +133,7 @@ export class EditorService {
     console.log('Sorting the image...');
     const pixels = s.pixels;
     console.log(s.width, s.height);
-    
-    
+
     // Loop through each row and sort the pixels in that row
     for (let y = 0; y < s.height; y++) {
       // Get a row
@@ -155,7 +158,6 @@ export class EditorService {
         pixels[index + 2] = row[x][2]; // Blue
         pixels[index + 3] = row[x][3]; // Alpha
       }
-      
     }
 
     // Update the canvas with sorted pixels
@@ -165,7 +167,7 @@ export class EditorService {
   }
 
   sortRow(row: any[]) {
-    let min = 255*3;
+    let min = 255 * 3;
     let minIndex = 0;
 
     // Find the darkest pixel in the row
@@ -176,7 +178,6 @@ export class EditorService {
         min = temp;
         minIndex = i;
       }
-      
     }
     // Sort the row up to the brightest pixel
     let sortedRow = row.slice(0, minIndex);
@@ -260,10 +261,43 @@ export class EditorService {
   }
 
   offsetImg(s: p5, img: p5.Image) {
+    // Extract RGB channels from the image
+    let r = s.createImage(img.width, img.height);
+    let g = s.createImage(img.width, img.height);
+    let b = s.createImage(img.width, img.height);
+
     img.loadPixels();
-    s.image(img, 0, 0);
-    s.tint(120, 50);
-    s.image(img, 50, 50);
+    r.loadPixels();
+    g.loadPixels();
+    b.loadPixels();
+
+    for (let i = 0; i < img.pixels.length; i += 4) {
+      r.pixels[i] = img.pixels[i]; // Red channel
+      g.pixels[i + 1] = img.pixels[i + 1]; // Green channel
+      b.pixels[i + 2] = img.pixels[i + 2]; // Blue channel
+      r.pixels[i + 3] = g.pixels[i + 3] = b.pixels[i + 3] = img.pixels[i + 3]; // Alpha channel
+    }
+
+    r.updatePixels();
+    g.updatePixels();
+    b.updatePixels();
+
+    // Shift the red channel to the right
+    s.copy(r, 1, 0, r.width - 1, r.height, 0, 0, r.width - 1, r.height);
+    s.fill(0, 0, 0, 255);
     s.updatePixels();
+
+    // Overlay the red channel on the image with opacity
+    s.blendMode(s.BLEND); // Adjust the blending mode as per your preference
+    s.image(img, 0, 0);
+    s.tint(255, 100); // Adjust the opacity as per your preference
+    s.image(r, 0, 0);
+    s.noTint();
+
+    s.blendMode(s.BLEND); // Reset the blending mode
+
+    // Display the original image, red channel, and shifted red channel
+    s.image(img, 0, img.height);
+    s.image(r, img.width, img.height);
   }
 }
