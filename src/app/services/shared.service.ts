@@ -81,8 +81,6 @@ export class SharedService {
   }
 
   async loadFileData(fileNames: string[]) {
-    console.log(fileNames);
-
     const images: LocalFile[] = await this.getImagesByNames(fileNames);
     this.images.next(images);
   }

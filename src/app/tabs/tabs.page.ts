@@ -1,26 +1,22 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { ActivationStart, Router, RouterOutlet } from '@angular/router';
+import { BaseImports } from '../services/base-imports';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss']
 })
-export class TabsPage implements OnInit {
+export class TabsPage extends BaseImports implements OnInit {
 
   @ViewChild(RouterOutlet) outlet: RouterOutlet;
-  constructor(private router: Router) {
-
+  constructor(private injector: Injector) {
+    super(injector);
   }
 
   
   ngOnInit(): void {
-    this.router.events.subscribe(e => {
-      if (e instanceof ActivationStart && e.snapshot.outlet === "administration")
-        this.outlet.deactivate();
-    });
   }
   setImage(){
-    
   }
 }

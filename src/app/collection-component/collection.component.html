@@ -7,35 +7,46 @@
 <ion-content>
 
     <div class="settings-item">
-        <ion-input 
-        fill="outline" 
-        class="export-name-input generic-input generic-input-dark" 
-        (ionChange)="renameCollection($event)" 
-        type="text" 
-        fill="solid" 
-        labelPlacement="floating"
-        [(ngModel)]="collection.name">
+        <ion-input fill="outline" class="export-name-input generic-input generic-input-dark"
+            (ionChange)="renameCollection($event)" type="text" fill="solid" labelPlacement="floating"
+            [(ngModel)]="collection.name">
         </ion-input>
     </div>
-     <ion-list *ngIf="images.length > 0">
-      <ion-item class="card" *ngFor="let file of images; let i = index">
-        <ion-thumbnail slot="start">
-          <ion-img [src]="file.data"></ion-img>
-        </ion-thumbnail>
-      
-       
-        <ion-button class="icon" slot="end" fill="clear" (click)="editImage(file)">
-          <img src="/assets/icons8-edit-50.png" />
-          
-        </ion-button>
-        <!-- <confirm-dialog (onDelete)="deleteImage(imageToDelete)"></confirm-dialog>  -->
-        <ion-button class="icon" slot="end" id="open-confirm-dialog" fill="clear" (click)="removeFromCollection(file)">
-          <img src="/assets/icons8-x-30.png" />
-        </ion-button>
-      </ion-item>
+    <ion-list *ngIf="images.length > 0">
+        <ion-item class="card" *ngFor="let file of images; let i = index">
+            <ion-thumbnail slot="start">
+                <ion-img [src]="file.data"></ion-img>
+            </ion-thumbnail>
+
+
+            <ion-button class="icon" slot="end" fill="clear" (click)="editImage(file)">
+                <img src="/assets/icons8-edit-50.png" />
+
+            </ion-button>
+            <ion-button class="icon" slot="end" fill="clear"
+                (click)="removeFromCollection(file)">
+                <img src="/assets/icons8-x-30.png" />
+            </ion-button>
+        </ion-item>
     </ion-list>
 
     <ion-text color="danger">
-        <a (click)="onDeleteCollection()">Delete collection</a>
+        <a (click)="setIsOpen(true)"> Delete collection</a>
     </ion-text>
-  </ion-content>
+</ion-content>
+<ion-modal [isOpen]="isModalOpen" class="confirm-modal-wrapper">
+    <ng-template>
+      <div class="confirm-modal yes-no-modal">
+        <h1>{{message}}</h1>
+  
+        <div class="button-container">
+          <ion-tab-button (click)="setIsOpen(false)">
+            <img src="/assets/icons8-x-30.png" />
+          </ion-tab-button>
+          <ion-tab-button (click)="onDeleteCollection()">
+            <img src="/assets/icons8-confirm-30.png" />
+          </ion-tab-button>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>

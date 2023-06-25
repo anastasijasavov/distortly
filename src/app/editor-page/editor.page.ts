@@ -41,10 +41,6 @@ export class EditorPage extends BaseImports implements OnInit, AfterViewInit, On
     });
   }
   ngAfterViewInit(): void {
-    this.router.events.subscribe(e => {
-      if (e instanceof ActivationStart && e.snapshot.outlet === "edit")
-        this.outlet.deactivate();
-    });
 
     if(this.sharedService.isEditMode){
       this.p5 = new p5(() => {

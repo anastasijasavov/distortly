@@ -4,7 +4,6 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { LocalFile } from '../dtos/local-file';
 import { selectCollectionById } from '../store/collections/collections.selectors';
 import * as fromActions from '../store/collections/collections.actions';
-import { CollectionDto } from '../dtos/collection.dto';
 import { CollectionDo } from '../dtos/collection.do';
 @Component({
   selector: 'collection-cmp',
@@ -15,6 +14,8 @@ export class CollectionComponent extends BaseImports implements OnInit {
   collectionId: string;
   images: LocalFile[] = [];
   collection: CollectionDo;
+  isModalOpen: boolean = false;
+  message = "Are you sure you want to delete this collection? This won't delete the images.";
 
   constructor(private injector: Injector, private route: ActivatedRoute) {
     super(injector);
@@ -35,10 +36,11 @@ export class CollectionComponent extends BaseImports implements OnInit {
       });
   }
 
-  async onDeleteCollection() {
+  onDeleteCollection() {
     this.collectionStore.dispatch(
       fromActions.deleteCollection({ id: this.collectionId })
     );
+    this.setIsOpen(false);
     this.sharedService.emitDeleteCollection(this.collectionId);
     this.router.navigate(['tabs/collections']);
     this.collectionStore.dispatch(fromActions.loadCollections());
@@ -65,5 +67,9 @@ export class CollectionComponent extends BaseImports implements OnInit {
         name: file.name,
       })
     );
+  }
+
+  setIsOpen(isOpen: boolean){
+    this.isModalOpen = isOpen;
   }
 }
