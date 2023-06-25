@@ -24,12 +24,13 @@ import { selectCollections } from '../store/collections/collections.selectors';
 })
 export class ImageLibraryComponent extends BaseImports {
   images: LocalFile[] = [];
+  isModalOpen: boolean;
   collections: Dictionary<CollectionDo>;
   customPopoverOptions = {
     header: 'Select Collections',
   };
 
-  imageToDelete:LocalFile;
+  imageToDelete: LocalFile;
 
   constructor(
     private plt: Platform,
@@ -44,14 +45,17 @@ export class ImageLibraryComponent extends BaseImports {
       this.images = images;
     });
 
-    this.store2.select(selectCollections).subscribe(col => {
+    this.store2.select(selectCollections).subscribe((col) => {
       this.collections = col;
-    })
+    });
   }
 
   addToCollection(e: any, file: LocalFile) {
     this.store.dispatch(
-      fromActions.updateCollection({ id: e.detail.value[0], changes: file.name})
+      fromActions.updateCollection({
+        id: e.detail.value[0],
+        changes: file.name,
+      })
     );
   }
 
@@ -63,15 +67,24 @@ export class ImageLibraryComponent extends BaseImports {
     this.router.navigate(['tabs/editor']);
   }
 
-  setImageToDelete(image:LocalFile){
+  setImageToDelete(image: LocalFile, isOpen: boolean) {
     this.imageToDelete = image;
+    this.isModalOpen = isOpen;
+    console.log('set image to delete and open modal');
   }
   async deleteImage(file: LocalFile) {
     await Filesystem.deleteFile({
       path: file.path,
       directory: Directory.Data,
     });
+    this.collectionStore.dispatch(
+      fromActions.removeImageFromCollections({ name: file.name })
+    );
     await this.sharedService.loadFiles();
+  }
+
+  setIsOpen(isOpen: boolean){
+    this.isModalOpen = isOpen;
   }
 
   async selectImage() {
@@ -130,4 +143,13 @@ export class ImageLibraryComponent extends BaseImports {
       };
       reader.readAsDataURL(blob);
     });
+
+  cancel() {
+    this.setIsOpen(false);
+  }
+
+  confirm() {
+    this.setIsOpen(false);
+    this.deleteImage(this.imageToDelete);
+  }
 }

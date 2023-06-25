@@ -1,9 +1,13 @@
 import { createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import {
+  EntityState,
+  EntityAdapter,
+  createEntityAdapter,
+  Dictionary,
+} from '@ngrx/entity';
 import * as CollectionActions from './collections.actions';
 
 import { CollectionDo } from 'src/app/dtos/collection.do';
-import { LocalFile } from 'src/app/dtos/local-file';
 
 export interface CollectionState extends EntityState<CollectionDo> {
   // additional state properties can be defined here
@@ -41,25 +45,45 @@ export const collectionReducer = createReducer(
     images?.push(image);
     col.images = images;
 
-    return collectionAdapter.updateOne({id, changes: col}, state);
+    return collectionAdapter.updateOne({ id, changes: col }, state);
   }),
   on(CollectionActions.deleteCollection, (state, { id }) =>
     collectionAdapter.removeOne(id, state)
   ),
-  on(CollectionActions.removeFromCollection, (state, {id, name}) => {
+  on(CollectionActions.removeFromCollection, (state, { id, name }) => {
     const returnState = { ...state.entities };
     const col = <CollectionDo>{ ...returnState[id] };
-    var images : string[] = [];
+    var images: string[] = [];
 
     //deep copy images
     col.images!.forEach((element) => {
-      if(element !== name){
+      if (element !== name) {
         images.push(element);
       }
     });
     col.images = images;
 
-    return collectionAdapter.updateOne({id, changes: col}, state); 
+    return collectionAdapter.updateOne({ id, changes: col }, state);
+  }),
+  on(CollectionActions.renameCollection, (state, { id, col }) => {
+    return collectionAdapter.updateOne({ id, changes: col }, state);
+  }),
+  on(CollectionActions.removeImageFromCollections, (state, { name }) => {
+    const returnState = { ...state };
+    const collections = { ...state.entities };
+    var updatedCollections: Dictionary<CollectionDo> = {};
+
+    Object.keys(collections).forEach((key) => {
+      const newCol: CollectionDo = {
+        name: collections[key]?.name!,
+        id: parseInt(key),
+        images: collections[key]?.images.filter((x) => x !== name)!,
+      };
+      updatedCollections[key] = newCol;
+    });
+
+    returnState.entities = updatedCollections;
+    return returnState;
   })
 );
 

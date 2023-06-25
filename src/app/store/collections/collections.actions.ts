@@ -19,7 +19,17 @@ export const deleteCollection = createAction(
 );
 
 
+
 export const removeFromCollection = createAction(
   '[Collection] Delete Collection',
   props<{id:string, name: string }>()
+);
+
+export const removeImageFromCollections = createAction(
+  '[Collection] Remove Image From Collections',
+  props<{name: string }>()
+);
+export const renameCollection = createAction(
+  '[Collection] Rename Collection',
+  props<{id:string, col: CollectionDo}>()
 );

@@ -1,6 +1,22 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title>Collection</ion-title>
+    </ion-toolbar>
+</ion-header>
+
 <ion-content>
 
-   
+    <div class="settings-item">
+        <ion-input 
+        fill="outline" 
+        class="export-name-input generic-input generic-input-dark" 
+        (ionChange)="renameCollection($event)" 
+        type="text" 
+        fill="solid" 
+        labelPlacement="floating"
+        [(ngModel)]="collection.name">
+        </ion-input>
+    </div>
      <ion-list *ngIf="images.length > 0">
       <ion-item class="card" *ngFor="let file of images; let i = index">
         <ion-thumbnail slot="start">
@@ -19,4 +35,5 @@
       </ion-item>
     </ion-list>
 
+    <h3 (click)="onDeleteCollection()">Delete collection</h3>
   </ion-content>
