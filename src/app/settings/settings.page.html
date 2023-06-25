@@ -3,21 +3,40 @@
         <ion-title> Settings </ion-title>
     </ion-toolbar>
 </ion-header>
+<div class="settings-container">
+    <div class="settings-item">
+        <ion-toggle 
+        [checked]="autoSave" 
+        [(ngModel)]="autoSave" 
+        (ionChange)="toggleAutoSave()"
+        color="dark">
+            Auto save
+        </ion-toggle>
+        <br /><br />
+    </div>
 
+    <div class="settings-item">
+        <h5>Default export name</h5>
+        <ion-input 
+        fill="outline" 
+        class="export-name-input generic-input generic-input-dark" 
+        (ionChange)="changeFileName()" 
+        type="text" 
+        fill="solid" 
+        labelPlacement="floating"
+        [(ngModel)]="fileName">
+        </ion-input>
+    </div>
 
-<ion-toggle [checked]="autoSave" [(ngModel)]="autoSave" (ionChange)="toggleAutoSave()">Auto save</ion-toggle><br /><br />
-
-<h5>Default export name</h5>
-<ion-input fill="outline" class="name-input" (ionChange)="changeFileName()" type="text" fill="solid" labelPlacement="floating"
-    [(ngModel)]="fileName">
-</ion-input>
-
-
-<h5>Default file type</h5>
-
-<ion-item>
-    <ion-select interface="popover" placeholder="" (ionChange)="setImageType()" [ngModel]="fileType">
-        <ion-select-option value="JPG">JPG</ion-select-option>
-        <ion-select-option value="PNG">PNG</ion-select-option>
-    </ion-select>
-</ion-item>
+    <div class="settings-item">
+        <h5>Default file type</h5>
+    </div>
+    <div class="settings-item select-wrapper">
+        <ion-item>
+            <ion-select interface="popover" placeholder="" (ionChange)="setImageType()" [ngModel]="fileType" class="type-select">
+                <ion-select-option value="JPG">JPG</ion-select-option>
+                <ion-select-option value="PNG">PNG</ion-select-option>
+            </ion-select>
+        </ion-item>
+    </div>
+</div>

@@ -50,8 +50,6 @@ export const collectionReducer = createReducer(
     const returnState = { ...state.entities };
     const col = <CollectionDo>{ ...returnState[id] };
     var images : string[] = [];
-    console.log(col, id, name);
-    
 
     //deep copy images
     col.images!.forEach((element) => {

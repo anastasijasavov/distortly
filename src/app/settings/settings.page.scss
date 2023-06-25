@@ -1,0 +1,34 @@
+ion-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-container
+{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    margin-top: 20px;
+}
+
+.settings-item{
+    width: 80%;
+    margin: 40px auto 0 auto;
+}
+
+.settings-item h5{
+    margin: 0 0 7px 0;
+}
+
+ion-input.export-name-input, ion-select.type-select{
+    --border-radius: 8px;
+    min-height: 0px;
+    height: 45px;
+}
+
+.select-wrapper{
+    width: 40%;
+    margin: 0 0 0 10%;
+    min-width: 120px;
+}
