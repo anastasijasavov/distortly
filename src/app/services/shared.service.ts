@@ -4,6 +4,7 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { LoadingController } from '@ionic/angular';
 import { Constants } from '../app.constants';
 import { Injectable } from '@angular/core';
+import { deleteCollection } from '../store/collections/collections.actions';
 
 @Injectable()
 export class SharedService {
@@ -16,6 +17,11 @@ export class SharedService {
   public images: BehaviorSubject<LocalFile[]> = new BehaviorSubject<
     LocalFile[]
   >([]);
+
+  private deleteCollection: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
+  collectionId$: Observable<string> = this.deleteCollection.asObservable();
+
   public images$: Observable<LocalFile[]> = this.images.asObservable();
   isEditMode = false;
   constructor(private loadingCtrl: LoadingController) {}
@@ -28,21 +34,24 @@ export class SharedService {
 
   async getImagesByNames(names: string[]) {
     const images: LocalFile[] = [];
-    for (let f of names) {
-      const filePath = `${Constants.IMAGE_DIR}/${f}`;
+    if (names && names?.length > 0) {
+      for (let f of names) {
+        const filePath = `${Constants.IMAGE_DIR}/${f}`;
 
-      const readFile = await Filesystem.readFile({
-        path: filePath,
-        directory: Directory.Data,
-      });
+        const readFile = await Filesystem.readFile({
+          path: filePath,
+          directory: Directory.Data,
+        });
 
-      images.push({
-        name: f,
-        path: filePath,
-        data: `data:image/jpeg;base64,${readFile.data}`,
-      });
+        images.push({
+          name: f,
+          path: filePath,
+          data: `data:image/jpeg;base64,${readFile.data}`,
+        });
+      }
+      return images;
     }
-    return images;
+    return [];
   }
   async loadFiles() {
     const loading = await this.loadingCtrl.create({
@@ -73,8 +82,12 @@ export class SharedService {
 
   async loadFileData(fileNames: string[]) {
     console.log(fileNames);
-    
+
     const images: LocalFile[] = await this.getImagesByNames(fileNames);
     this.images.next(images);
+  }
+
+  emitDeleteCollection(id: string){
+    this.deleteCollection.next(id);
   }
 }

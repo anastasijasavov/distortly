@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, EventEmitter, Injector, OnInit } from '@angular/core';
 import { BaseImports } from '../services/base-imports';
 import { ActivatedRoute, Params } from '@angular/router';
 import { LocalFile } from '../dtos/local-file';
@@ -15,6 +15,7 @@ export class CollectionComponent extends BaseImports implements OnInit {
   collectionId: string;
   images: LocalFile[] = [];
   collection: CollectionDo;
+
   constructor(private injector: Injector, private route: ActivatedRoute) {
     super(injector);
     this.collectionId = this.route.snapshot.paramMap.get('id')!;
@@ -26,8 +27,6 @@ export class CollectionComponent extends BaseImports implements OnInit {
   }
 
   async ngOnInit() {
-    console.log('init');
-
     this.collectionStore
       .select(selectCollectionById(this.collectionId))
       .subscribe(async (col) => {
@@ -40,10 +39,12 @@ export class CollectionComponent extends BaseImports implements OnInit {
     this.collectionStore.dispatch(
       fromActions.deleteCollection({ id: this.collectionId })
     );
+    this.sharedService.emitDeleteCollection(this.collectionId);
+    this.router.navigate(['tabs/collections']);
+    this.collectionStore.dispatch(fromActions.loadCollections());
   }
 
   renameCollection(e: any) {
-    console.log(e);
     this.collection.name = e.detail.value;
     this.collectionStore.dispatch(
       fromActions.renameCollection({

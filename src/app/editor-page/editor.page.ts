@@ -87,7 +87,6 @@ export class EditorPage extends BaseImports implements OnInit, AfterViewInit, On
     var canvas = s.createCanvas(this.pic.width, this.pic.height);
 
     canvas.mousePressed(() => {
-      console.log("pressed");
       
       if (s.mouseIsPressed) {
         s.saveCanvas(filename, 'jpg');
