@@ -1,4 +1,4 @@
-import { Component, Injector } from '@angular/core';
+import { Component, HostListener, Injector } from '@angular/core';
 import {
   Camera,
   CameraResultType,
@@ -24,8 +24,9 @@ import { selectCollections } from '../store/collections/collections.selectors';
 })
 export class ImageLibraryComponent extends BaseImports {
   images: LocalFile[] = [];
-  isModalOpen: boolean;
+  isModalOpen: boolean = false;
   collections: Dictionary<CollectionDo>;
+  message: string = '';
   customPopoverOptions = {
     header: 'Select Collections',
   };
@@ -38,6 +39,8 @@ export class ImageLibraryComponent extends BaseImports {
     private store2: Store<CollectionState>
   ) {
     super(injector);
+    this.message =
+      'Are you sure you want to delete this image? It will also remove it from the collections.';
   }
 
   async ngOnInit() {
@@ -73,6 +76,7 @@ export class ImageLibraryComponent extends BaseImports {
     console.log('set image to delete and open modal');
   }
   async deleteImage(file: LocalFile) {
+    this.setIsOpen(false);
     await Filesystem.deleteFile({
       path: file.path,
       directory: Directory.Data,
@@ -83,7 +87,7 @@ export class ImageLibraryComponent extends BaseImports {
     await this.sharedService.loadFiles();
   }
 
-  setIsOpen(isOpen: boolean){
+  setIsOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
 
@@ -151,5 +155,11 @@ export class ImageLibraryComponent extends BaseImports {
   confirm() {
     this.setIsOpen(false);
     this.deleteImage(this.imageToDelete);
+  }
+
+  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(
+    event: KeyboardEvent
+  ) {
+    this.setIsOpen(false);
   }
 }

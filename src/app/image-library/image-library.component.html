@@ -42,19 +42,4 @@
   </ion-toolbar>
 </ion-content>
 
-<ion-modal [isOpen]="isModalOpen" class="confirm-modal-wrapper">
-  <ng-template>
-    <div class="confirm-modal">
-      <h1>Are you sure you want to delete this image?</h1>
-
-      <div class="button-container">
-        <ion-tab-button (click)="cancel()">
-          <img src="/assets/icons8-x-30.png" />
-        </ion-tab-button>
-        <ion-tab-button (click)="confirm()">
-          <img src="/assets/icons8-confirm-30.png" />
-        </ion-tab-button>
-      </div>
-    </div>
-  </ng-template>
-</ion-modal>
+<confirm-dialog [isOpen]="isModalOpen" [message]="message" (onDelete)="deleteImage(imageToDelete)" (onCancel)="setIsOpen(false)"></confirm-dialog>

@@ -31,15 +31,15 @@ export class CollectionComponent extends BaseImports implements OnInit {
     this.collectionStore
       .select(selectCollectionById(this.collectionId))
       .subscribe(async (col) => {
-        this.collection = {...col!};
+        this.collection = { ...col! };
         this.images = await this.sharedService.getImagesByNames(col?.images!);
       });
   }
 
   async onDeleteCollection() {
-    //TODO:
-    //delete from storage
-    //redirect to collections page
+    this.collectionStore.dispatch(
+      fromActions.deleteCollection({ id: this.collectionId })
+    );
   }
 
   renameCollection(e: any) {
