@@ -20,6 +20,7 @@ export class EditBarComponent extends BaseImports implements OnInit {
   @Output() onGlitch = new EventEmitter();
 
   showSlider = false;
+  showTriangleSlider = false;
   constructor(private injector: Injector) {
     super(injector);
   }
@@ -35,10 +36,14 @@ export class EditBarComponent extends BaseImports implements OnInit {
 
   dither(){
     this.showSlider = true;
+    this.showTriangleSlider = false;
+
     this.onDither.emit(true);
   }
 
   triangulate() {
+    this.showTriangleSlider = true;
+    this.showSlider = false;
     this.onTriangulate.emit(true);
   }
 
@@ -58,5 +63,17 @@ export class EditBarComponent extends BaseImports implements OnInit {
     console.log(e.detail.value);
     
     this.sharedService.setContrast(e.detail.value);
+  }
+
+  setAbstractionLevel(e: any){
+    this.sharedService.setAbstractionLevel(e.detail.value);
+  }
+
+  setHue(e: any){
+    this.sharedService.setHue(e.detail.value);
+  }
+
+  setDetailLevel(e: any){
+    this.sharedService.setDetailLevel(e.detail.value);
   }
 }

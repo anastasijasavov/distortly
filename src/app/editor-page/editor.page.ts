@@ -19,6 +19,7 @@ import {
   selectUser,
   selectUserState,
 } from '../store/user-settings/user-settings.selectors';
+import { TriangulateParams } from '../dtos/triangulate.dto';
 
 @Component({
   selector: 'editor',
@@ -115,13 +116,8 @@ export class EditorPage
       s.setup = () => {
         const maxWidth = Math.min(window.innerWidth, this.pic.width);
         this.pic.resize(maxWidth, 0);
-        var canvas = s.createCanvas(this.pic.width, this.pic.height);
-
-        canvas.mouseClicked(() => {
-          if (s.mouseIsPressed) {
-            s.saveCanvas('dithered', 'jpg');
-          }
-        });
+        s.createCanvas(this.pic.width, this.pic.height);
+      
         s.noLoop();
         s.noStroke();
       };
@@ -130,7 +126,6 @@ export class EditorPage
         this.sharedService.param$.subscribe(params => {
           ditherParams.pixsize = params.pixsize;
           ditherParams.contrast = params.contrast;
-          console.log("intensity", params.pixsize);
           this.editorService.dither(s, this.pic, ditherParams);
           
         });
@@ -162,16 +157,31 @@ export class EditorPage
   }
 
   onTriangulate() {
-    let img: p5.Image;
+
+    const triangulateParams: TriangulateParams = {
+      abstractionLevel: 1,
+      hue: 5,
+      detailLevel: 1
+    };
     const sketch = (s: p5) => {
       s.preload = () => {
         this.preloadImage(s, 'triangulate');
       };
 
-      s.setup = () => {};
+      s.setup = () => {
+        const maxWidth = Math.min(window.innerWidth, this.pic.width);
+        this.pic.resize(maxWidth, 0);
+        s.createCanvas(this.pic.width, this.pic.height);
+
+        s.noLoop();
+        s.noStroke();
+      };
 
       s.draw = () => {
-        this.editorService.triangulate(s, img);
+      
+        this.sharedService.triangulateParams$.subscribe(params => {
+          this.editorService.triangulate(s, this.pic, params);
+        })
       };
     };
 

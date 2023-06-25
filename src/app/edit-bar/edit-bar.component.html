@@ -9,8 +9,11 @@
         <ion-content class="ion-padding">Dither</ion-content>
       </ng-template>
     </ion-popover> -->
-      <button id="pixel-sort" (click)="triangulate()">
+      <!-- <button id="pixel-sort" (click)="triangulate()">
         <img src="/assets/icons8-sort-32.png" />
+      </button> -->
+      <button   (click)="triangulate()">
+        <img src="/assets/icons8-design-64.png" />
       </button>
       <!-- <ion-popover trigger="pixel-sort" triggerAction="hover">
       <ng-template>
@@ -42,3 +45,8 @@
 
 <ion-range *ngIf="showSlider" (ionChange)="setPixSize($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
 <ion-range *ngIf="showSlider" (ionChange)="setContrast($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
+
+
+<ion-range *ngIf="showTriangleSlider" (ionChange)="setAbstractionLevel($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
+<ion-range *ngIf="showTriangleSlider" (ionChange)="setHue($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
+<ion-range *ngIf="showTriangleSlider" (ionChange)="setDetailLevel($event)" aria-label="Range with ticks" [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>

@@ -5,6 +5,7 @@ import { LoadingController } from '@ionic/angular';
 import { Constants } from '../app.constants';
 import { Injectable } from '@angular/core';
 import { DitherParams } from '../dtos/dither.dto';
+import { TriangulateParams } from '../dtos/triangulate.dto';
 
 @Injectable()
 export class SharedService {
@@ -19,6 +20,14 @@ export class SharedService {
   }
   private param: BehaviorSubject<DitherParams> = new BehaviorSubject(this.ditherParams);
   public param$: Observable<DitherParams> = this.param.asObservable();
+
+  triangulateParams: TriangulateParams= {
+    abstractionLevel: 1,
+    hue: 5,
+    detailLevel: 1
+  }
+  private triangParam: BehaviorSubject<TriangulateParams> = new BehaviorSubject(this.triangulateParams);
+  public triangulateParams$: Observable<TriangulateParams> = this.triangParam.asObservable();
   private image: BehaviorSubject<LocalFile> = new BehaviorSubject(
     this.emptyFile
   );
@@ -106,5 +115,20 @@ export class SharedService {
   setContrast(contrast: number){
    this.ditherParams.contrast = contrast;
    this.param.next(this.ditherParams);
+  }
+
+  setAbstractionLevel(level: number){
+    this.triangulateParams.abstractionLevel = level;
+    this.triangParam.next(this.triangulateParams);
+  }
+
+  setHue(hue: number){
+    this.triangulateParams.hue = hue;
+    this.triangParam.next(this.triangulateParams);
+  }
+
+  setDetailLevel(detail: number){
+    this.triangulateParams.detailLevel = detail;
+    this.triangParam.next(this.triangulateParams);
   }
 }

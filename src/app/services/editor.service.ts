@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import p5 from 'p5';
 import { DitherParams } from '../dtos/dither.dto';
+import { TriangulateParams } from '../dtos/triangulate.dto';
 
 @Injectable()
 export class EditorService {
@@ -8,8 +9,6 @@ export class EditorService {
     pic.loadPixels();
 
     let { xoffset, yoffset, pixsize, contrast } = { ...ditherParams };
-    console.log(ditherParams);
-    
     for (let x = 0; x < pic.width; x += pixsize) {
       for (let y = 0; y < pic.height; y += pixsize) {
         let loc = (x + y * pic.width) * 4;
@@ -57,21 +56,30 @@ export class EditorService {
     s.updatePixels();
   }
 
-  triangulate(s: p5, pic: p5.Image) {
-    let x = s.mouseX;
-    let y = s.mouseY;
-    let c = pic.get(s.int(x), s.int(y));
+  triangulate(s: p5, pic: p5.Image, params: TriangulateParams) {
+    for (let i = 0; i < 500 + 200 * params.detailLevel; i++) {
+      let x = s.random(0, pic.width);
+      let y = s.random(0, pic.height);
+      let c = pic.get(s.int(x), s.int(y));
+      const hue = 1 + s.abs(10 - params.hue) / 5;
+      if (params.hue > 5) {
+        c[2] *= hue;
+      } else if (params.hue < 5) {
+        c[1] *= hue;
+      }
+      s.fill(c);
+      s.noStroke();
 
-    s.fill(c);
-    s.noStroke();
-    s.triangle(
-      x,
-      y,
-      s.int(x + s.random(50)),
-      s.int(y + s.random(70)),
-      s.int(x - s.random(100)),
-      s.int(y + s.random(60))
-    );
+      const abstractionLevel = 5 * params.abstractionLevel;
+      s.triangle(
+        x,
+        y,
+        s.int(x + s.random(20 + abstractionLevel)),
+        s.int(y + s.random(50 + abstractionLevel)),
+        s.int(x - s.random(80 + abstractionLevel)),
+        s.int(y + s.random(40 + abstractionLevel))
+      );
+    }
   }
 
   get3dMap(s: p5, pic: p5.Image) {
