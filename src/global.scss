@@ -26,8 +26,9 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+
 :root {
-    --background-color:#1A1625;
+    --background-color: #1A1625;
     --primary-color: #2F2B3A;
     --secondary-color: #46424F;
     --ion-font-family: 'Fira Code', monospace
@@ -36,26 +37,29 @@
 :host {
     background: var(--background-color) !important;
 }
+
 body {
-    
+
     --ion-item-background: var(--background-color);
     --ion-background-color: var(--background-color);
 }
+
 .ion-card {
     background-color: var(--primary-color);
 }
- 
+
 .list-md {
-    background: var(--background-color); 
+    background: var(--background-color);
 }
 
-.ion-page{
+.ion-page {
     background: var(--background-color) !important;
 }
 
 ion-modal {
     --background: transparent;
 }
+
 // ion-item {
 //     width: 80%;
 //     min-width: 40px;
@@ -63,7 +67,7 @@ ion-modal {
 //     --border-radius: 14px;
 // }
 
-ion-input.generic-input{
+ion-input.generic-input {
     --border-radius: 8px;
     --color: white;
     --border-color: white !important;
@@ -72,11 +76,11 @@ ion-input.generic-input{
     --highlight-color-invalid: white !important;
 }
 
-ion-input.generic-input-light{
+ion-input.generic-input-light {
     --background: var(--custom-color-input) !important;
 }
 
-ion-input.generic-input-dark{
+ion-input.generic-input-dark {
     --background: var(--custom-color-input-secondary) !important;
 }
 
@@ -100,7 +104,8 @@ ion-input.generic-input-dark{
     color: white;
 }
 
-ion-modal.confirm-modal-wrapper::part(content), .confirm-modal{
+ion-modal.confirm-modal-wrapper::part(content),
+.confirm-modal {
     width: 300px;
     height: 180px;
 }
@@ -113,14 +118,88 @@ ion-modal.confirm-modal-wrapper::part(content), .confirm-modal{
     gap: 0px;
     margin-top: 8px;
 }
-  
-.button-container ion-tab-button{
-height: 54px;
+
+.button-container ion-tab-button {
+    height: 54px;
 }
 
-.yes-no-modal h1{
+.yes-no-modal h1 {
     font-size: 16px;
     line-height: 22px;
     width: 94%;
     margin: 30px auto auto auto;
+}
+
+
+.card {
+    width: 93%;
+    margin: 20px auto;
+    border-radius: 14px;
+    background-color: var(--ion-item-background);
+    -webkit-box-shadow: 0px 10px 9px -6px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 10px 9px -6px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 10px 9px -6px rgba(0, 0, 0, 0.75);
+}
+
+ion-thumbnail.card-thumbnail {
+    --size-width: 130px;
+    --size-height: 130px;
+    --border-radius: 14px;
+    width: var(--size-width);
+    height: var(--size-height);
+    margin: 15px 0;
+}
+
+ion-button.icon {
+    --height: 40px;
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    --margin-start: 0;
+    --margin-end: 0;
+    --margin-top: 0;
+    --margin-bottom: 0;
+    max-width: 40px;
+    min-width: 40px;
+}
+
+ion-button.icon img {
+    margin: 0;
+}
+
+.button-small {
+    height: 40px;
+
+    img {
+        height: 40px;
+    }
+}
+
+@media (max-width: 400px) {
+    ion-thumbnail.card-thumbnail {
+        --size-width: 80px;
+        --size-height: 130px;
+    }
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-child {
+    width: 33.3%;
+    text-align: center;
+    margin: auto 0;
+}
+
+.logo-cotainer {
+    display: flex;
+    justify-content: left;
+}
+
+.toolbar img {
+    max-height: 56px;
+    width: auto;
 }

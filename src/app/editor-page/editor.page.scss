@@ -1,12 +1,10 @@
-.toolbar{
-    display: flex;
-    justify-content: space-between;
-}
+
 
 .toolbar-buttons{
     height: 45px;
     padding: 0;
     display: flex;
+    justify-content: right;
 }
 
 .toolbar-buttons button{

@@ -1,20 +1,24 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
-        <ion-title>Collection</ion-title>
+        <div class="toolbar">
+            <div class="header-child logo-cotainer"><img src="/assets/logo.png"/></div>
+            <ion-title class="header-child"> Collection </ion-title>
+            <div class="header-child"></div>
+        </div>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-    <div class="settings-item">
-        <ion-input fill="outline" class="export-name-input generic-input generic-input-dark"
+    <div>
+        <ion-input fill="outline" class="collection-name-input generic-input generic-input-dark"
             (ionChange)="renameCollection($event)" type="text" fill="solid" labelPlacement="floating"
             [(ngModel)]="collection.name">
         </ion-input>
     </div>
     <ion-list *ngIf="images.length > 0">
         <ion-item class="card" *ngFor="let file of images; let i = index">
-            <ion-thumbnail slot="start">
+            <ion-thumbnail slot="start" class="card-thumbnail">
                 <ion-img [src]="file.data"></ion-img>
             </ion-thumbnail>
 
@@ -30,8 +34,8 @@
         </ion-item>
     </ion-list>
 
-    <ion-text color="danger">
-        <a (click)="setIsOpen(true)"> Delete collection</a>
+    <ion-text>
+        <a (click)="setIsOpen(true)" class="delete-anchor"> Delete collection</a>
     </ion-text>
 </ion-content>
 <ion-modal [isOpen]="isModalOpen" class="confirm-modal-wrapper">

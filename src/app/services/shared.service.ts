@@ -65,6 +65,14 @@ export class SharedService {
 
   public images$: Observable<LocalFile[]> = this.images.asObservable();
   isEditMode = false;
+
+
+  strips = 20;
+  private glitchParams: BehaviorSubject<number> = new BehaviorSubject(
+    this.strips
+  );
+  public glitchParams$: Observable<number> = this.glitchParams.asObservable();
+
   constructor(private loadingCtrl: LoadingController) {}
 
   setImage(image: LocalFile) {
@@ -163,5 +171,11 @@ export class SharedService {
   setMapRotation(rotateY: number){
     this.mapRotationY = rotateY;
     this.mapRotation.next(rotateY);
+  }
+
+
+  setGlitchParams(strips: number){
+    this.strips = strips;
+    this.glitchParams.next(strips);
   }
 }

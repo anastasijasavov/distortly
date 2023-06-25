@@ -23,6 +23,7 @@ export class EditBarComponent extends BaseImports implements OnInit {
   showTriangleSlider = false;
   showPixelSlider = false;
   showMapSlider = false;
+  showGlitchSlider = false;
   constructor(private injector: Injector) {
     super(injector);
   }
@@ -43,6 +44,7 @@ export class EditBarComponent extends BaseImports implements OnInit {
     this.showTriangleSlider = false;
     this.showPixelSlider = false;
     this.showMapSlider = false;
+    this.showGlitchSlider = false;
 
     this.onDither.emit(true);
   }
@@ -52,6 +54,7 @@ export class EditBarComponent extends BaseImports implements OnInit {
     this.showPixelSlider = false;
     this.showMapSlider = false;
     this.showSlider = false;
+    this.showGlitchSlider = false;
     this.onTriangulate.emit(true);
   }
 
@@ -60,10 +63,16 @@ export class EditBarComponent extends BaseImports implements OnInit {
     this.showPixelSlider = true;
     this.showMapSlider = false;
     this.showSlider = false;
+    this.showGlitchSlider = false;
     this.onPixelSort.emit(true);
   }
 
   glitch() {
+    this.showSlider = false;
+    this.showTriangleSlider = false;
+    this.showPixelSlider = false;
+    this.showMapSlider = false;
+    this.showGlitchSlider = true;
     this.onGlitch.emit(true);
   }
 
@@ -94,5 +103,9 @@ export class EditBarComponent extends BaseImports implements OnInit {
   }
   setMapRotation(e: any) {
     this.sharedService.setMapRotation(e.detail.value);
+  }
+
+  setGlitchParams(e: any) {
+    this.sharedService.setGlitchParams(e.detail.value);
   }
 }

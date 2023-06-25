@@ -93,9 +93,9 @@ export class EditorService {
     let tiles = 500;
     let tileSize = s.width / tiles;
     s.camera(
-      s.width / 4.0,
-      s.height / 4.0,
-      s.height / 2.0 / s.tan((s.PI * 30.0) / (270.0)),
+      s.width / 2.0,
+      s.height / 2.0,
+      s.height / 2.0 / s.tan((s.PI * 30.0) / 270.0),
       s.width / 2.0,
       s.height / 2.0,
       0,
@@ -109,7 +109,7 @@ export class EditorService {
     s.rotateY(s.radians(360 / rotateY));
 
     console.log(tiles);
-    
+
     for (let x = 0; x < tiles; x++) {
       for (let y = 0; y < tiles; y++) {
         let c = pic.get(s.int(x * tileSize), s.int(y * tileSize));
@@ -185,43 +185,33 @@ export class EditorService {
     return sortedRow.concat(row.slice(minIndex));
   }
 
-  glitch(s: p5, img: p5.Image) {
-    let threshold = 80; // Threshold for edge detection
-    let glitchColor = [255, 0, 0]; // Color of the shifted edges
+  glitch(s: p5, img: p5.Image, strips: number) {
+    const numStrips = strips * 20;
+    const stripWidth = s.width / numStrips;
+    s.loadPixels();
 
-    // Set the number of glitches and their intensity
-    // Load pixels of the image
-    img.loadPixels();
+    // Iterate through each strip
+    for (let i = 0; i < numStrips; i++) {
+      let startX = i * stripWidth;
+      let endX = startX + stripWidth;
 
-    // Iterate over each pixel to detect edges
-    for (let x = 1; x < img.width - 1; x++) {
-      for (let y = 1; y < img.height - 1; y++) {
-        // Get pixel indices
-        const i = (x + y * img.width) * 4;
+      // Displace the pixels within the strip
+      for (let x = startX; x < endX; x++) {
+        for (let y = 0; y < s.height; y++) {
+          let displacement = s.int(s.random(-numStrips, numStrips)); // Random horizontal displacement
 
-        // Apply edge detection algorithm
-        const diff =
-          s.abs(
-            s.brightness([img.pixels[i - 4]]) -
-              s.brightness([img.pixels[i + 4]])
-          ) +
-          s.abs(
-            s.brightness([img.pixels[i - img.width * 4]]) -
-              s.brightness([img.pixels[i + img.width * 4]])
-          );
+          // Get the color from the original image
+          let originalX = s.constrain(x + displacement, startX, endX - 1);
+          let col = img.get(originalX, y);
 
-        // If the difference is above the threshold, shift the pixel color
-        if (diff > threshold) {
-          // Shift the pixel color to the right
-          img.pixels[i + 4] = glitchColor[0];
-          img.pixels[i + 5] = glitchColor[1];
-          img.pixels[i + 6] = glitchColor[2];
+          // Set the color to the modified image
+          img.set(x, y, col);
         }
       }
     }
 
-    // Update the modified pixels on the canvas
     img.updatePixels();
+    s.image(img, 0, 0);
   }
 
   inpaint(s: p5, img: p5.Image, mask: p5.Image) {

@@ -5,7 +5,7 @@
     around! </h6>
   <ion-list *ngIf="images.length > 0">
     <ion-item class="card" *ngFor="let file of images; let i = index">
-      <ion-thumbnail slot="start">
+      <ion-thumbnail slot="start" class="card-thumbnail">
         <ion-img [src]="file.data"></ion-img>
       </ion-thumbnail>
       <!-- <ion-item>

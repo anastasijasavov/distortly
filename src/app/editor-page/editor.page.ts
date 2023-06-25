@@ -211,31 +211,27 @@ export class EditorPage
   }
 
   onGlitch() {
-    let img: p5.Image;
     const sketch = (s: p5) => {
       s.preload = () => {
-        this.sharedService.image$.subscribe(
-          (image) => (img = s.loadImage(image.data))
-        );
-        s.noLoop();
+        this.preloadImage(s, 'glitch');
+
       };
 
       s.setup = () => {
-        const canvas = s.createCanvas(img.width, img.height);
-        s.image(img, 0, 0, img.width, img.height);
+        const maxWidth = Math.min(window.innerWidth, this.pic.width);
+        this.pic.resize(maxWidth, 0);
+        s.createCanvas(this.pic.width, this.pic.height);
 
+        s.noLoop();
         s.noStroke();
       };
 
-      s.mousePressed = (e: any) => {
-        if (s.mouseIsPressed) {
-          s.saveCanvas('glitch', 'jpg');
-        }
-      };
+
       s.draw = () => {
-        const maxWidth = Math.min(500, img.width);
-        img.resize(maxWidth, 0);
-        this.editorService.glitch(s, img);
+     this.sharedService.glitchParams$.subscribe(strips => {
+       this.editorService.glitch(s, this.pic, strips);
+
+     })
       };
     };
 

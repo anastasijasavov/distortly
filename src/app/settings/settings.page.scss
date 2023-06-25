@@ -27,8 +27,13 @@ ion-input.export-name-input, ion-select.type-select{
     height: 45px;
 }
 
+ion-input.export-name-input{
+    max-width: 400px;
+}
+
 .select-wrapper{
     width: 40%;
     margin: 0 0 0 10%;
     min-width: 120px;
+    max-width: 200px;
 }

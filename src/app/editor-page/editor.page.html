@@ -1,17 +1,12 @@
 <ion-header [translucent]="true" *ngIf="sharedService.isEditMode">
   <ion-toolbar>
     <div class="toolbar">
-      <ion-title> Edit </ion-title>
-      <div class="toolbar-buttons">
+      <div class="header-child logo-cotainer"><img src="/assets/logo.png"/></div>
+      <ion-title class="header-child"> Edit </ion-title>
+      <div class="toolbar-buttons header-child">
         <button>
           <img src="/assets/icons8-save-50.png" (click)="exportImage()" />
         </button>
-        <!-- <button>
-          <img src="/assets/icons8-undo-64.png" />
-        </button>
-        <button>
-          <img src="/assets/icons8-undo-64.png" class="redo-img" />
-        </button> -->
       </div>
     </div>
   </ion-toolbar>
@@ -34,5 +29,6 @@
    (onDither)="onDither()"
    (onStartMap)="onStartMap()"
    (onPixelSort)="onPixelSort()" 
-   (onTriangulate)="onTriangulate()" (onGlitch)="onGlitch()"></cmp-edit-bar>
+   (onTriangulate)="onTriangulate()" 
+   (onGlitch)="onGlitch()"></cmp-edit-bar>
 </ion-content>
