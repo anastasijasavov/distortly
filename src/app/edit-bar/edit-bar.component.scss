@@ -33,9 +33,11 @@
 }
 
 .range-container{
-  width: 90%;
-  margin: auto;
+  width: 100%;
+  padding: 0 5%;
+  margin: 0 auto 10px auto;
   max-width: 900px;
+  background-color: rgba(126, 97, 137, 0.2);;
 }
 
 @media (min-width: 700px) {

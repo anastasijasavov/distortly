@@ -183,13 +183,13 @@ ion-button.icon img {
     }
 }
 
-.toolbar {
+div.toolbar {
     display: flex;
     justify-content: space-between;
 }
 
 .header-child {
-    width: 33.3%;
+    width: 25%;
     text-align: center;
     margin: auto 0;
 }
@@ -199,7 +199,13 @@ ion-button.icon img {
     justify-content: left;
 }
 
-.toolbar img {
-    max-height: 56px;
+div.toolbar img {
+    height: 30px;
     width: auto;
+    margin-left: 10px;
+}
+
+ion-title.header-child{
+    width: 50%;
+    padding: 0;
 }

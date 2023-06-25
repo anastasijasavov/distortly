@@ -1,6 +1,12 @@
 .delete-anchor{
     color: #eb445a;
     margin-left: 3%;
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.delete-anchor:hover{
+    cursor: pointer;
 }
 
 .collection-name-input
