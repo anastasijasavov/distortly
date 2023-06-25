@@ -21,6 +21,7 @@ export class EditBarComponent extends BaseImports implements OnInit {
 
   showSlider = false;
   showTriangleSlider = false;
+  showPixelSlider = false;
   constructor(private injector: Injector) {
     super(injector);
   }
@@ -37,17 +38,22 @@ export class EditBarComponent extends BaseImports implements OnInit {
   dither(){
     this.showSlider = true;
     this.showTriangleSlider = false;
+    this.showPixelSlider = false;
 
     this.onDither.emit(true);
   }
 
   triangulate() {
     this.showTriangleSlider = true;
+    this.showPixelSlider = false;
     this.showSlider = false;
     this.onTriangulate.emit(true);
   }
 
   pixelSort() {
+    this.showTriangleSlider = false;
+    this.showPixelSlider = true;
+    this.showSlider = false;
     this.onPixelSort.emit(true);
   }
 
@@ -76,4 +82,10 @@ export class EditBarComponent extends BaseImports implements OnInit {
   setDetailLevel(e: any){
     this.sharedService.setDetailLevel(e.detail.value);
   }
+
+  setPixelMin(e: any){
+    this.sharedService.setPixelParam(e.detail.value);
+  }
+
+
 }

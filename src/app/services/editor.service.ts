@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import p5 from 'p5';
 import { DitherParams } from '../dtos/dither.dto';
 import { TriangulateParams } from '../dtos/triangulate.dto';
+import { PixelSort } from '../dtos/pixel-sort.dto';
 
 @Injectable()
 export class EditorService {
@@ -75,8 +76,8 @@ export class EditorService {
         x,
         y,
         s.int(x + s.random(20 + abstractionLevel)),
-        s.int(y + s.random(50 + abstractionLevel)),
-        s.int(x - s.random(80 + abstractionLevel)),
+        s.int(y + s.random(40 + abstractionLevel)),
+        s.int(x - s.random(40 + abstractionLevel)),
         s.int(y + s.random(40 + abstractionLevel))
       );
     }
@@ -119,8 +120,7 @@ export class EditorService {
     s.pop();
   }
 
-  pixelSort(s: p5, img: p5.Image) {
-    console.log(img);
+  pixelSort(s: p5, img: p5.Image, params: PixelSort) {
     s.image(img, 0, 0);
 
     // Load the pixel data from the canvas
@@ -128,6 +128,9 @@ export class EditorService {
 
     console.log('Sorting the image...');
     const pixels = s.pixels;
+    console.log(s.width, s.height);
+    
+    
     // Loop through each row and sort the pixels in that row
     for (let y = 0; y < s.height; y++) {
       // Get a row
@@ -141,7 +144,6 @@ export class EditorService {
           pixels[index + 3], // Alpha
         ]);
       }
-
       // Sort the row
       row = this.sortRow(row);
 
@@ -153,6 +155,7 @@ export class EditorService {
         pixels[index + 2] = row[x][2]; // Blue
         pixels[index + 3] = row[x][3]; // Alpha
       }
+      
     }
 
     // Update the canvas with sorted pixels
@@ -162,7 +165,7 @@ export class EditorService {
   }
 
   sortRow(row: any[]) {
-    let min = 255 * 3;
+    let min = 255*3;
     let minIndex = 0;
 
     // Find the darkest pixel in the row
@@ -173,8 +176,8 @@ export class EditorService {
         min = temp;
         minIndex = i;
       }
+      
     }
-
     // Sort the row up to the brightest pixel
     let sortedRow = row.slice(0, minIndex);
     sortedRow.sort();

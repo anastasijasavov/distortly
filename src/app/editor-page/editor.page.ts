@@ -189,16 +189,24 @@ export class EditorPage
   }
 
   onPixelSort() {
-    let img: p5.Image;
     const sketch = (s: p5) => {
       s.preload = () => {
         this.preloadImage(s, 'pixel-sort');
       };
 
-      s.setup = () => {};
+      s.setup = () => {
+        const maxWidth = Math.min(window.innerWidth, this.pic.width); 
+        this.pic.resize(maxWidth, 0);
+        s.createCanvas(this.pic.width, this.pic.height);
+
+        s.noLoop();
+        s.noStroke();
+      };
 
       s.draw = () => {
-        this.editorService.pixelSort(s, img);
+        this.sharedService.pixelParams$.subscribe(params => {
+          this.editorService.pixelSort(s, this.pic, params);
+        })
       };
     };
 

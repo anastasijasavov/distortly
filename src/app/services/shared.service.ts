@@ -6,28 +6,45 @@ import { Constants } from '../app.constants';
 import { Injectable } from '@angular/core';
 import { DitherParams } from '../dtos/dither.dto';
 import { TriangulateParams } from '../dtos/triangulate.dto';
+import { PixelSort } from '../dtos/pixel-sort.dto';
 
 @Injectable()
 export class SharedService {
   emptyFile: LocalFile = { name: '', data: '', path: '' };
   isEmptyFile = true;
-  
+
   ditherParams: DitherParams = {
     contrast: 1,
     pixsize: 1,
     xoffset: 0,
     yoffset: 0,
-  }
-  private param: BehaviorSubject<DitherParams> = new BehaviorSubject(this.ditherParams);
+  };
+  private param: BehaviorSubject<DitherParams> = new BehaviorSubject(
+    this.ditherParams
+  );
   public param$: Observable<DitherParams> = this.param.asObservable();
 
-  triangulateParams: TriangulateParams= {
+  triangulateParams: TriangulateParams = {
     abstractionLevel: 1,
     hue: 5,
-    detailLevel: 1
-  }
-  private triangParam: BehaviorSubject<TriangulateParams> = new BehaviorSubject(this.triangulateParams);
-  public triangulateParams$: Observable<TriangulateParams> = this.triangParam.asObservable();
+    detailLevel: 1,
+  };
+
+  private triangParam: BehaviorSubject<TriangulateParams> = new BehaviorSubject(
+    this.triangulateParams
+  );
+  public triangulateParams$: Observable<TriangulateParams> =
+    this.triangParam.asObservable();
+
+  pixelParams: PixelSort = {
+    min: 255 * 3,
+  };
+
+  private pixelParam: BehaviorSubject<PixelSort> = new BehaviorSubject(
+    this.pixelParams
+  );
+  public pixelParams$: Observable<PixelSort> = this.pixelParam.asObservable();
+
   private image: BehaviorSubject<LocalFile> = new BehaviorSubject(
     this.emptyFile
   );
@@ -112,23 +129,28 @@ export class SharedService {
     this.param.next(this.ditherParams);
   }
 
-  setContrast(contrast: number){
-   this.ditherParams.contrast = contrast;
-   this.param.next(this.ditherParams);
+  setContrast(contrast: number) {
+    this.ditherParams.contrast = contrast;
+    this.param.next(this.ditherParams);
   }
 
-  setAbstractionLevel(level: number){
+  setAbstractionLevel(level: number) {
     this.triangulateParams.abstractionLevel = level;
     this.triangParam.next(this.triangulateParams);
   }
 
-  setHue(hue: number){
+  setHue(hue: number) {
     this.triangulateParams.hue = hue;
     this.triangParam.next(this.triangulateParams);
   }
 
-  setDetailLevel(detail: number){
+  setDetailLevel(detail: number) {
     this.triangulateParams.detailLevel = detail;
     this.triangParam.next(this.triangulateParams);
+  }
+
+  setPixelParam(min: number) {
+    this.pixelParams.min = min;
+    this.pixelParam.next(this.pixelParams);
   }
 }
