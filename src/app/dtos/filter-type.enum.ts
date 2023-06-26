@@ -5,5 +5,7 @@ export enum FilterType  {
     PXL_SORT,
     TOPOGRAPHY,
     GLITCH,
-    SHIFT
+    SHIFT,
+    DEBLUR,
+    EDGE
 }

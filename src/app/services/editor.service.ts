@@ -330,4 +330,114 @@ export class EditorService {
 
     console.log('Image preview...');
   }
+
+  deblur(s: p5, img: p5.Image, params: number) {
+    s.tint(246, 205, 139);
+    s.image(img, 0, 0);
+
+    let grained = s.createImage(img.width, img.height);
+    grained.copy(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+    grained.loadPixels();
+
+    // Apply salt and pepper effect
+    const saltPercentage = 0.01 * params; // Percentage of pixels to turn white (salt)
+    const pepperPercentage = 0.01 * params; // Percentage of pixels to turn black (pepper)
+    const totalPixels = grained.width * grained.height;
+    const saltPixels = Math.floor(totalPixels * saltPercentage);
+    const pepperPixels = Math.floor(totalPixels * pepperPercentage);
+
+    for (let i = 0; i < saltPixels; i++) {
+      const x = Math.floor(s.random(grained.width));
+      const y = Math.floor(s.random(grained.height));
+      const index = (x + y * grained.width) * 4;
+      grained.pixels[index] = 255; // Set red channel to white
+      grained.pixels[index + 1] = 255; // Set green channel to white
+      grained.pixels[index + 2] = 255; // Set blue channel to white
+    }
+
+    for (let i = 0; i < pepperPixels; i++) {
+      const x = Math.floor(s.random(grained.width));
+      const y = Math.floor(s.random(grained.height));
+      const index = (x + y * grained.width) * 4;
+      grained.pixels[index] = 0; // Set red channel to black
+      grained.pixels[index + 1] = 0; // Set green channel to black
+      grained.pixels[index + 2] = 0; // Set blue channel to black
+    }
+
+    grained.updatePixels();
+    s.image(grained, 0, 0);
+  }
+
+  edgeDetect(s: p5, img: p5.Image, numRectangles: number) {
+    let filterRectangles = [];
+
+    // Create edge overlay image
+    let edgeOverlayImg = s.createImage(img.width, img.height);
+    edgeOverlayImg.copy(
+      img,
+      0,
+      0,
+      img.width,
+      img.height,
+      0,
+      0,
+      img.width,
+      img.height
+    );
+
+    // Set edge overlay color
+    edgeOverlayImg.loadPixels();
+    const edgeColor = s.color(255, 255, 0); // Yellow color for edge overlay
+
+    for (let i = 0; i < edgeOverlayImg.pixels.length; i += 4) {
+      const r = edgeOverlayImg.pixels[i];
+      const g = edgeOverlayImg.pixels[i + 1];
+      const b = edgeOverlayImg.pixels[i + 2];
+
+      // Check if it's an edge pixel (where r, g, b are not all the same)
+      if (r !== g || g !== b) {
+        edgeOverlayImg.pixels[i] = s.red(edgeColor);
+        edgeOverlayImg.pixels[i + 1] = s.green(edgeColor);
+        edgeOverlayImg.pixels[i + 2] = s.blue(edgeColor);
+      }
+    }
+
+    edgeOverlayImg.updatePixels();
+
+    // Generate random filter rectangles
+
+    for (let i = 0; i < numRectangles; i++) {
+      const rectX = s.random(0, img.width);
+      const rectY = s.random(0, img.height);
+      const rectWidth = s.random(50, 200); // Random width within a range
+      const rectHeight = s.random(50, 200); // Random height within a range
+
+      const rectangle = {
+        x: rectX,
+        y: rectY,
+        width: rectWidth,
+        height: rectHeight,
+      };
+      filterRectangles.push(rectangle);
+    }
+
+    s.image(img, 0, 0);
+
+    // Draw filter rectangles on top of the image
+    for (let i = 0; i < filterRectangles.length; i++) {
+      const { x, y, width, height } = filterRectangles[i];
+      s.noFill();
+      s.rect(x, y, width, height);
+  
+      // Apply threshold filter within the rectangle bounds
+      const filteredImg = img.get(x, y, width, height);
+      filteredImg.filter(s.THRESHOLD);
+  
+      // Draw filtered image within the rectangle bounds
+      s.image(filteredImg, x, y);
+    }
+    edgeOverlayImg.filter(s.THRESHOLD);
+    // s.tint(255, 255, 0, 50);
+    s.image(edgeOverlayImg, 0, 0, s.random(img.width /2), s.random(img.height / 2));
+  }
 }

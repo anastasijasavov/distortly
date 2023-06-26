@@ -264,7 +264,7 @@ export class EditorPage
       };
 
       s.draw = () => {
-       
+
         this.sharedService.glitchParams$.subscribe((strips) => {
           const img = this.editorService.glitch(s, this.pic, strips);
           // this.userStore.dispatch(
@@ -335,6 +335,61 @@ export class EditorPage
     }
     img.updatePixels();
     this.p5.image(img, height, width);
+  }
+
+  onDeblur(){
+    if (this.p5) {
+      this.p5.remove();
+    }
+    const sketch = (s: p5) => {
+      s.preload = () => {
+        this.preloadImage(s, 'deblur');
+      };
+
+      s.setup = () => {
+        this.createCanvas(s);
+      };
+
+      s.draw = () => {
+        this.sharedService.noiseParams$.subscribe((params) => {
+          this.editorService.deblur(s, this.pic, params);
+        });
+      };
+    };
+
+    this.p5 = new p5(sketch, this.sketch.nativeElement);
+  }
+
+  onDetectEdges(){
+    if (this.p5) {
+      this.p5.remove();
+    }
+    const sketch = (s: p5) => {
+      s.preload = () => {
+        this.preloadImage(s, 'edge-detection');
+      };
+
+      s.setup = () => {
+        this.createCanvas(s);
+      };
+
+      s.draw = () => {
+        this.sharedService.noiseParams$.subscribe((params) => {
+          this.editorService.edgeDetect(s, this.pic, params);
+        });
+      };
+    };
+
+    this.p5 = new p5(sketch, this.sketch.nativeElement);
+  }
+
+  createCanvas(s: p5){
+    const maxWidth = Math.min(window.innerWidth, this.pic.width);
+    this.pic.resize(maxWidth, 0);
+    s.createCanvas(this.pic.width, this.pic.height);
+
+    s.noLoop();
+    s.noStroke();
   }
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {

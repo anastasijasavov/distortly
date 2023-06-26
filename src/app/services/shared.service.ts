@@ -74,6 +74,12 @@ export class SharedService {
   );
   public glitchParams$: Observable<number> = this.glitchParams.asObservable();
 
+  noiseLevel = 1;
+  private noiseParams: BehaviorSubject<number> = new BehaviorSubject(
+    this.noiseLevel
+  );
+  public noiseParams$: Observable<number> = this.noiseParams.asObservable();
+
   shiftDownwardParams: ShiftDownward = {
     shiftAmount1: 0,
     shiftAmount2: 0,
@@ -206,5 +212,10 @@ export class SharedService {
   setDownwardShiftParams3(shiftAmount: number){
     this.shiftDownwardParams.shiftAmount3 = shiftAmount;
     this.shiftDownwardParam.next(this.shiftDownwardParams);
+  }
+
+  setNoiseParams(noiseLevel: number){
+    this.noiseLevel = noiseLevel;
+    this.noiseParams.next(noiseLevel);
   }
 }

@@ -6,6 +6,7 @@ import {
   Output,
 } from '@angular/core';
 import { BaseImports } from '../services/base-imports';
+import { FilterType } from '../dtos/filter-type.enum';
 
 @Component({
   selector: 'cmp-edit-bar',
@@ -19,6 +20,8 @@ export class EditBarComponent extends BaseImports implements OnInit {
   @Output() onPixelSort = new EventEmitter();
   @Output() onGlitch = new EventEmitter();
   @Output() onShiftDownward = new EventEmitter();
+  @Output() onDeblur = new EventEmitter();
+  @Output() onEdge = new EventEmitter();
 
   showSlider = false;
   showTriangleSlider = false;
@@ -26,6 +29,25 @@ export class EditBarComponent extends BaseImports implements OnInit {
   showMapSlider = false;
   showGlitchSlider = false;
   showShiftDownwardSlider = false;
+  
+  DITHER = FilterType.DITHER;
+  SHIFT = FilterType.SHIFT;
+  GLITCH = FilterType.GLITCH;
+  PXL_SORT = FilterType.PXL_SORT;
+  TRIANGULATE = FilterType.TRIANGULATE;
+  TOPOGRAPHY = FilterType.TOPOGRAPHY;
+  DEBLUR = FilterType.DEBLUR;
+  EDGE = FilterType.EDGE;
+  sliders: { filterType: FilterType; show: boolean }[] = [
+    { filterType: FilterType.GLITCH, show: false },
+    { filterType: FilterType.PXL_SORT, show: false },
+    { filterType: FilterType.DITHER, show: false },
+    { filterType: FilterType.SHIFT, show: false },
+    { filterType: FilterType.TOPOGRAPHY, show: false },
+    { filterType: FilterType.TRIANGULATE, show: false },
+    { filterType: FilterType.DEBLUR, show: false },
+  ];
+
   constructor(private injector: Injector) {
     super(injector);
   }
@@ -33,64 +55,57 @@ export class EditBarComponent extends BaseImports implements OnInit {
 
   startMic() {}
 
+  enableSlider(filterType: FilterType) {
+    this.sliders.forEach((slider) => {
+      if (slider.filterType === filterType) {
+        slider.show = true;
+      } else {
+        slider.show = false;
+      }
+    });
+  }
+
+  isVisible(filter: FilterType){
+    return this.sliders.find(x => x.filterType === filter)?.show;
+  }
+
   startMapping() {
-    this.showTriangleSlider = false;
-    this.showPixelSlider = false;
-    this.showMapSlider = true;
-    this.showSlider = false;
-    this.showGlitchSlider = false;
-    this.showShiftDownwardSlider = false;
+    this.enableSlider(FilterType.TOPOGRAPHY);
     this.onStartMap.emit(true);
   }
 
   dither() {
-    this.showSlider = true;
-    this.showTriangleSlider = false;
-    this.showPixelSlider = false;
-    this.showMapSlider = false;
-    this.showGlitchSlider = false;
-    this.showShiftDownwardSlider = false;
+    this.enableSlider(FilterType.DITHER);
     this.onDither.emit(true);
   }
 
   triangulate() {
-    this.showTriangleSlider = true;
-    this.showPixelSlider = false;
-    this.showMapSlider = false;
-    this.showSlider = false;
-    this.showGlitchSlider = false;
-    this.showShiftDownwardSlider = false;
+    this.enableSlider(FilterType.TRIANGULATE);
     this.onTriangulate.emit(true);
   }
 
   pixelSort() {
-    this.showTriangleSlider = false;
-    this.showPixelSlider = true;
-    this.showMapSlider = false;
-    this.showSlider = false;
-    this.showShiftDownwardSlider = false;
-    this.showGlitchSlider = false;
+    this.enableSlider(FilterType.PXL_SORT);
     this.onPixelSort.emit(true);
   }
 
   glitch() {
-    this.showSlider = false;
-    this.showTriangleSlider = false;
-    this.showPixelSlider = false;
-    this.showMapSlider = false;
-    this.showGlitchSlider = true;
-    this.showShiftDownwardSlider = false;
+    this.enableSlider(FilterType.GLITCH);
     this.onGlitch.emit(true);
   }
 
-  shiftPixelsDownward()
-  {
-    this.showSlider = false;
-    this.showTriangleSlider = false;
-    this.showPixelSlider = false;
-    this.showMapSlider = false;
-    this.showGlitchSlider = false;
-    this.showShiftDownwardSlider = true;
+  deblur() {
+    this.enableSlider(FilterType.DEBLUR);
+    this.onDeblur.emit(true);
+  }
+
+  edgeDetect() {
+    this.enableSlider(FilterType.DEBLUR);
+    this.onEdge.emit(true);
+  }
+
+  shiftPixelsDownward() {
+    this.enableSlider(FilterType.SHIFT);
     this.onShiftDownward.emit(true);
   }
 
@@ -99,8 +114,6 @@ export class EditBarComponent extends BaseImports implements OnInit {
   }
 
   setContrast(e: any) {
-    console.log(e.detail.value);
-
     this.sharedService.setContrast(e.detail.value);
   }
 
@@ -127,15 +140,19 @@ export class EditBarComponent extends BaseImports implements OnInit {
     this.sharedService.setGlitchParams(e.detail.value);
   }
 
-  setShiftDownwardParams1(e: any){
+  setShiftDownwardParams1(e: any) {
     this.sharedService.setDownwardShiftParams1(e.detail.value);
   }
 
-  setShiftDownwardParams2(e: any){
+  setShiftDownwardParams2(e: any) {
     this.sharedService.setDownwardShiftParams2(e.detail.value);
   }
 
-  setShiftDownwardParams3(e: any){
+  setShiftDownwardParams3(e: any) {
     this.sharedService.setDownwardShiftParams3(e.detail.value);
+  }
+
+  setNoiseParams(e: any) {
+    this.sharedService.setNoiseParams(e.detail.value);
   }
 }

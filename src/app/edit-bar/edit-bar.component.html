@@ -1,32 +1,35 @@
 <ion-tabs class="edit-bar">
   <div class="range-container">
-    <ion-range *ngIf="showSlider" (ionChange)="setPixSize($event)" aria-label="Range with ticks" [ticks]="true"
+    <ion-range *ngIf="isVisible(DITHER)" (ionChange)="setPixSize($event)" aria-label="Range with ticks" [ticks]="true"
       [snaps]="true" [min]="1" [max]="10"></ion-range>
-    <ion-range *ngIf="showSlider" (ionChange)="setContrast($event)" aria-label="Range with ticks" [ticks]="true"
+    <ion-range *ngIf="isVisible(DITHER)" (ionChange)="setContrast($event)" aria-label="Range with ticks" [ticks]="true"
       [snaps]="true" [min]="1" [max]="10"></ion-range>
-    <ion-range *ngIf="showTriangleSlider" (ionChange)="setAbstractionLevel($event)" aria-label="Range with ticks"
+    <ion-range *ngIf="isVisible(TRIANGULATE)" (ionChange)="setAbstractionLevel($event)" aria-label="Range with ticks"
       [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-    <ion-range *ngIf="showTriangleSlider" (ionChange)="setHue($event)" aria-label="Range with ticks" [ticks]="true"
+    <ion-range *ngIf="isVisible(TRIANGULATE)" (ionChange)="setHue($event)" aria-label="Range with ticks" [ticks]="true"
       [snaps]="true" [min]="1" [max]="10"></ion-range>
-    <ion-range *ngIf="showTriangleSlider" (ionChange)="setDetailLevel($event)" aria-label="Range with ticks"
+    <ion-range *ngIf="isVisible(TRIANGULATE)" (ionChange)="setDetailLevel($event)" aria-label="Range with ticks"
       [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
 
-    <ion-range *ngIf="showPixelSlider" (ionChange)="setPixelMin($event)" aria-label="Range with ticks" [ticks]="true"
-      [snaps]="true" [min]="1" [max]="10"></ion-range>
+    <ion-range *ngIf="isVisible(PXL_SORT)" (ionChange)="setPixelMin($event)" aria-label="Range with ticks"
+      [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
 
-    <ion-range *ngIf="showMapSlider" (ionChange)="setMapRotation($event)" aria-label="Range with ticks" [ticks]="true"
-      [snaps]="true" [min]="1" [max]="10"></ion-range>
+    <ion-range *ngIf="isVisible(TOPOGRAPHY)" (ionChange)="setMapRotation($event)" aria-label="Range with ticks"
+      [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
 
-    <ion-range *ngIf="showGlitchSlider" (ionChange)="setGlitchParams($event)" aria-label="Range with ticks"
+    <ion-range *ngIf="isVisible(GLITCH)" (ionChange)="setGlitchParams($event)" aria-label="Range with ticks"
       [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-      <ion-range *ngIf="showShiftDownwardSlider" (ionChange)="setShiftDownwardParams1($event)" aria-label="Range with ticks"
+    <ion-range *ngIf="isVisible(SHIFT)" (ionChange)="setShiftDownwardParams1($event)" aria-label="Range with ticks"
       [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-    <ion-range *ngIf="showShiftDownwardSlider" (ionChange)="setShiftDownwardParams2($event)" aria-label="Range with ticks"
+    <ion-range *ngIf="isVisible(SHIFT)" (ionChange)="setShiftDownwardParams2($event)" aria-label="Range with ticks"
       [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-    <ion-range *ngIf="showShiftDownwardSlider" (ionChange)="setShiftDownwardParams3($event)" aria-label="Range with ticks"
+    <ion-range *ngIf="isVisible(SHIFT)" (ionChange)="setShiftDownwardParams3($event)" aria-label="Range with ticks"
       [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-  
-    </div>
+
+      <ion-range *ngIf="isVisible(DEBLUR)" (ionChange)="setNoiseParams($event)" aria-label="Range with ticks"
+      [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
+
+  </div>
   <ion-tab-bar slot="bottom">
     <div class="button-container">
       <button id="pixel-btn" (click)="dither()">
@@ -41,7 +44,7 @@
         <img src="/assets/icons8-sort-32.png" />
       </button> -->
       <button (click)="triangulate()">
-        <img src="/assets/icons8-design-64.png" />
+        <img src="/assets/icons8-mesh-50.png" />
       </button>
       <!-- <ion-popover trigger="pixel-sort" triggerAction="hover">
       <ng-template>
@@ -57,7 +60,7 @@
       </ng-template>
     </ion-popover> -->
       <button id="inpaint" (click)="glitch()">
-        <img src="/assets/icons8-sound-50.png" />
+        <img src="/assets/icons8-merge-64.png" />
       </button>
       <!-- <ion-popover trigger="inpaint" triggerAction="hover">
       <ng-template>
@@ -65,12 +68,20 @@
       </ng-template>
     </ion-popover> -->
       <button id="3dmap" (click)="startMapping()">
-        <img src="/assets/icons8-merge-64.png" />
+        <img src="/assets/icons8-cube-64.png" />
       </button>
 
 
       <button id="shift-downward" (click)="shiftPixelsDownward()">
-        <img src="/assets/icons8-merge-64.png" />
+        <img src="/assets/icons8-data-transfer-32.png" />
+      </button>
+
+      <button id="deblur" (click)="deblur()">
+        <img src="/assets/icons8-seeding-64.png" />
+      </button>
+
+      <button id="edge" (click)="edgeDetect()">
+        <img src="/assets/icons8-layer-64.png" />
       </button>
     </div>
   </ion-tab-bar>
