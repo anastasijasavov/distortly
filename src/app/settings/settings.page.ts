@@ -11,7 +11,7 @@ import * as fromActions from '../store/user-settings/user-settings.actions';
 })
 export class SettingsPage extends BaseImports implements OnInit {
   userSettings: UserSettings;
-  fileType: FileType = 'JPG';
+  fileType: FileType = 'jpg';
   autoSave = true;
   fileName: string = "pic";
   constructor(private injector: Injector) {

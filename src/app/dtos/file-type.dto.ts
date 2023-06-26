@@ -1,1 +1,1 @@
-export type FileType = 'JPG' | 'PNG';
+export type FileType = 'jpg' | 'png';

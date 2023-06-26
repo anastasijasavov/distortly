@@ -13,7 +13,7 @@ export const collectionAdapter: EntityAdapter<UserSettings> =
 export const initialState: UserState = {
   autoSave: true,
   filename: 'pic',
-  fileType: 'JPG'
+  fileType: 'jpg'
 };
 
 export const userReducer = createReducer(
