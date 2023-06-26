@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" *ngIf="sharedService.isEditMode">
   <ion-toolbar>
     <div class="toolbar">
-      <div class="header-child logo-cotainer"><img src="/assets/logo.png"/></div>
+      <div class="header-child logo-cotainer"><img src="/assets/logo-small.png"/></div>
       <ion-title class="header-child"> Edit </ion-title>
       <div class="toolbar-buttons header-child">
         <button>
@@ -23,7 +23,7 @@
     Select image from upload and click on edit to edit it!
   </h6>
   <!-- Remove the imgClass if its not need-->
-  <div #sketch *ngIf="!sharedService.isEmptyFile" class="imgClass canvas-container"></div>
+  <div #sketch class="imgClass canvas-container"></div>
 
   <cmp-edit-bar class="edit-bar" *ngIf="!sharedService.isEmptyFile" 
    (onDither)="onDither()"

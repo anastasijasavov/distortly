@@ -57,10 +57,18 @@ export class EditorPage
         //load image to p5js canvas
         this.p5 = new p5((s: p5) => {
           s.preload = () => {
-            this.preloadImage(s, 'loaded_img');
+            this.preloadImage(s, 'm');
           };
-
-          s.draw = () => {};
+    
+          s.setup = () => {
+            const maxWidth = Math.min(window.innerWidth, this.pic.width);
+            this.pic.resize(maxWidth, 0);
+            s.createCanvas(this.pic.width, this.pic.height);
+    
+            s.image(this.pic, 0, 0);
+            s.noLoop();
+            s.noStroke();
+          };
         }, this.sketch.nativeElement);
       });
   }
@@ -73,16 +81,14 @@ export class EditorPage
 
   ngOnInit(): void {}
 
-  preloadImage(s: p5, filename: string, img?: p5.Image, isWebGL = false) {
-    if (!img) {
-      this.sharedService.image$.subscribe((image) => {
-        this.pic = s.loadImage(image.data);
-        s.image(this.pic, 0, 0);
-        this.imageStack.push(this.pic);
-      });
-    } else {
-      this.imageStack.push(img);
-    }
+  preloadImage(s: p5, filename: string, isWebGL = false) {
+    this.sharedService.image$.subscribe((image) => {
+      this.pic = s.loadImage(image.data);
+
+      s.createCanvas(this.pic.width, this.pic.height);
+      s.image(this.pic, 0, 0);
+      this.imageStack.push(this.pic);
+    });
 
     const maxWidth = Math.min(window.innerWidth, this.pic.width);
     this.pic.resize(maxWidth, 0);
@@ -100,6 +106,9 @@ export class EditorPage
     this.p5.remove();
   }
   onDither() {
+    if(this.p5){
+      this.p5.remove();
+    }
     const ditherParams: DitherParams = {
       pixsize: 2,
       yoffset: 0,
@@ -132,10 +141,13 @@ export class EditorPage
     this.p5 = new p5(sketch, this.sketch.nativeElement);
   }
   onStartMap() {
+    if(this.p5){
+      this.p5.remove();
+    }
     let img: p5.Image;
     const sketch = (s: p5) => {
       s.preload = () => {
-        this.preloadImage(s, 'topography', undefined, true);
+        this.preloadImage(s, 'topography', true);
       };
 
       s.setup = () => {
@@ -156,6 +168,9 @@ export class EditorPage
   }
 
   onTriangulate() {
+    if(this.p5){
+      this.p5.remove();
+    }
     const triangulateParams: TriangulateParams = {
       abstractionLevel: 1,
       hue: 5,
@@ -186,6 +201,9 @@ export class EditorPage
   }
 
   onPixelSort() {
+    if(this.p5){
+      this.p5.remove();
+    }
     const sketch = (s: p5) => {
       s.preload = () => {
         this.preloadImage(s, 'pixel-sort');
@@ -211,6 +229,9 @@ export class EditorPage
   }
 
   onGlitch() {
+    if(this.p5){
+      this.p5.remove();
+    }
     const sketch = (s: p5) => {
       s.preload = () => {
         this.preloadImage(s, 'glitch');
