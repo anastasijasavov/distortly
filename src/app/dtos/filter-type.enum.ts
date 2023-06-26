@@ -7,5 +7,6 @@ export enum FilterType  {
     GLITCH,
     SHIFT,
     DEBLUR,
-    EDGE
+    EDGE,
+    INVERT
 }

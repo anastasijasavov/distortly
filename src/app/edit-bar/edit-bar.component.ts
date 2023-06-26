@@ -22,6 +22,7 @@ export class EditBarComponent extends BaseImports implements OnInit {
   @Output() onShiftDownward = new EventEmitter();
   @Output() onDeblur = new EventEmitter();
   @Output() onEdge = new EventEmitter();
+  @Output() onInvert = new EventEmitter();
 
   showSlider = false;
   showTriangleSlider = false;
@@ -77,6 +78,10 @@ export class EditBarComponent extends BaseImports implements OnInit {
   dither() {
     this.enableSlider(FilterType.DITHER);
     this.onDither.emit(true);
+  }
+  invert(){
+    this.enableSlider(FilterType.DEBLUR);
+    this.onInvert.emit(true);
   }
 
   triangulate() {

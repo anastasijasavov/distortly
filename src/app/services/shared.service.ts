@@ -83,7 +83,9 @@ export class SharedService {
   shiftDownwardParams: ShiftDownward = {
     shiftAmount1: 0,
     shiftAmount2: 0,
-    shiftAmount3: 0
+    shiftAmount3: 0,
+    width1: Math.random() * 3 + 2,
+    width2: Math.random() * 3 + 2
   };
 
   private shiftDownwardParam: BehaviorSubject<ShiftDownward> = new BehaviorSubject(

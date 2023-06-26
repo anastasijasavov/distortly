@@ -4,6 +4,7 @@ import { DitherParams } from '../dtos/dither.dto';
 import { TriangulateParams } from '../dtos/triangulate.dto';
 import { PixelSort } from '../dtos/pixel-sort.dto';
 import { ShiftDownward } from '../dtos/shift-downward.dto';
+import { InvertParams } from '../dtos/invert.dto';
 
 @Injectable()
 export class EditorService {
@@ -244,94 +245,54 @@ export class EditorService {
   }
 
   shiftPixelsDownward(s: p5, img: p5.Image, params: ShiftDownward) {
-    s.image(img, 0, 0);
 
-    // Load the pixel data from the canvas
+    const imgCopy = s.createImage(img.width, img.height);
+    imgCopy.copy(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+    
+    s.image(imgCopy, 0, 0);
     s.loadPixels();
-    //debugger
-    let shiftAmount1 = Math.floor((img.height / 10) * params.shiftAmount1);
-    let shiftAmount2 = Math.floor((img.height / 10) * params.shiftAmount2);
-    let shiftAmount3 = Math.floor((img.height / 10) * params.shiftAmount3);
 
-    console.log(
-      `Shifting the pixels downward - First third: ${shiftAmount1} rows, Second third: ${shiftAmount2} rows, Last third: ${shiftAmount3} rows...`
-    );
-    const pixels = s.pixels;
+    if (
+      !(
+        params.shiftAmount1 == 0 &&
+        params.shiftAmount2 == 0 &&
+        params.shiftAmount3 == 0
+      )
+    ) {
+      const shiftAmount1 = Math.floor(
+        (img.height / 10) * (params.shiftAmount1 - 1)
+      );
+      const shiftAmount2 = Math.floor(
+        (img.height / 10) * (params.shiftAmount2 - 1)
+      );
+      const shiftAmount3 = Math.floor(
+        (img.height / 10) * (params.shiftAmount3 - 1)
+      );
 
-    // Create a temporary array to store the shifted pixels
-    const shiftedPixels = new Array(img.width * img.height * 4);
+      const thirdWidth1 = Math.floor(s.width / params.width1);
+      const thirdWidth2 = Math.floor(s.width / params.width2);
 
-    // Generate random widths for each third
-    const minWidth = Math.floor(s.width / 5);
-    const maxWidth = Math.floor(s.width / 2);
+      for (let y = 0; y < s.height; y++) {
+        for (let x = 0; x < s.width; x++) {
+          let col = img.get(x, y);
+          let newY;
+          if (x < thirdWidth1) {
+            newY = (y + shiftAmount1) % s.height;
+          } else if (x < thirdWidth1 + thirdWidth2) {
+            newY = (y + shiftAmount2) % s.height;
+          } else {
+            newY = (y + shiftAmount3) % s.height;
+          }
 
-    // Generate random widths for each third
-    const thirdWidth1 =
-      Math.floor(Math.random() * (maxWidth - minWidth + 1)) + minWidth;
-    const thirdWidth2 =
-      Math.floor(Math.random() * (maxWidth - minWidth + 1)) + minWidth;
-    const thirdWidth3 = s.width - (thirdWidth1 + thirdWidth2);
-
-    // Shift the first third
-    for (let y = 0; y < s.height; y++) {
-      for (let x = 0; x < thirdWidth1; x++) {
-        let currentIndex = (x + y * s.width) * 4;
-        let nextRowIndex = Math.floor(
-          (x + ((y + shiftAmount1) % s.height) * s.width) * 4
-        );
-
-        // Store the current pixel data
-        shiftedPixels[nextRowIndex] = pixels[currentIndex]; // Red
-        shiftedPixels[nextRowIndex + 1] = pixels[currentIndex + 1]; // Green
-        shiftedPixels[nextRowIndex + 2] = pixels[currentIndex + 2]; // Blue
-        shiftedPixels[nextRowIndex + 3] = pixels[currentIndex + 3]; // Alpha
+          imgCopy.set(x, newY, s.color(col));
+        }
       }
+
+      imgCopy.updatePixels();
+      s.image(imgCopy, 0, 0);
     }
-
-    // Shift the second third
-    for (let y = 0; y < s.height; y++) {
-      for (let x = thirdWidth1; x < thirdWidth1 + thirdWidth2; x++) {
-        let currentIndex = (x + y * s.width) * 4;
-        let nextRowIndex = Math.floor(
-          (x + ((y + shiftAmount2) % s.height) * s.width) * 4
-        );
-
-        // Store the current pixel data
-        shiftedPixels[nextRowIndex] = pixels[currentIndex]; // Red
-        shiftedPixels[nextRowIndex + 1] = pixels[currentIndex + 1]; // Green
-        shiftedPixels[nextRowIndex + 2] = pixels[currentIndex + 2]; // Blue
-        shiftedPixels[nextRowIndex + 3] = pixels[currentIndex + 3]; // Alpha
-      }
-    }
-
-    // Shift the last third
-    for (let y = 0; y < s.height; y++) {
-      for (let x = thirdWidth1 + thirdWidth2; x < s.width; x++) {
-        let currentIndex = (x + y * s.width) * 4;
-        let nextRowIndex = Math.floor(
-          (x + ((y + shiftAmount3) % s.height) * s.width) * 4
-        );
-
-        // Store the current pixel data
-        shiftedPixels[nextRowIndex] = pixels[currentIndex]; // Red
-        shiftedPixels[nextRowIndex + 1] = pixels[currentIndex + 1]; // Green
-        shiftedPixels[nextRowIndex + 2] = pixels[currentIndex + 2]; // Blue
-        shiftedPixels[nextRowIndex + 3] = pixels[currentIndex + 3]; // Alpha
-      }
-    }
-
-    // Copy the shifted pixels back to the original pixel array
-    for (let i = 0; i < pixels.length; i++) {
-      pixels[i] = shiftedPixels[i];
-    }
-
-    // Update the canvas with shifted pixels
-    s.updatePixels();
-
-    console.log('Image preview...');
   }
-
-  deblur(s: p5, img: p5.Image, params: number) {
+  grain(s: p5, img: p5.Image, params: number) {
     s.tint(246, 205, 139);
     s.image(img, 0, 0);
 
@@ -439,5 +400,32 @@ export class EditorService {
     edgeOverlayImg.filter(s.THRESHOLD);
     // s.tint(255, 255, 0, 50);
     s.image(edgeOverlayImg, 0, 0, s.random(img.width /2), s.random(img.height / 2));
+  }
+
+
+  invert(s: p5, img: p5.Image, params: InvertParams) {
+    let inverted = s.createImage(img.width, img.height);
+    inverted.loadPixels();
+    let threshold = (255 / 9) * (params.threshold - 1);
+  
+    img.loadPixels();
+    for (let i = 0; i < img.pixels.length; i += 4) {
+      let brightness = (img.pixels[i] + img.pixels[i + 1] + img.pixels[i + 2]) / 3;
+  
+      if (brightness > threshold) {
+        inverted.pixels[i] = 255 - img.pixels[i]; // Invert red channel
+        inverted.pixels[i + 1] = 255 - img.pixels[i + 1]; // Invert green channel
+        inverted.pixels[i + 2] = 255 - img.pixels[i + 2]; // Invert blue channel
+      } else {
+        inverted.pixels[i] = img.pixels[i]; // Preserve red channel
+        inverted.pixels[i + 1] = img.pixels[i + 1]; // Preserve green channel
+        inverted.pixels[i + 2] = img.pixels[i + 2]; // Preserve blue channel
+      }
+  
+      inverted.pixels[i + 3] = img.pixels[i + 3]; // Preserve alpha channel
+    }
+    inverted.updatePixels();
+  
+    s.image(inverted, 0, 0);
   }
 }

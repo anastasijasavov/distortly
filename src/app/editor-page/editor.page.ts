@@ -22,6 +22,7 @@ import {
 import { TriangulateParams } from '../dtos/triangulate.dto';
 import { saveImage } from '../store/user-settings/user-settings.actions';
 import { FilterType } from '../dtos/filter-type.enum';
+import { InvertParams } from '../dtos/invert.dto';
 
 @Component({
   selector: 'editor',
@@ -352,7 +353,7 @@ export class EditorPage
 
       s.draw = () => {
         this.sharedService.noiseParams$.subscribe((params) => {
-          this.editorService.deblur(s, this.pic, params);
+          this.editorService.grain(s, this.pic, params);
         });
       };
     };
@@ -376,6 +377,38 @@ export class EditorPage
       s.draw = () => {
         this.sharedService.noiseParams$.subscribe((params) => {
           this.editorService.edgeDetect(s, this.pic, params);
+        });
+      };
+    };
+
+    this.p5 = new p5(sketch, this.sketch.nativeElement);
+  }
+
+  onInvert()
+  {
+    if(this.p5){
+      this.p5.remove();
+    }
+    const sketch = (s: p5) => {
+      s.preload = () => {
+        this.preloadImage(s, 'invert');
+      };
+
+      s.setup = () => {
+        const maxWidth = Math.min(window.innerWidth, this.pic.width);
+        this.pic.resize(maxWidth, 0);
+        s.createCanvas(this.pic.width, this.pic.height);
+
+        s.noLoop();
+        s.noStroke();
+      };
+
+      s.draw = () => {
+        this.sharedService.noiseParams$.subscribe((params) => {
+          const noiseParams: InvertParams = {
+            threshold: params
+          }
+          this.editorService.invert(s, this.pic, noiseParams);
         });
       };
     };
