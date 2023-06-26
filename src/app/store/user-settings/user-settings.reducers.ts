@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import * as UserActions from './user-settings.actions';
 import { UserSettings } from 'src/app/dtos/user.do';
 
@@ -13,16 +13,26 @@ export const collectionAdapter: EntityAdapter<UserSettings> =
 export const initialState: UserState = {
   autoSave: true,
   filename: 'pic',
-  fileType: 'jpg'
+  fileType: 'jpg',
 };
 
 export const userReducer = createReducer(
   initialState,
   on(UserActions.loadUser, (state) => state),
 
-  on(UserActions.updateUser, (state, {props}) => {
+  on(UserActions.updateUser, (state, { props }) => {
     return {
-      ...state, ...props
+      ...state,
+      ...props,
+    };
+  }),
+  on(UserActions.saveImage, (state, { image }) => {
+    // const imagePixels = [...image.pixels];
+    // const newImage = {...state.currentImage, image };
+
+    return {
+      ...state,
+      currentImage: image,
     };
   })
 );

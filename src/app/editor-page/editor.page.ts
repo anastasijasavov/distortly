@@ -12,7 +12,7 @@ import { LocalFile } from '../dtos/local-file';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BaseImports } from '../services/base-imports';
 import p5 from 'p5';
-import { Observable, filter } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 import { DitherParams } from '../dtos/dither.dto';
 import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 import {
@@ -20,6 +20,8 @@ import {
   selectUserState,
 } from '../store/user-settings/user-settings.selectors';
 import { TriangulateParams } from '../dtos/triangulate.dto';
+import { saveImage } from '../store/user-settings/user-settings.actions';
+import { FilterType } from '../dtos/filter-type.enum';
 
 @Component({
   selector: 'editor',
@@ -49,22 +51,32 @@ export class EditorPage
     this.image$ = this.sharedService.image$;
   }
   ngAfterViewInit(): void {
+
+    // this.userStore.select(selectUser).subscribe(user => {
+    //   if(user.currentImage){
+    //     this.sharedService.loa
+    //     this.loadImageFromPixels(user.currentImage.pixels, window.innerWidth, window.innerHeight);
+    //   }
+    // })
+
     this.sharedService.image$
       ?.pipe(filter((image) => image && image?.data !== ''))
       .subscribe((image) => {
         this.image = image;
         this.sharedService.isEmptyFile = false;
+
         //load image to p5js canvas
         this.p5 = new p5((s: p5) => {
           s.preload = () => {
             this.preloadImage(s, 'm');
           };
-    
+
           s.setup = () => {
             const maxWidth = Math.min(window.innerWidth, this.pic.width);
             this.pic.resize(maxWidth, 0);
             s.createCanvas(this.pic.width, this.pic.height);
-    
+            this.userStore.dispatch(saveImage({image: {imageName: image.name, filterType: FilterType.INIT, params: 0 }}));
+
             s.image(this.pic, 0, 0);
             s.noLoop();
             s.noStroke();
@@ -106,7 +118,7 @@ export class EditorPage
     this.p5.remove();
   }
   onDither() {
-    if(this.p5){
+    if (this.p5) {
       this.p5.remove();
     }
     const ditherParams: DitherParams = {
@@ -141,7 +153,7 @@ export class EditorPage
     this.p5 = new p5(sketch, this.sketch.nativeElement);
   }
   onStartMap() {
-    if(this.p5){
+    if (this.p5) {
       this.p5.remove();
     }
     let img: p5.Image;
@@ -158,9 +170,9 @@ export class EditorPage
       };
 
       s.draw = () => {
-        this.sharedService.mapRotation$.subscribe(rotateY => {
+        this.sharedService.mapRotation$.subscribe((rotateY) => {
           this.editorService.get3dMap(s, this.pic, rotateY);
-        })
+        });
       };
     };
 
@@ -168,7 +180,7 @@ export class EditorPage
   }
 
   onTriangulate() {
-    if(this.p5){
+    if (this.p5) {
       this.p5.remove();
     }
     const triangulateParams: TriangulateParams = {
@@ -201,7 +213,7 @@ export class EditorPage
   }
 
   onPixelSort() {
-    if(this.p5){
+    if (this.p5) {
       this.p5.remove();
     }
     const sketch = (s: p5) => {
@@ -220,7 +232,12 @@ export class EditorPage
 
       s.draw = () => {
         this.sharedService.pixelParams$.subscribe((params) => {
-          this.editorService.pixelSort(s, this.pic, params);
+          const img = this.editorService.pixelSort(s, this.pic, params);
+          // this.userStore.dispatch(
+          //   saveImage({
+          //     image: { pixels: [...img.pixels], filterType: FilterType.PXL_SORT, params: params },
+          //   })
+          // );
         });
       };
     };
@@ -229,13 +246,12 @@ export class EditorPage
   }
 
   onGlitch() {
-    if(this.p5){
+    if (this.p5) {
       this.p5.remove();
     }
     const sketch = (s: p5) => {
       s.preload = () => {
         this.preloadImage(s, 'glitch');
-
       };
 
       s.setup = () => {
@@ -247,12 +263,19 @@ export class EditorPage
         s.noStroke();
       };
 
-
       s.draw = () => {
-     this.sharedService.glitchParams$.subscribe(strips => {
-       this.editorService.glitch(s, this.pic, strips);
+       
+        this.sharedService.glitchParams$.subscribe((strips) => {
+          const img = this.editorService.glitch(s, this.pic, strips);
+          // this.userStore.dispatch(
+          //   saveImage({
+          //     image: { imageName: this.sharedService., filterType: FilterType.GLITCH, params: strips },
+          //   })
+          // );
 
-     })
+          // this.p5.remove();
+          this.loadImageFromPixels(img.pixels, img.width, img.height);
+        });
       };
     };
 
@@ -260,7 +283,7 @@ export class EditorPage
   }
 
   onShiftDownward() {
-    if(this.p5){
+    if (this.p5) {
       this.p5.remove();
     }
     const sketch = (s: p5) => {
@@ -293,6 +316,26 @@ export class EditorPage
   //   this.pic.resize(maxWidth, 0);
   // }
 
+  loadImageFromPixels(pixels: number[], width: number, height: number) {
+    let img = this.p5.createImage(width, height);
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const index = (x + y * width) * 4;
+        img.set(
+          x,
+          y,
+          this.p5.color(
+            pixels[index],
+            pixels[index + 1],
+            pixels[index + 2],
+            pixels[index + 3]
+          )
+        );
+      }
+    }
+    img.updatePixels();
+    this.p5.image(img, height, width);
+  }
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     this.p5.remove();
