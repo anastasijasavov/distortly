@@ -95,9 +95,9 @@ export class EditorService {
     let tiles = 500;
     let tileSize = s.width / tiles;
     s.camera(
-      s.width / 2.0,
-      s.height / 2.0,
-      s.height / 2.0 / s.tan((s.PI * 30.0) / 270.0),
+      (s.width / 2.0) * 1.2,
+      (s.height / 2.0) * 1.2,
+      s.height / 2.0 / s.tan((s.PI * 30.0) / 180.0),
       s.width / 2.0,
       s.height / 2.0,
       0,
@@ -108,8 +108,8 @@ export class EditorService {
 
     s.push();
     s.translate(s.width / 2, s.height / 2);
-    s.rotateY(s.radians(360 / rotateY));
-
+    s.rotateY(s.radians(360 / rotateY * 5));
+    // s.rotateY(s.radians(s.frameCount));
     for (let x = 0; x < tiles; x++) {
       for (let y = 0; y < tiles; y++) {
         let c = pic.get(s.int(x * tileSize), s.int(y * tileSize));
@@ -245,10 +245,9 @@ export class EditorService {
   }
 
   shiftPixelsDownward(s: p5, img: p5.Image, params: ShiftDownward) {
-
     const imgCopy = s.createImage(img.width, img.height);
     imgCopy.copy(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-    
+
     s.image(imgCopy, 0, 0);
     s.loadPixels();
 
@@ -389,29 +388,35 @@ export class EditorService {
       const { x, y, width, height } = filterRectangles[i];
       s.noFill();
       s.rect(x, y, width, height);
-  
+
       // Apply threshold filter within the rectangle bounds
       const filteredImg = img.get(x, y, width, height);
       filteredImg.filter(s.THRESHOLD);
-  
+
       // Draw filtered image within the rectangle bounds
       s.image(filteredImg, x, y);
     }
     edgeOverlayImg.filter(s.THRESHOLD);
     // s.tint(255, 255, 0, 50);
-    s.image(edgeOverlayImg, 0, 0, s.random(img.width /2), s.random(img.height / 2));
+    s.image(
+      edgeOverlayImg,
+      0,
+      0,
+      s.random(img.width / 2),
+      s.random(img.height / 2)
+    );
   }
-
 
   invert(s: p5, img: p5.Image, params: InvertParams) {
     let inverted = s.createImage(img.width, img.height);
     inverted.loadPixels();
     let threshold = (255 / 9) * (params.threshold - 1);
-  
+
     img.loadPixels();
     for (let i = 0; i < img.pixels.length; i += 4) {
-      let brightness = (img.pixels[i] + img.pixels[i + 1] + img.pixels[i + 2]) / 3;
-  
+      let brightness =
+        (img.pixels[i] + img.pixels[i + 1] + img.pixels[i + 2]) / 3;
+
       if (brightness > threshold) {
         inverted.pixels[i] = 255 - img.pixels[i]; // Invert red channel
         inverted.pixels[i + 1] = 255 - img.pixels[i + 1]; // Invert green channel
@@ -421,11 +426,11 @@ export class EditorService {
         inverted.pixels[i + 1] = img.pixels[i + 1]; // Preserve green channel
         inverted.pixels[i + 2] = img.pixels[i + 2]; // Preserve blue channel
       }
-  
+
       inverted.pixels[i + 3] = img.pixels[i + 3]; // Preserve alpha channel
     }
     inverted.updatePixels();
-  
+
     s.image(inverted, 0, 0);
   }
 }

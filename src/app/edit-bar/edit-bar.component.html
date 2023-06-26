@@ -35,38 +35,19 @@
       <button id="pixel-btn" (click)="dither()">
         <img src="/assets/icons8-pixel-heart-50.png" />
       </button>
-      <!-- <ion-popover class="pixel-btn">
-      <ng-template>
-        <ion-content class="ion-padding">Dither</ion-content>
-      </ng-template>
-    </ion-popover> -->
-      <!-- <button id="pixel-sort" (click)="triangulate()">
-        <img src="/assets/icons8-sort-32.png" />
-      </button> -->
+
       <button (click)="triangulate()">
         <img src="/assets/icons8-mesh-50.png" />
       </button>
-      <!-- <ion-popover trigger="pixel-sort" triggerAction="hover">
-      <ng-template>
-        <ion-content class="ion-padding">Pixel sort</ion-content>
-      </ng-template>
-    </ion-popover> -->
+
       <button id="sound-glitch" (click)="pixelSort()">
         <img src="/assets/icons8-sort-32.png" />
       </button>
-      <!-- <ion-popover trigger="sound-glitch" triggerAction="hover">
-      <ng-template>
-        <ion-content class="ion-padding">Glitch</ion-content>
-      </ng-template>
-    </ion-popover> -->
+
       <button id="inpaint" (click)="glitch()">
         <img src="/assets/icons8-merge-64.png" />
       </button>
-      <!-- <ion-popover trigger="inpaint" triggerAction="hover">
-      <ng-template>
-        <ion-content class="ion-padding">Inpainting</ion-content>
-      </ng-template>
-    </ion-popover> -->
+
       <button id="3dmap" (click)="startMapping()">
         <img src="/assets/icons8-cube-64.png" />
       </button>
@@ -83,7 +64,6 @@
       <button id="edge" (click)="edgeDetect()">
         <img src="/assets/icons8-layer-64.png" />
       </button>
-
 
       <button id="edge" (click)="invert()">
         <img src="/assets/icons8-invert-50.png" />
