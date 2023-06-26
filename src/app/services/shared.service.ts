@@ -43,7 +43,7 @@ export class SharedService {
   public mapRotation$: Observable<number> = this.mapRotation.asObservable();
 
   pixelParams: PixelSort = {
-    min: 255 * 3,
+    min: 1,
   };
 
   private pixelParam: BehaviorSubject<PixelSort> = new BehaviorSubject(

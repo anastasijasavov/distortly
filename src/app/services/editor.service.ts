@@ -108,8 +108,6 @@ export class EditorService {
     s.translate(s.width / 2, s.height / 2);
     s.rotateY(s.radians(360 / rotateY));
 
-    console.log(tiles);
-
     for (let x = 0; x < tiles; x++) {
       for (let y = 0; y < tiles; y++) {
         let c = pic.get(s.int(x * tileSize), s.int(y * tileSize));
@@ -133,7 +131,6 @@ export class EditorService {
 
     console.log('Sorting the image...');
     const pixels = s.pixels;
-    console.log(s.width, s.height);
 
     // Loop through each row and sort the pixels in that row
     for (let y = 0; y < s.height; y++) {
@@ -148,8 +145,9 @@ export class EditorService {
           pixels[index + 3], // Alpha
         ]);
       }
+
       // Sort the row
-      row = this.sortRow(row);
+      row = row.sort();
 
       // Record the sorted data
       for (let x = 0; x < s.width; x++) {
@@ -159,6 +157,7 @@ export class EditorService {
         pixels[index + 2] = row[x][2]; // Blue
         pixels[index + 3] = row[x][3]; // Alpha
       }
+     
     }
 
     // Update the canvas with sorted pixels
@@ -167,8 +166,8 @@ export class EditorService {
     console.log('Image preview...');
   }
 
-  sortRow(row: any[]) {
-    let min = 255 * 3;
+  sortRow(row: any[], treshold: number) {
+    let min = (255 * 3) / treshold;
     let minIndex = 0;
 
     // Find the darkest pixel in the row
@@ -184,6 +183,7 @@ export class EditorService {
     let sortedRow = row.slice(0, minIndex);
     sortedRow.sort();
     return sortedRow.concat(row.slice(minIndex));
+
   }
 
   glitch(s: p5, img: p5.Image, strips: number) {
