@@ -259,6 +259,34 @@ export class EditorPage
     this.p5 = new p5(sketch, this.sketch.nativeElement);
   }
 
+  onShiftDownward() {
+    if(this.p5){
+      this.p5.remove();
+    }
+    const sketch = (s: p5) => {
+      s.preload = () => {
+        this.preloadImage(s, 'shift-downward');
+      };
+
+      s.setup = () => {
+        const maxWidth = Math.min(window.innerWidth, this.pic.width);
+        this.pic.resize(maxWidth, 0);
+        s.createCanvas(this.pic.width, this.pic.height);
+
+        s.noLoop();
+        s.noStroke();
+      };
+
+      s.draw = () => {
+        this.sharedService.shiftDownwardParams$.subscribe((params) => {
+          this.editorService.shiftPixelsDownward(s, this.pic, params);
+        });
+      };
+    };
+
+    this.p5 = new p5(sketch, this.sketch.nativeElement);
+  }
+
   // @HostListener('window:resize', ['$event'])
   // onResize(event:any) {
   //   const maxWidth = Math.min(this.pic.width, event.target.width);

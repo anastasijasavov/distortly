@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
 import { DitherParams } from '../dtos/dither.dto';
 import { TriangulateParams } from '../dtos/triangulate.dto';
 import { PixelSort } from '../dtos/pixel-sort.dto';
+import { ShiftDownward } from '../dtos/shift-downward.dto';
 
 @Injectable()
 export class SharedService {
@@ -72,6 +73,19 @@ export class SharedService {
     this.strips
   );
   public glitchParams$: Observable<number> = this.glitchParams.asObservable();
+
+  shiftDownwardParams: ShiftDownward = {
+    shiftAmount1: 0,
+    shiftAmount2: 0,
+    shiftAmount3: 0
+  };
+
+  private shiftDownwardParam: BehaviorSubject<ShiftDownward> = new BehaviorSubject(
+    this.shiftDownwardParams
+  );
+  public shiftDownwardParams$: Observable<ShiftDownward> =
+    this.shiftDownwardParam.asObservable();
+
 
   constructor(private loadingCtrl: LoadingController) {}
 
@@ -177,5 +191,20 @@ export class SharedService {
   setGlitchParams(strips: number){
     this.strips = strips;
     this.glitchParams.next(strips);
+  }
+
+  setDownwardShiftParams1(shiftAmount: number){
+    this.shiftDownwardParams.shiftAmount1 = shiftAmount;
+    this.shiftDownwardParam.next(this.shiftDownwardParams);
+  }
+
+  setDownwardShiftParams2(shiftAmount: number){
+    this.shiftDownwardParams.shiftAmount2 = shiftAmount;
+    this.shiftDownwardParam.next(this.shiftDownwardParams);
+  }
+
+  setDownwardShiftParams3(shiftAmount: number){
+    this.shiftDownwardParams.shiftAmount3 = shiftAmount;
+    this.shiftDownwardParam.next(this.shiftDownwardParams);
   }
 }

@@ -18,12 +18,14 @@ export class EditBarComponent extends BaseImports implements OnInit {
   @Output() onDither = new EventEmitter();
   @Output() onPixelSort = new EventEmitter();
   @Output() onGlitch = new EventEmitter();
+  @Output() onShiftDownward = new EventEmitter();
 
   showSlider = false;
   showTriangleSlider = false;
   showPixelSlider = false;
   showMapSlider = false;
   showGlitchSlider = false;
+  showShiftDownwardSlider = false;
   constructor(private injector: Injector) {
     super(injector);
   }
@@ -36,6 +38,8 @@ export class EditBarComponent extends BaseImports implements OnInit {
     this.showPixelSlider = false;
     this.showMapSlider = true;
     this.showSlider = false;
+    this.showGlitchSlider = false;
+    this.showShiftDownwardSlider = false;
     this.onStartMap.emit(true);
   }
 
@@ -45,7 +49,7 @@ export class EditBarComponent extends BaseImports implements OnInit {
     this.showPixelSlider = false;
     this.showMapSlider = false;
     this.showGlitchSlider = false;
-
+    this.showShiftDownwardSlider = false;
     this.onDither.emit(true);
   }
 
@@ -55,6 +59,7 @@ export class EditBarComponent extends BaseImports implements OnInit {
     this.showMapSlider = false;
     this.showSlider = false;
     this.showGlitchSlider = false;
+    this.showShiftDownwardSlider = false;
     this.onTriangulate.emit(true);
   }
 
@@ -63,6 +68,7 @@ export class EditBarComponent extends BaseImports implements OnInit {
     this.showPixelSlider = true;
     this.showMapSlider = false;
     this.showSlider = false;
+    this.showShiftDownwardSlider = false;
     this.showGlitchSlider = false;
     this.onPixelSort.emit(true);
   }
@@ -73,7 +79,19 @@ export class EditBarComponent extends BaseImports implements OnInit {
     this.showPixelSlider = false;
     this.showMapSlider = false;
     this.showGlitchSlider = true;
+    this.showShiftDownwardSlider = false;
     this.onGlitch.emit(true);
+  }
+
+  shiftPixelsDownward()
+  {
+    this.showSlider = false;
+    this.showTriangleSlider = false;
+    this.showPixelSlider = false;
+    this.showMapSlider = false;
+    this.showGlitchSlider = false;
+    this.showShiftDownwardSlider = true;
+    this.onShiftDownward.emit(true);
   }
 
   setPixSize(e: any) {
@@ -107,5 +125,17 @@ export class EditBarComponent extends BaseImports implements OnInit {
 
   setGlitchParams(e: any) {
     this.sharedService.setGlitchParams(e.detail.value);
+  }
+
+  setShiftDownwardParams1(e: any){
+    this.sharedService.setDownwardShiftParams1(e.detail.value);
+  }
+
+  setShiftDownwardParams2(e: any){
+    this.sharedService.setDownwardShiftParams2(e.detail.value);
+  }
+
+  setShiftDownwardParams3(e: any){
+    this.sharedService.setDownwardShiftParams3(e.detail.value);
   }
 }

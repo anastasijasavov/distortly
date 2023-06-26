@@ -14,7 +14,7 @@
         [(ngModel)]="autoSave" 
         (ionChange)="toggleAutoSave()"
         color="dark">
-            Auto save
+            Save image state after editing
         </ion-toggle>
         <br /><br />
     </div>
@@ -38,8 +38,8 @@
     <div class="settings-item select-wrapper">
         <ion-item>
             <ion-select interface="popover" placeholder="" (ionChange)="setImageType()" [ngModel]="fileType" class="type-select">
-                <ion-select-option value="JPG">JPG</ion-select-option>
-                <ion-select-option value="PNG">PNG</ion-select-option>
+                <ion-select-option value="jpg">JPG</ion-select-option>
+                <ion-select-option value="png">PNG</ion-select-option>
             </ion-select>
         </ion-item>
     </div>

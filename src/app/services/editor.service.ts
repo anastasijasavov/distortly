@@ -3,6 +3,7 @@ import p5 from 'p5';
 import { DitherParams } from '../dtos/dither.dto';
 import { TriangulateParams } from '../dtos/triangulate.dto';
 import { PixelSort } from '../dtos/pixel-sort.dto';
+import { ShiftDownward } from '../dtos/shift-downward.dto';
 
 @Injectable()
 export class EditorService {
@@ -126,43 +127,28 @@ export class EditorService {
   pixelSort(s: p5, img: p5.Image, params: PixelSort) {
     s.image(img, 0, 0);
 
-    // Load the pixel data from the canvas
-    s.loadPixels();
-
     console.log('Sorting the image...');
-    const pixels = s.pixels;
-
-    // Loop through each row and sort the pixels in that row
     for (let y = 0; y < s.height; y++) {
-      // Get a row
       let row = [];
       for (let x = 0; x < s.width; x++) {
-        let index = (x + y * s.width) * 4;
+        let col = img.get(x, y);
         row.push([
-          pixels[index], // Red
-          pixels[index + 1], // Green
-          pixels[index + 2], // Blue
-          pixels[index + 3], // Alpha
+          s.red(col),
+          s.green(col),
+          s.blue(col),
+          s.alpha(col)
         ]);
       }
-
-      // Sort the row
-      row = row.sort();
-
-      // Record the sorted data
+      
+      row.sort();
+      
       for (let x = 0; x < s.width; x++) {
-        let index = (x + y * s.width) * 4;
-        pixels[index] = row[x][0]; // Red
-        pixels[index + 1] = row[x][1]; // Green
-        pixels[index + 2] = row[x][2]; // Blue
-        pixels[index + 3] = row[x][3]; // Alpha
+        let col = s.color(row[x][0], row[x][1], row[x][2], row[x][3]);
+        img.set(x, y, col);
       }
-     
     }
-
-    // Update the canvas with sorted pixels
-    s.updatePixels();
-
+    img.updatePixels();
+    s.image(img, 0, 0);
     console.log('Image preview...');
   }
 
@@ -286,9 +272,88 @@ export class EditorService {
     s.noTint();
 
     s.blendMode(s.BLEND); // Reset the blending mode
-
     // Display the original image, red channel, and shifted red channel
     s.image(img, 0, img.height);
     s.image(r, img.width, img.height);
   }
+
+  shiftPixelsDownward(s: p5, img: p5.Image, params: ShiftDownward) {
+    
+    s.image(img, 0, 0);
+    
+    // Load the pixel data from the canvas
+    s.loadPixels();
+    //debugger
+    let shiftAmount1 = Math.floor((img.height / 10) * params.shiftAmount1);
+    let shiftAmount2 = Math.floor((img.height / 10) * params.shiftAmount2);
+    let shiftAmount3 = Math.floor((img.height / 10) * params.shiftAmount3);
+
+    console.log(`Shifting the pixels downward - First third: ${shiftAmount1} rows, Second third: ${shiftAmount2} rows, Last third: ${shiftAmount3} rows...`);
+    const pixels = s.pixels;
+  
+    // Create a temporary array to store the shifted pixels
+    const shiftedPixels = [];
+  
+    // Generate random widths for each third
+    const minWidth = Math.floor(s.width / 5); 
+    const maxWidth = Math.floor(s.width / 2); 
+  
+    // Generate random widths for each third
+    const thirdWidth1 = Math.floor(Math.random() * (maxWidth - minWidth + 1)) + minWidth;
+    const thirdWidth2 = Math.floor(Math.random() * (maxWidth - minWidth + 1)) + minWidth;
+    const thirdWidth3 = s.width - (thirdWidth1 + thirdWidth2);
+  
+    // Shift the first third
+    for (let y = 0; y < s.height; y++) {
+      for (let x = 0; x < thirdWidth1; x++) {
+        let currentIndex = (x + y * s.width) * 4;
+        let nextRowIndex = Math.floor((x + ((y + shiftAmount1) % s.height) * s.width) * 4);
+  
+        // Store the current pixel data
+        shiftedPixels[nextRowIndex] = pixels[currentIndex];         // Red
+        shiftedPixels[nextRowIndex + 1] = pixels[currentIndex + 1]; // Green
+        shiftedPixels[nextRowIndex + 2] = pixels[currentIndex + 2]; // Blue
+        shiftedPixels[nextRowIndex + 3] = pixels[currentIndex + 3]; // Alpha
+      }
+    }
+  
+    // Shift the second third
+    for (let y = 0; y < s.height; y++) {
+      for (let x = thirdWidth1; x < (thirdWidth1 + thirdWidth2); x++) {
+        let currentIndex = (x + y * s.width) * 4;
+        let nextRowIndex = Math.floor((x + ((y + shiftAmount2) % s.height) * s.width) * 4);
+  
+        // Store the current pixel data
+        shiftedPixels[nextRowIndex] = pixels[currentIndex];         // Red
+        shiftedPixels[nextRowIndex + 1] = pixels[currentIndex + 1]; // Green
+        shiftedPixels[nextRowIndex + 2] = pixels[currentIndex + 2]; // Blue
+        shiftedPixels[nextRowIndex + 3] = pixels[currentIndex + 3]; // Alpha
+      }
+    }
+  
+    // Shift the last third
+    for (let y = 0; y < s.height; y++) {
+      for (let x = (thirdWidth1 + thirdWidth2); x < s.width; x++) {
+        let currentIndex = (x + y * s.width) * 4;
+        let nextRowIndex = Math.floor((x + ((y + shiftAmount3) % s.height) * s.width) * 4);
+  
+        // Store the current pixel data
+        shiftedPixels[nextRowIndex] = pixels[currentIndex];         // Red
+        shiftedPixels[nextRowIndex + 1] = pixels[currentIndex + 1]; // Green
+        shiftedPixels[nextRowIndex + 2] = pixels[currentIndex + 2]; // Blue
+        shiftedPixels[nextRowIndex + 3] = pixels[currentIndex + 3]; // Alpha
+      }
+    }
+  
+    // Copy the shifted pixels back to the original pixel array
+    for (let i = 0; i < pixels.length; i++) {
+      pixels[i] = shiftedPixels[i];
+    }
+  
+    // Update the canvas with shifted pixels
+    s.updatePixels();
+  
+    console.log('Image preview...');
+  }
 }
+

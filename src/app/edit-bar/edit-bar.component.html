@@ -19,7 +19,14 @@
 
     <ion-range *ngIf="showGlitchSlider" (ionChange)="setGlitchParams($event)" aria-label="Range with ticks"
       [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
-  </div>
+      <ion-range *ngIf="showShiftDownwardSlider" (ionChange)="setShiftDownwardParams1($event)" aria-label="Range with ticks"
+      [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
+    <ion-range *ngIf="showShiftDownwardSlider" (ionChange)="setShiftDownwardParams2($event)" aria-label="Range with ticks"
+      [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
+    <ion-range *ngIf="showShiftDownwardSlider" (ionChange)="setShiftDownwardParams3($event)" aria-label="Range with ticks"
+      [ticks]="true" [snaps]="true" [min]="1" [max]="10"></ion-range>
+  
+    </div>
   <ion-tab-bar slot="bottom">
     <div class="button-container">
       <button id="pixel-btn" (click)="dither()">
@@ -58,6 +65,11 @@
       </ng-template>
     </ion-popover> -->
       <button id="3dmap" (click)="startMapping()">
+        <img src="/assets/icons8-merge-64.png" />
+      </button>
+
+
+      <button id="shift-downward" (click)="shiftPixelsDownward()">
         <img src="/assets/icons8-merge-64.png" />
       </button>
     </div>
