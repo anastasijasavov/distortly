@@ -126,7 +126,7 @@ export class EditorService {
 
   pixelSort(s: p5, img: p5.Image, params: PixelSort) {
     s.image(img, 0, 0);
-
+  
     console.log('Sorting the image...');
     for (let y = 0; y < s.height; y++) {
       let row = [];
@@ -136,14 +136,22 @@ export class EditorService {
           s.red(col),
           s.green(col),
           s.blue(col),
-          s.alpha(col)
+          s.alpha(col),
+          s.brightness(col) // Add brightness value to the pixel
         ]);
       }
       
-      row.sort();
+      row = this.sortRow(row, params.min);
       
+      let currentIndex = 0;
       for (let x = 0; x < s.width; x++) {
-        let col = s.color(row[x][0], row[x][1], row[x][2], row[x][3]);
+        let col;        
+        if (currentIndex < row.length && row[currentIndex][4] >= params.min) {
+          col = s.color(row[currentIndex][0], row[currentIndex][1], row[currentIndex][2], row[currentIndex][3]);
+          currentIndex++;
+        } else {
+          col = img.get(x, y);
+        }
         img.set(x, y, col);
       }
     }
@@ -151,25 +159,11 @@ export class EditorService {
     s.image(img, 0, 0);
     console.log('Image preview...');
   }
-
-  sortRow(row: any[], treshold: number) {
-    let min = (255 * 3) / treshold;
-    let minIndex = 0;
-
-    // Find the darkest pixel in the row
-    for (let i = 0; i < row.length; i++) {
-      // Each pixel has an RGB value, for instance, [255, 255, 255]
-      let temp = row[i][0] + row[i][1] + row[i][2];
-      if (temp < min) {
-        min = temp;
-        minIndex = i;
-      }
-    }
-    // Sort the row up to the brightest pixel
-    let sortedRow = row.slice(0, minIndex);
-    sortedRow.sort();
-    return sortedRow.concat(row.slice(minIndex));
-
+  
+  sortRow(row: any[], threshold: number) {
+    let sortedRow = row.filter(pixel => pixel[4] >= threshold  * 20); // Filter out pixels below the threshold
+    sortedRow.sort((a, b) => a[4] - b[4]); // Sort the row based on brightness
+    return sortedRow;
   }
 
   glitch(s: p5, img: p5.Image, strips: number) {
@@ -199,42 +193,6 @@ export class EditorService {
 
     img.updatePixels();
     s.image(img, 0, 0);
-  }
-
-  inpaint(s: p5, img: p5.Image, mask: p5.Image) {
-    img.loadPixels();
-    // Convert the mask image to a binary image with black and white pixels
-    mask.loadPixels();
-    for (let i = 0; i < mask.pixels.length; i += 4) {
-      const r = mask.pixels[i];
-      const g = mask.pixels[i + 1];
-      const b = mask.pixels[i + 2];
-      const a = mask.pixels[i + 3];
-      // Set the pixel to white if it's not black
-      if (r !== 0 || g !== 0 || b !== 0) {
-        mask.pixels[i] = 255;
-        mask.pixels[i + 1] = 255;
-        mask.pixels[i + 2] = 255;
-        mask.pixels[i + 3] = 255;
-      }
-    }
-    mask.updatePixels();
-
-    // Inpaint the image using the mask
-    s.loadPixels();
-    for (let i = 0; i < s.pixels.length; i += 4) {
-      const r = mask.pixels[i];
-      const g = mask.pixels[i + 1];
-      const b = mask.pixels[i + 2];
-      const a = mask.pixels[i + 3];
-      // Set the pixel color to black if it's part of the mask
-      if (r === 0 && g === 0 && b === 0 && a === 255) {
-        s.pixels[i] = 0;
-        s.pixels[i + 1] = 0;
-        s.pixels[i + 2] = 0;
-      }
-    }
-    s.updatePixels();
   }
 
   offsetImg(s: p5, img: p5.Image) {
