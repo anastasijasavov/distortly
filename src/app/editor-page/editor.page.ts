@@ -12,7 +12,7 @@ import { LocalFile } from '../dtos/local-file';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BaseImports } from '../services/base-imports';
 import p5 from 'p5';
-import { Observable, filter, map } from 'rxjs';
+import { Observable, Subscription, filter, map } from 'rxjs';
 import { DitherParams } from '../dtos/dither.dto';
 import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 import {
@@ -42,6 +42,7 @@ export class EditorPage
   p5: p5;
   pic: p5.Image;
 
+  subscriptions: Subscription[] = [];
   constructor(
     private sanitizer: DomSanitizer,
     private injector: Injector,
@@ -52,7 +53,6 @@ export class EditorPage
     this.image$ = this.sharedService.image$;
   }
   ngAfterViewInit(): void {
-
     // this.userStore.select(selectUser).subscribe(user => {
     //   if(user.currentImage){
     //     this.sharedService.loa
@@ -60,7 +60,7 @@ export class EditorPage
     //   }
     // })
 
-    this.sharedService.image$
+    const sub = this.sharedService.image$
       ?.pipe(filter((image) => image && image?.data !== ''))
       .subscribe((image) => {
         this.image = image;
@@ -76,7 +76,15 @@ export class EditorPage
             const maxWidth = Math.min(window.innerWidth, this.pic.width);
             this.pic.resize(maxWidth, 0);
             s.createCanvas(this.pic.width, this.pic.height);
-            this.userStore.dispatch(saveImage({image: {imageName: image.name, filterType: FilterType.INIT, params: 0 }}));
+            this.userStore.dispatch(
+              saveImage({
+                image: {
+                  imageName: image.name,
+                  filterType: FilterType.INIT,
+                  params: 0,
+                },
+              })
+            );
 
             s.image(this.pic, 0, 0);
             s.noLoop();
@@ -84,24 +92,28 @@ export class EditorPage
           };
         }, this.sketch.nativeElement);
       });
+    this.subscriptions.push(sub);
   }
 
   exportImage() {
-    this.userStore.select(selectUser).subscribe((user) => {
+    const sub = this.userStore.select(selectUser).subscribe((user) => {
       this.p5.saveCanvas(user.filename, user.fileType);
     });
+    this.subscriptions.push(sub);
   }
 
   ngOnInit(): void {}
 
   preloadImage(s: p5, filename: string, isWebGL = false) {
-    this.sharedService.image$.subscribe((image) => {
+    const sub = this.sharedService.image$.subscribe((image) => {
       this.pic = s.loadImage(image.data);
 
       s.createCanvas(this.pic.width, this.pic.height);
       s.image(this.pic, 0, 0);
       this.imageStack.push(this.pic);
     });
+
+    this.subscriptions.push(sub);
 
     const maxWidth = Math.min(window.innerWidth, this.pic.width);
     this.pic.resize(maxWidth, 0);
@@ -117,6 +129,7 @@ export class EditorPage
 
   ngOnDestroy(): void {
     this.p5.remove();
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
   onDither() {
     if (this.p5) {
@@ -144,11 +157,13 @@ export class EditorPage
       };
 
       s.draw = () => {
-        this.sharedService.param$.subscribe((params) => {
+        const sub = this.sharedService.param$.subscribe((params) => {
           ditherParams.pixsize = params.pixsize;
           ditherParams.contrast = params.contrast;
           this.editorService.dither(s, this.pic, ditherParams);
         });
+
+        this.subscriptions.push(sub);
       };
     };
     this.p5 = new p5(sketch, this.sketch.nativeElement);
@@ -171,9 +186,10 @@ export class EditorPage
       };
 
       s.draw = () => {
-        this.sharedService.mapRotation$.subscribe((rotateY) => {
+        const sub = this.sharedService.mapRotation$.subscribe((rotateY) => {
           this.editorService.get3dMap(s, this.pic, rotateY);
         });
+        this.subscriptions.push(sub);
       };
     };
 
@@ -204,9 +220,12 @@ export class EditorPage
       };
 
       s.draw = () => {
-        this.sharedService.triangulateParams$.subscribe((params) => {
-          this.editorService.triangulate(s, this.pic, params);
-        });
+        const sub = this.sharedService.triangulateParams$.subscribe(
+          (params) => {
+            this.editorService.triangulate(s, this.pic, params);
+          }
+        );
+        this.subscriptions.push(sub);
       };
     };
 
@@ -232,7 +251,7 @@ export class EditorPage
       };
 
       s.draw = () => {
-        this.sharedService.pixelParams$.subscribe((params) => {
+        const sub = this.sharedService.pixelParams$.subscribe((params) => {
           const img = this.editorService.pixelSort(s, this.pic, params);
           // this.userStore.dispatch(
           //   saveImage({
@@ -240,6 +259,7 @@ export class EditorPage
           //   })
           // );
         });
+        this.subscriptions.push(sub);
       };
     };
 
@@ -265,8 +285,7 @@ export class EditorPage
       };
 
       s.draw = () => {
-
-        this.sharedService.glitchParams$.subscribe((strips) => {
+        const sub = this.sharedService.glitchParams$.subscribe((strips) => {
           const img = this.editorService.glitch(s, this.pic, strips);
           // this.userStore.dispatch(
           //   saveImage({
@@ -277,6 +296,7 @@ export class EditorPage
           // this.p5.remove();
           this.loadImageFromPixels(img.pixels, img.width, img.height);
         });
+        this.subscriptions.push(sub);
       };
     };
 
@@ -302,9 +322,12 @@ export class EditorPage
       };
 
       s.draw = () => {
-        this.sharedService.shiftDownwardParams$.subscribe((params) => {
-          this.editorService.shiftPixelsDownward(s, this.pic, params);
-        });
+        const sub = this.sharedService.shiftDownwardParams$.subscribe(
+          (params) => {
+            this.editorService.shiftPixelsDownward(s, this.pic, params);
+          }
+        );
+        this.subscriptions.push(sub);
       };
     };
 
@@ -338,7 +361,7 @@ export class EditorPage
     this.p5.image(img, height, width);
   }
 
-  onDeblur(){
+  onDeblur() {
     if (this.p5) {
       this.p5.remove();
     }
@@ -352,16 +375,17 @@ export class EditorPage
       };
 
       s.draw = () => {
-        this.sharedService.noiseParams$.subscribe((params) => {
+        const sub = this.sharedService.noiseParams$.subscribe((params) => {
           this.editorService.grain(s, this.pic, params);
         });
+        this.subscriptions.push(sub);
       };
     };
 
     this.p5 = new p5(sketch, this.sketch.nativeElement);
   }
 
-  onDetectEdges(){
+  onDetectEdges() {
     if (this.p5) {
       this.p5.remove();
     }
@@ -375,18 +399,18 @@ export class EditorPage
       };
 
       s.draw = () => {
-        this.sharedService.noiseParams$.subscribe((params) => {
+        const sub = this.sharedService.noiseParams$.subscribe((params) => {
           this.editorService.edgeDetect(s, this.pic, params);
         });
+        this.subscriptions.push(sub);
       };
     };
 
     this.p5 = new p5(sketch, this.sketch.nativeElement);
   }
 
-  onInvert()
-  {
-    if(this.p5){
+  onInvert() {
+    if (this.p5) {
       this.p5.remove();
     }
     const sketch = (s: p5) => {
@@ -404,19 +428,20 @@ export class EditorPage
       };
 
       s.draw = () => {
-        this.sharedService.noiseParams$.subscribe((params) => {
+        const sub = this.sharedService.noiseParams$.subscribe((params) => {
           const noiseParams: InvertParams = {
-            threshold: params
-          }
+            threshold: params,
+          };
           this.editorService.invert(s, this.pic, noiseParams);
         });
+        this.subscriptions.push(sub);
       };
     };
 
     this.p5 = new p5(sketch, this.sketch.nativeElement);
   }
 
-  createCanvas(s: p5){
+  createCanvas(s: p5) {
     const maxWidth = Math.min(window.innerWidth, this.pic.width);
     this.pic.resize(maxWidth, 0);
     s.createCanvas(this.pic.width, this.pic.height);

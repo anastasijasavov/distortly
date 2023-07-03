@@ -1,4 +1,4 @@
-import { Component, HostListener, Injector } from '@angular/core';
+import { Component, HostListener, Injector, OnDestroy } from '@angular/core';
 import {
   Camera,
   CameraResultType,
@@ -16,13 +16,14 @@ import { CollectionDo } from '../dtos/collection.do';
 import { CollectionState } from '../store/collections/collections.reducers';
 import { Dictionary } from '@ngrx/entity';
 import { selectCollections } from '../store/collections/collections.selectors';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'cmp-image-library',
   templateUrl: './image-library.component.html',
   styleUrls: ['./image-library.component.scss'],
   providers: [],
 })
-export class ImageLibraryComponent extends BaseImports {
+export class ImageLibraryComponent extends BaseImports implements OnDestroy {
   images: LocalFile[] = [];
   isModalOpen: boolean = false;
   collections: Dictionary<CollectionDo>;
@@ -32,7 +33,7 @@ export class ImageLibraryComponent extends BaseImports {
   };
 
   imageToDelete: LocalFile;
-
+  imageSub: Subscription[] = [];
   constructor(
     private plt: Platform,
     private injector: Injector,
@@ -44,15 +45,21 @@ export class ImageLibraryComponent extends BaseImports {
   }
 
   async ngOnInit() {
-    this.sharedService.images$.subscribe((images) => {
+    const sub = this.sharedService.images$.subscribe((images) => {
       this.images = images;
     });
 
-    this.store2.select(selectCollections).subscribe((col) => {
+    const sub2 = this.store2.select(selectCollections).subscribe((col) => {
       this.collections = col;
     });
+
+    this.imageSub.push(sub);
+    this.imageSub.push(sub2);
   }
 
+  ngOnDestroy(): void {
+    this.imageSub.forEach((s) => s.unsubscribe());
+  }
   addToCollection(e: any, file: LocalFile) {
     this.store.dispatch(
       fromActions.updateCollection({

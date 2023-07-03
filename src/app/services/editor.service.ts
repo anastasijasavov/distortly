@@ -87,7 +87,7 @@ export class EditorService {
 
   get3dMap(s: p5, pic: p5.Image, rotateY: number) {
     // debugger;
-    s.createCanvas(pic.width, pic.height, s.WEBGL);
+    s.createCanvas(window.innerWidth, window.innerHeight, s.WEBGL);
     s.background(241);
     s.fill(0);
     s.noStroke();
@@ -108,7 +108,7 @@ export class EditorService {
 
     s.push();
     s.translate(s.width / 2, s.height / 2);
-    s.rotateY(s.radians(360 / rotateY * 5));
+    s.rotateY(s.radians((360 / rotateY) * 5));
     // s.rotateY(s.radians(s.frameCount));
     for (let x = 0; x < tiles; x++) {
       for (let y = 0; y < tiles; y++) {
